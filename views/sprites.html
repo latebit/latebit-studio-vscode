@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprite Preview</title>
+  <style>
+    .frames {
+      --editor-size: 20px;
+
+      display: grid;
+      grid-template-columns: repeat(var(--width), var(--editor-size));
+      grid-template-rows: repeat(var(--height), var(--editor-size));
+      font-size: 16px;
+
+      .box {
+        width: var(--editor-size);
+        height: var(--editor-size);
+        font-family: monospace;
+        text-align: center;
+        line-height: var(--editor-size);
+      }
+    }
+
+    .preview {
+      --preview-size: 5px;
+
+      display: grid;
+      grid-template-columns: repeat(var(--width), var(--preview-size));
+      grid-template-rows: repeat(var(--height), var(--preview-size));
+
+      .box {
+        width: var(--preview-size);
+        height: var(--preview-size);
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sprite Preview</h1>
+
+  <h2>Frames</h2>
+  <div class="frames"></div>
+
+  <h2>Preview</h2>
+  <div class="preview"></div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    const log = (...s) => vscode.postMessage({ type: 'log', payload: s });
+    const $preview = document.querySelector('.preview');
+    const $frames = document.querySelector('.frames');
+
+    const background = {
+      '0': 'rgb(0, 0, 0)',
+      '1': 'rgb(29, 43, 83)',
+      '2': 'rgb(126, 37, 83)',
+      '3': 'rgb(0, 135, 81)',
+      '4': 'rgb(171, 82, 54)',
+      '5': 'rgb(95, 87, 79)',
+      '6': 'rgb(194, 195, 199)',
+      '7': 'rgb(255, 241, 232)',
+      '8': 'rgb(255, 0, 77)',
+      '9': 'rgb(255, 163, 0)',
+      'A': 'rgb(255, 236, 39)',
+      'B': 'rgb(0, 228, 54)',
+      'C': 'rgb(41, 173, 255)',
+      'D': 'rgb(131, 118, 156)',
+      'E': 'rgb(255, 119, 168)',
+      'F': 'rgb(255, 204, 170)',
+    }
+    const foreground = {
+      '0': 'white',
+      '1': 'white',
+      '2': 'white',
+      '3': 'white',
+      '4': 'white',
+      '5': 'white',
+      '6': 'black',
+      '7': 'black',
+      '8': 'white',
+      '9': 'black',
+      'A': 'black',
+      'B': 'black',
+      'C': 'black',
+      'D': 'black',
+      'E': 'black',
+      'F': 'black',
+    }
+
+    let context;
+    let frameTimer;
+    const frameTime = 33; // assuming 30fps
+
+    window.addEventListener('message', (e) => {
+      switch (e.data.type) {
+        case 'refresh':
+          context = e.data.payload;
+          document.documentElement.style.setProperty('--width', context.width);
+          document.documentElement.style.setProperty('--height', context.height);
+          if (frameTimer) clearInterval(frameTimer);
+
+          drawFrames(context);
+          const previewFrames = makePreviewFrames(context);
+
+          let currentFrame = 0;
+          drawPreviewFrame(context, previewFrames, currentFrame);
+          frameTimer = setInterval(() => {
+            requestAnimationFrame(() => {
+              currentFrame = (currentFrame + 1) % (context.frames);
+              drawPreviewFrame(context, previewFrames, currentFrame);
+            })
+          }, frameTime * context.sleep);
+          break;
+      }
+    })
+
+    function drawFrames(context) {
+      $frames.innerHTML = '';
+
+      for (let line of context.lines) {
+        for (let c of line) {
+          const box = document.createElement('div');
+          box.classList.add('box');
+          c = Number.isNaN(parseInt(c, 16)) ? '' : c.toUpperCase();
+          if (c) {
+            box.style.background = background[c];
+            box.style.color = foreground[c];
+            box.innerText = c;
+          }
+          $frames.appendChild(box);
+        }
+      }
+    }
+
+    function drawPreviewFrame({ height, lines }, previewFrames, currentFrame) {
+      $preview.innerHTML = '';
+
+      for (const cell of previewFrames[currentFrame]) {
+        const box = document.createElement('div');
+        box.classList.add('box');
+        box.style.background = cell;
+        $preview.appendChild(box);
+      }
+    }
+
+    function makePreviewFrames(context) {
+      const result = [];
+
+      context.lines.forEach((line, index) => {
+        const i = Math.floor(index / context.height);
+
+        if (!result[i]) {
+          result[i] = []
+        }
+
+        for (const c of line) {
+          const a = Number.isNaN(parseInt(c, 16)) ? '' : c.toUpperCase();
+          result[i].push(background[a] ?? 'white')
+        }
+      })
+
+      return result;
+    }
+  </script>
+</body>
+
+</html>
