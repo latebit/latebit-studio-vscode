@@ -38,40 +38,71 @@ function makeSpriteContext(spriteFileContent: string): SpriteContext {
   };
 }
 
-export function init(): vscode.Disposable {
-  let panel: vscode.WebviewPanel;
+function getSpritePanel() {
+  const panel = vscode.window.createWebviewPanel(
+    'spritePreview',
+    'Sprite Preview',
+    vscode.ViewColumn.Beside,
+    { enableScripts: true }
+  );
 
-  const disposable = vscode.commands.registerCommand('latebits-studio.sprite', () => {
+  panel.webview.onDidReceiveMessage(e => {
+    if (e.type == 'log') console.log(...e.payload)
+  })
+
+  panel.webview.html = view;
+
+  return panel;
+}
+
+export function activate(context: vscode.ExtensionContext) {
+  let panel: vscode.WebviewPanel | undefined;
+
+  context.subscriptions.push(vscode.commands.registerCommand('latebits-studio.sprite', () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
 
     const doc = editor.document;
     const text = doc.getText();
-
-    panel = vscode.window.createWebviewPanel(
-      'spritePreview',
-      'Sprite Preview',
-      vscode.ViewColumn.Beside,
-      { enableScripts: true }
-    );
-
-    panel.webview.onDidReceiveMessage(e => {
-      if (e.type == 'log') console.log(...e.payload)
-    })
-
-    panel.webview.html = view;
+    panel = getSpritePanel();
 
     panel.webview.postMessage({ type: 'refresh', payload: makeSpriteContext(text) })
-  });
+  }));
 
-  vscode.workspace.onDidChangeTextDocument(debounce((e: vscode.TextDocumentChangeEvent) => {
-    if (panel && e.document.uri === vscode.window.activeTextEditor?.document.uri) {
-      panel.webview.postMessage({
+  context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(debounce((e: vscode.TextDocumentChangeEvent) => {
+    if (e.document.uri === vscode.window.activeTextEditor?.document.uri) {
+      panel?.webview.postMessage({
         type: 'refresh',
         payload: makeSpriteContext(e.document.getText())
       })
     }
-  }, 500));
+  }, 500)));
 
-  return disposable
+  context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(document => {
+    if (document.languageId === 'latebits') {
+      if (!panel) {
+        console.log('making new panel')
+        panel = getSpritePanel();
+      }
+
+      panel.webview.postMessage({
+        type: 'refresh',
+        payload: makeSpriteContext(document.getText())
+      })
+    }
+  }));
+
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(editor => {
+    console.log('did change active text editor')
+    if (editor?.document.languageId === 'latebits') {
+      if (!panel) {
+        panel = getSpritePanel();
+      }
+
+      panel.webview.postMessage({
+        type: 'refresh',
+        payload: makeSpriteContext(editor.document.getText())
+      })
+    }
+  }))
 }

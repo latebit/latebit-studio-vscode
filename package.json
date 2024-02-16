@@ -10,17 +10,23 @@
     "Other"
   ],
   "activationEvents": [
-    "onFileSystem:scheme:latebits"
+    "onFileSystem:latebits",
+    "onLanguage:latebits"
   ],
-  "main": "./out/index.js",
+  "main": "./out/src/index.js",
   "contributes": {
     "commands": [
       {
         "command": "latebits-studio.sprite",
-        "title": "Show sprite tools",
+        "title": "Show sprite preview",
         "category": "LateBits"
       }
-    ]
+    ],
+    "languages": [ {
+        "id": "latebits",
+        "aliases": [ "LateBits", "latebits" ],
+        "extensions": [ ".latebits" ]
+      } ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

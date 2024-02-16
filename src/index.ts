@@ -1,10 +1,8 @@
 import * as vscode from 'vscode';
-import { init } from './sprites';
+import { activate as activateSprite } from './sprites';
 
 export function activate(context: vscode.ExtensionContext) {
-	const sprite = init();
-
-	context.subscriptions.push(sprite);
+	activateSprite(context);
 }
 
 export function deactivate() { }
