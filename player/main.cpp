@@ -3,39 +3,21 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
 #include <cstdio>
-#ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <emscripten/bind.h>
-#endif
-#include <memory>
+
+#include "src/player.h"
+#include "src/wrappers.h"
 
 #include "latebit/sid/parser/parser.h"
-#include "latebit/sid/synth/sequencer.h"
+#include "latebit/sid/parser/symbol.h"
 #include "latebit/sid/synth/track.h"
 #include "latebit/sid/synth/tune.h"
-#include "src/player.h"
 
 using namespace std;
-#ifdef __EMSCRIPTEN__
-using namespace emscripten;
-#endif
 using namespace sid;
 using namespace player;
-
-// Emscripten does not directly support binding std::shared_ptr<std::vector<T>>
-// Se we are wrapping all the related methods in the Tune class
-auto getNote(const Tune &tune, int trackIndex, int noteIndex) -> Note {
-  return tune.getTrack(trackIndex)->at(noteIndex);
-}
-
-auto setNote(Tune &tune, int trackIndex, int noteIndex,
-             const Note &note) -> void {
-  tune.getTrack(trackIndex)->at(noteIndex) = note;
-}
-
-auto getTrackSize(const Tune &tune, int trackIndex) -> int {
-  return tune.getTrack(trackIndex)->size();
-}
+using namespace emscripten;
 
 int main() {
   if (0 != SDL_Init(SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
@@ -72,7 +54,6 @@ int main() {
   emscripten_set_main_loop_timing(EM_TIMING_RAF, 33);
 }
 
-#ifdef __EMSCRIPTEN__
 EMSCRIPTEN_BINDINGS(sid) {
   class_<Player>("Player")
       .class_function("play", &Player::play, allow_raw_pointers())
@@ -127,4 +108,3 @@ EMSCRIPTEN_BINDINGS(sid) {
       .value("FADEIN", EffectType::FADEIN)
       .value("FADEOUT", EffectType::FADEOUT);
 }
-#endif

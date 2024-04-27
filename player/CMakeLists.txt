@@ -7,11 +7,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-link_directories(${CMAKE_SOURCE_DIR}/lib)
+include(cmake/FetchSid.cmake)
+fetch_sid("v0.3.0")
 
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/main.cpp" "${CMAKE_SOURCE_DIR}/src/*.cpp")
+file(GLOB HDR_FILES "${CMAKE_SOURCE_DIR}/src/*.h")
 
-add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_link_libraries(${PROJECT_NAME} SDL2 sid embind)
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-O3 -sUSE_SDL=2")
+add_executable(${PROJECT_NAME} ${SRC_FILES} ${HDR_FILES})
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 sid embind)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-O3 -sUSE_SDL=2")

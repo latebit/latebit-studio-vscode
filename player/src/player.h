@@ -1,3 +1,5 @@
+#pragma once
+
 #include "latebit/sid/synth/sequencer.h"
 #include <memory>
 
