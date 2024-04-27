@@ -1,7 +1,7 @@
 {
-  "name": "latebits-studio",
-  "displayName": "latebits-studio",
-  "description": "Official tools for the LateBits game engine",
+  "name": "latebit-studio",
+  "displayName": "latebit-studio",
+  "description": "Official tools for the latebit game engine",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.86.0"
@@ -10,23 +10,41 @@
     "Other"
   ],
   "activationEvents": [
-    "onFileSystem:latebits",
-    "onLanguage:latebits"
+    "onFileSystem:latebit",
+    "onLanguage:latebit"
   ],
   "main": "./out/src/index.js",
   "contributes": {
     "commands": [
       {
-        "command": "latebits-studio.sprite",
+        "command": "latebit-studio.sprite",
         "title": "Show sprite preview",
-        "category": "LateBits"
+        "category": "latebit"
       }
     ],
-    "languages": [ {
-        "id": "latebits",
-        "aliases": [ "LateBits", "latebits" ],
-        "extensions": [ ".latebits" ]
-      } ]
+    "customEditors": [
+      {
+        "viewType": "latebit-studio.tune",
+        "displayName": "latebit",
+        "selector": [
+          {
+            "filenamePattern": "*.lbtune"
+          }
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "id": "latebit",
+        "aliases": [
+          "latebit",
+          "latebit"
+        ],
+        "extensions": [
+          ".latebit"
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -37,14 +55,21 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.86.0",
     "@types/mocha": "^10.0.6",
-    "@types/node": "18.x",
+    "@types/node": "^18.19.31",
+    "@types/vscode": "^1.86.0",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
     "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.9"
-  }
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@vscode/wasm-wasi": "0.13.0-pre.1",
+    "@wasmer/wasi": "^1.2.2"
+  },
+  "extensionDependencies": [
+    "ms-vscode.wasm-wasi-core"
+  ]
 }
