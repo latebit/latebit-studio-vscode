@@ -10,7 +10,6 @@
 #include "src/wrappers.h"
 
 #include "latebit/sid/parser/parser.h"
-#include "latebit/sid/parser/symbol.h"
 #include "latebit/sid/synth/track.h"
 #include "latebit/sid/synth/tune.h"
 
@@ -81,13 +80,11 @@ EMSCRIPTEN_BINDINGS(sid) {
   emscripten::function("getTrackSize", &getTrackSize);
 
   class_<Note>("Note")
-      .constructor<int, int, WaveType, EffectType, string>()
-      .class_function("rest", &Note::rest)
-      .class_function("invalid", &Note::invalid)
+      .function("fromSymbol", &Note::fromSymbol)
       .function("isRest", &Note::isRest)
-      .function("isSame", &Note::isSame)
       .function("isEqual", &Note::isEqual)
       .function("isInvalid", &Note::isInvalid)
+      .function("isContinue", &Note::isContinue)
       .function("getPitch", &Note::getPitch)
       .function("getVolume", &Note::getVolume)
       .function("getWave", &Note::getWave)
