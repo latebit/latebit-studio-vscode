@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    /* for FOUC */
+    html {
+      display: none;
+    }
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ views }}/reset.css">
+  <link rel="stylesheet" href="{{ views }}/audio/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Track Editor</h1>
+    <a href="#">Read the specification</a>
+    <section class="subtitle">
+      <p>
+        Change the metadata and the notes of the tracks to create a new audio track.
+      </p>
+      <p>
+        When you are ready, click on the play button to listen to your creation.
+      </p>
+    </section>
+  </header>
+
+  <main>
+    <section id="editor">
+      <p>Loading...</p>
+    </section>
+    <aside id="metadata">
+      <form>
+        <h2>Metadata</h2>
+        <label for="bpm">BPM</label>
+        <input id="bpm" type="number" min="10" max="400" value="---">
+
+        <label for="ticks">Ticks per beat</label>
+        <input id="ticks" type="number" min="1" max="16" value="---">
+
+        <label for="beats">Number of beats</label>
+        <input id="beats" type="number" min="1" max="64" value="---">
+      </form>
+      <form>
+        <h2>Playback</h2>
+        <label for="loop">
+          <input type="checkbox" id="loop" disabled>Loop
+        </label>
+        <button id="play" disabled>
+          Play/Pause
+        </button>
+      </form>
+    </aside>
+  </main>
+
+  <script>
+    Module = {
+      locateFile: function (path) {
+        return '{{ player }}/' + path;
+      }
+    };
+  </script>
+  <script src="{{ player }}/player.js"></script>
+  <script src="{{ views }}/audio/app.js" type="module"></script>
+  <style>
+    /* for FOUC */
+    html {
+      display: unset;
+    }
+  </style>
+</body>
+
+</html>

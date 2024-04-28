@@ -1,0 +1,37 @@
+body {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  section.subtitle {
+    padding: var(--container-paddding) 0;
+  }
+}
+
+#editor {
+  --column-size: calc(var(--container-paddding) * 4);
+  flex: 3;
+
+  display: grid;
+  gap: var(--container-paddding);
+  grid-template-columns: repeat(auto-fill, minmax(var(--column-size), 1fr));
+  padding: 0 var(--container-paddding);
+
+  .cell {
+    font-family: monospace;
+  }
+}
+
+#metadata {
+  flex: 1;
+
+  form {
+    padding-bottom: var(--container-paddding);
+  }
+}
+
+main {
+  display: flex;
+  padding-top: var(--container-paddding);
+}
