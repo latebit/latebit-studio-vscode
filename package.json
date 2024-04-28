@@ -64,12 +64,5 @@
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "@vscode/wasm-wasi": "0.13.0-pre.1",
-    "@wasmer/wasi": "^1.2.2"
-  },
-  "extensionDependencies": [
-    "ms-vscode.wasm-wasi-core"
-  ]
+  }
 }
