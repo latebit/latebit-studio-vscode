@@ -18,7 +18,7 @@ public:
   static void callback(void *data, unsigned char *stream, int len);
   static void play(Tune *tune);
   static void pause();
-  static void preview(string symbol);
+  static Note preview(Symbol symbol);
 
   static bool isPlaying();
   static bool isLooping();

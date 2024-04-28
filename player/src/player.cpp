@@ -1,6 +1,6 @@
 #include "player.h"
-#include "latebit/sid/parser/symbol.h"
 #include <SDL2/SDL_audio.h>
+#include <latebit/sid/synth/track.h>
 #include <memory>
 
 using namespace sid;
@@ -50,11 +50,12 @@ bool Player::isPlaying() { return tuneSequencer->isPlaying(); };
 bool Player::isLooping() { return tuneSequencer->isLooping(); };
 void Player::setLoop(bool loop) { tuneSequencer->setLoop(loop); };
 
-void Player::preview(string symbol) {
-  if (isRest(symbol) || isContinue(symbol) || isEndOfTrack(symbol))
-    return;
+Note Player::preview(string symbol) {
+  if (symbol.empty() || symbol == END_OF_TRACK_SYMBOL ||
+      symbol == REST_SYMBOL || symbol == CONTINUE_SYMBOL)
+    return Note::makeRest();
 
-  auto n = toNote(symbol);
+  auto n = Note::fromSymbol(symbol);
   auto tune = make_shared<Tune>(1);
   tune->setBeatsCount(1);
   tune->setBpm(120);
@@ -65,6 +66,8 @@ void Player::preview(string symbol) {
 
   SDL_PauseAudioDevice(device, 0);
   sfxSequencer->play();
+
+  return n;
 }
 
 } // namespace player
