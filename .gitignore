@@ -1,5 +1,9 @@
 out
 dist
+build
+.cache
+player/include
+player/lib
 node_modules
 .vscode-test/
 *.vsix
