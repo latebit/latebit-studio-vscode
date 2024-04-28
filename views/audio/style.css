@@ -11,15 +11,29 @@ header {
 
 #editor {
   --column-size: calc(var(--container-paddding) * 4);
+  --index-size: calc(var(--container-paddding) * 2);
+  --cell-height: calc(var(--vscode-editor-font-size) * 2);
   flex: 3;
 
   display: grid;
   gap: var(--container-paddding);
-  grid-template-columns: repeat(auto-fill, minmax(var(--column-size), 1fr));
-  padding: 0 var(--container-paddding);
+  grid-template-columns: var(--index-size) repeat(auto-fill, minmax(var(--column-size), 1fr));
+
+  .beat {
+    margin-top: 8px;
+    font-weight: bolder;
+  }
 
   .cell {
     font-family: monospace;
+    height: var(--cell-height);
+  }
+
+  .index {
+    font-family: monospace;
+    height: var(--cell-height);
+    text-align: right;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
   }
 }
 
