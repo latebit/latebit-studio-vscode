@@ -44,9 +44,11 @@ export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvide
   private getHTML(webview: vscode.Webview) {
     const views = getUri(webview, this.context, 'views');
     const player = getUri(webview, this.context, 'player', 'build');
+    const nodeModules = getUri(webview, this.context, 'node_modules');
 
     return view
       .replaceAll("{{ views }}", views)
+      .replaceAll("{{ nodeModules }}", nodeModules)
       .replaceAll("{{ player }}", player);
   }
 }
