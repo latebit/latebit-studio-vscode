@@ -65,7 +65,8 @@ EMSCRIPTEN_BINDINGS(sid) {
       .class_function("stop", &Player::stop);
 
   class_<TuneParser>("TuneParser")
-      .class_function("fromString", &TuneParser::fromString);
+      .class_function("fromString", &TuneParser::fromString)
+      .class_function("toString", &TuneParser::toString, allow_raw_pointers());
 
   class_<Tune>("Tune")
       .constructor<int>()

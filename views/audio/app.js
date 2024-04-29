@@ -1,8 +1,9 @@
 import { executeHostCommand } from './ipc.js'
+import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
-import { state } from './state.js'
+import { $edit } from './components/edit.js'
 
 const $app = {
   init() {
@@ -10,6 +11,7 @@ const $app = {
       $metadata.init();
       $playback.init();
       $editor.init();
+      $edit.init();
       executeHostCommand('getDocumentText', null, (payload) => {
         try {
           const tune = Module.TuneParser.fromString(payload);
