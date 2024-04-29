@@ -13,6 +13,17 @@ auto getNote(const Tune &tune, int trackIndex, int noteIndex) -> Note {
 
 auto setNote(Tune &tune, int trackIndex, int noteIndex,
              const Note &note) -> void {
+  if (noteIndex >= tune.getBeatsCount() * tune.getTicksPerBeat())
+    return;
+
+  if (tune.getTrack(trackIndex)->size() <= noteIndex) {
+    tune.getTrack(trackIndex)->reserve(noteIndex + 1);
+  }
+
+  for (int i = tune.getTrack(trackIndex)->size(); i <= noteIndex; i++) {
+    tune.getTrack(trackIndex)->push_back(Note::makeRest());
+  }
+
   tune.getTrack(trackIndex)->at(noteIndex) = note;
 }
 

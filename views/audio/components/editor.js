@@ -7,6 +7,7 @@ export const $editor = {
     state.listen('tune', (tune) => this.update(tune));
   },
   update(tune) {
+    debugger
     const tracks = tune.getTracksCount()
     const maxTrackLength = tune.getBeatsCount() * tune.getTicksPerBeat();
     const $root = this.$root.cloneNode(false);
@@ -26,10 +27,23 @@ export const $editor = {
 
     for (let i = 0; i < tracks; i++) {
       const $track = document.createElement('div');
-      for (let j = 0; j < maxTrackLength; j++) {
+      for (let j = 0; j < Module.getTrackSize(tune, i); j++) {
         const $cell = makeCell(tune, i, j);
         $track.appendChild($cell);
       }
+
+      if (Module.getTrackSize(tune, i) < maxTrackLength) {
+        const $btn = document.createElement('button');
+        $btn.textContent = '+';
+        $btn.addEventListener('click', () => {
+          const note = Module.Note.makeRest();
+          const tune = state.getTune();
+          Module.setNote(tune, i, Module.getTrackSize(tune, i), note);
+          state.setTune(tune);
+        });
+        $track.appendChild($btn);
+      }
+
       $root.appendChild($track);
     }
     this.$root.replaceWith($root);

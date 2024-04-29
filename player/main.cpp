@@ -80,7 +80,8 @@ EMSCRIPTEN_BINDINGS(sid) {
   emscripten::function("getTrackSize", &getTrackSize);
 
   class_<Note>("Note")
-      .function("fromSymbol", &Note::fromSymbol)
+      .class_function("makeRest", &Note::makeRest)
+      .class_function("fromSymbol", &Note::fromSymbol)
       .function("isRest", &Note::isRest)
       .function("isEqual", &Note::isEqual)
       .function("isInvalid", &Note::isInvalid)

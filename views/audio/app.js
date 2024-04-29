@@ -13,11 +13,9 @@ const $app = {
       executeHostCommand('getDocumentText', null, (payload) => {
         try {
           const tune = Module.TuneParser.fromString(payload);
-          $metadata.update(tune);
-          $editor.update(tune);
+          state.setTune(tune);
           $playback.$play.disabled = false;
           $playback.$loop.disabled = false;
-          state.setTune(tune);
         } catch (error) {
           executeHostCommand('error', error.message);
         }
