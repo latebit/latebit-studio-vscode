@@ -7,7 +7,6 @@ export const $editor = {
     state.listen('tune', (tune) => this.update(tune));
   },
   update(tune) {
-    debugger
     const tracks = tune.getTracksCount()
     const maxTrackLength = tune.getBeatsCount() * tune.getTicksPerBeat();
     const $root = this.$root.cloneNode(false);
@@ -63,16 +62,34 @@ const makeCell = (tune, track, tick) => {
   let previousValue = $cell.value;
   $cell.addEventListener('keyup', (e) => {
     if (e.target.value === previousValue) return;
+
+    const note = Module.Player.parse(e.target.value);
+    if (note.isInvalid()) return;
+
     try {
-      const note = Module.Player.preview(e.target.value);
-      const tune = state.getTune();
-      Module.setNote(tune, track, tick, note);
-      state.setTune(tune);
+      Module.Player.preview(e.target.value);
       previousValue = e.target.value;
     } catch (error) {
       executeHostCommand('error', error.message);
     }
   })
+
+  $cell.addEventListener('change', (e) => {
+    const note = Module.Player.parse(e.target.value);
+    if (note.isInvalid()) {
+      executeHostCommand('error', `Invalid symbol: ${e.target.value}`);
+      $cell.value = previousValue;
+      return
+    }
+
+    try {
+      const tune = state.getTune();
+      Module.setNote(tune, track, tick, note);
+      state.setTune(tune);
+    } catch (error) {
+      executeHostCommand('error', error);
+    }
+  });
 
   $cell.addEventListener('focus', (e) => {
     Module.Player.preview(e.target.value);

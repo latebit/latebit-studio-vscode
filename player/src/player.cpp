@@ -46,16 +46,24 @@ void Player::pause() {
   tuneSequencer->pause();
 }
 
+void Player::stop() {
+  SDL_PauseAudioDevice(device, 1);
+  tuneSequencer->stop();
+}
+
 bool Player::isPlaying() { return tuneSequencer->isPlaying(); };
 bool Player::isLooping() { return tuneSequencer->isLooping(); };
 void Player::setLoop(bool loop) { tuneSequencer->setLoop(loop); };
 
-Note Player::preview(string symbol) {
+void Player::preview(string symbol) {
   if (symbol.empty() || symbol == END_OF_TRACK_SYMBOL ||
       symbol == REST_SYMBOL || symbol == CONTINUE_SYMBOL)
-    return Note::makeRest();
+    return;
 
   auto n = Note::fromSymbol(symbol);
+  if (n.isInvalid())
+    return;
+
   auto tune = make_shared<Tune>(1);
   tune->setBeatsCount(1);
   tune->setBpm(120);
@@ -66,8 +74,17 @@ Note Player::preview(string symbol) {
 
   SDL_PauseAudioDevice(device, 0);
   sfxSequencer->play();
+}
 
-  return n;
+Note Player::parse(string symbol) {
+  if (symbol.empty() || symbol == END_OF_TRACK_SYMBOL)
+    return Note::makeInvalid();
+  if (symbol == REST_SYMBOL)
+    return Note::makeRest();
+  if (symbol == CONTINUE_SYMBOL)
+    return Note::makeContinue();
+
+  return Note::fromSymbol(symbol);
 }
 
 } // namespace player

@@ -16,6 +16,7 @@ const $app = {
           state.setTune(tune);
           $playback.$play.disabled = false;
           $playback.$loop.disabled = false;
+          $playback.$stop.disabled = false;
         } catch (error) {
           executeHostCommand('error', error.message);
         }

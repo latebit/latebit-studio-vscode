@@ -5,6 +5,7 @@ export const $metadata = {
   $ticks: document.getElementById('ticks'),
   $beats: document.getElementById('beats'),
   init() {
+    state.listen('tune', (tune) => this.update(tune));
     this.$bpm.addEventListener('change', (e) => setBpm(e.target.value));
     this.$ticks.addEventListener('change', (e) => setTicks(e.target.value));
     this.$beats.addEventListener('change', (e) => setBeats(e.target.value));

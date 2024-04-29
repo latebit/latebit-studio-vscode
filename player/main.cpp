@@ -57,10 +57,12 @@ EMSCRIPTEN_BINDINGS(sid) {
   class_<Player>("Player")
       .class_function("play", &Player::play, allow_raw_pointers())
       .class_function("preview", &Player::preview)
+      .class_function("parse", &Player::parse)
       .class_function("isPlaying", &Player::isPlaying)
       .class_function("isLooping", &Player::isLooping)
       .class_function("setLoop", &Player::setLoop)
-      .class_function("pause", &Player::pause);
+      .class_function("pause", &Player::pause)
+      .class_function("stop", &Player::stop);
 
   class_<TuneParser>("TuneParser")
       .class_function("fromString", &TuneParser::fromString);
