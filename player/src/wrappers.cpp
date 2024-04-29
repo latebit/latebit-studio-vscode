@@ -27,6 +27,11 @@ auto setNote(Tune &tune, int trackIndex, int noteIndex,
   tune.getTrack(trackIndex)->at(noteIndex) = note;
 }
 
+auto removeNote(Tune &tune, int trackIndex, int noteIndex) -> void {
+  tune.getTrack(trackIndex)
+      ->erase(tune.getTrack(trackIndex)->begin() + noteIndex);
+}
+
 auto getTrackSize(const Tune &tune, int trackIndex) -> int {
   return tune.getTrack(trackIndex)->size();
 }

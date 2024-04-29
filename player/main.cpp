@@ -79,6 +79,7 @@ EMSCRIPTEN_BINDINGS(sid) {
 
   emscripten::function("getNote", &getNote);
   emscripten::function("setNote", &setNote);
+  emscripten::function("removeNote", &removeNote);
   emscripten::function("getTrackSize", &getTrackSize);
 
   class_<Note>("Note")

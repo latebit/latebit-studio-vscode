@@ -33,7 +33,10 @@ export const $editor = {
 
       if (Module.getTrackSize(tune, i) < maxTrackLength) {
         const $btn = document.createElement('button');
-        $btn.textContent = '+';
+        $btn.classList.add('add', 'codicon', 'codicon-plus');
+        if (Module.getTrackSize(tune, i) % tune.getTicksPerBeat() === 0) {
+          $btn.classList.add('beat');
+        }
         $btn.addEventListener('click', () => {
           const note = Module.Note.makeRest();
           const tune = state.getTune();
@@ -51,16 +54,12 @@ export const $editor = {
 }
 
 const makeCell = (tune, track, tick) => {
-  const $cell = document.createElement('input');
-  $cell.value = Module.getNote(tune, track, tick).getSymbol();
-  $cell.classList.add('cell');
+  const $input = document.createElement('input');
+  $input.value = Module.getNote(tune, track, tick).getSymbol();
+  $input.classList.add('input');
 
-  if (tick % tune.getTicksPerBeat() === 0) {
-    $cell.classList.add('beat');
-  }
-
-  let previousValue = $cell.value;
-  $cell.addEventListener('keyup', (e) => {
+  let previousValue = $input.value;
+  $input.addEventListener('keyup', (e) => {
     if (e.target.value === previousValue) return;
 
     const note = Module.Player.parse(e.target.value);
@@ -74,11 +73,11 @@ const makeCell = (tune, track, tick) => {
     }
   })
 
-  $cell.addEventListener('change', (e) => {
+  $input.addEventListener('change', (e) => {
     const note = Module.Player.parse(e.target.value);
     if (note.isInvalid()) {
       executeHostCommand('error', `Invalid symbol: ${e.target.value}`);
-      $cell.value = previousValue;
+      $input.value = previousValue;
       return
     }
 
@@ -91,9 +90,26 @@ const makeCell = (tune, track, tick) => {
     }
   });
 
-  $cell.addEventListener('focus', (e) => {
+  $input.addEventListener('focus', (e) => {
     Module.Player.preview(e.target.value);
   })
+
+  const $delete = document.createElement('button');
+  $delete.classList.add('delete', 'codicon', 'codicon-close');
+  $delete.addEventListener('click', () => {
+    const tune = state.getTune();
+    Module.removeNote(tune, track, tick);
+    state.setTune(tune);
+  });
+
+  const $cell = document.createElement('div');
+  $cell.classList.add('cell');
+  $cell.appendChild($input)
+  $cell.appendChild($delete)
+
+  if (tick % tune.getTicksPerBeat() === 0) {
+    $cell.classList.add('beat');
+  }
 
   return $cell;
 }

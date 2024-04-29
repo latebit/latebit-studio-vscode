@@ -10,9 +10,13 @@ header {
 }
 
 #editor {
-  --column-size: calc(var(--container-paddding) * 4);
-  --index-size: calc(var(--container-paddding) * 2);
-  --cell-height: calc(var(--vscode-editor-font-size) * 2);
+  --input-height: calc(var(--vscode-editor-font-size) * 2);
+  --input-width: 7ch;
+  --delete-width: var(--input-height);
+  --column-size: calc(var(--input-width) + var(--delete-width));
+  --index-size: 4ch;
+  --beat-gap: calc(var(--container-paddding) / 2);
+
   flex: 3;
 
   display: grid;
@@ -20,18 +24,43 @@ header {
   grid-template-columns: var(--index-size) repeat(auto-fill, minmax(var(--column-size), 1fr));
 
   .beat {
-    margin-top: 8px;
+    margin-top: var(--beat-gap);
     font-weight: bolder;
   }
 
   .cell {
-    font-family: monospace;
-    height: var(--cell-height);
+    display: flex;
+
+    &.beat {
+      margin-top: var(--beat-gap);
+
+      .input {
+        font-weight: bolder;
+      }
+    }
+
+    .delete {
+      width: var(--input-height);
+      background-color: var(--vscode-input-background);
+      color: var(--vscode-input-background);
+    }
+
+    &:hover {
+      .delete {
+        color: var(--vscode-input-foreground);
+      }
+    }
+
+    .input {
+      font-family: monospace;
+      height: var(--input-height);
+      width: var(--input-width);
+    }
   }
 
   .index {
     font-family: monospace;
-    height: var(--cell-height);
+    height: var(--input-height);
     text-align: right;
     padding: var(--input-padding-vertical) var(--input-padding-horizontal);
   }

@@ -10,6 +10,7 @@ namespace player {
 auto getNote(const Tune &tune, int trackIndex, int noteIndex) -> Note;
 auto setNote(Tune &tune, int trackIndex, int noteIndex,
              const Note &note) -> void;
+auto removeNote(Tune &tune, int trackIndex, int noteIndex) -> void;
 auto getTrackSize(const Tune &tune, int trackIndex) -> int;
 
 } // namespace player
