@@ -12,7 +12,12 @@ export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvide
     const provider = new LatebitTuneEditorProvider(context);
     return vscode.window.registerCustomEditorProvider(
       LatebitTuneEditorProvider.VIEW_TYPE,
-      provider
+      provider,
+      {
+        webviewOptions: {
+          retainContextWhenHidden: true,
+        },
+      }
     );
   }
 
