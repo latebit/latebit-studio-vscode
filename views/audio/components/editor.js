@@ -1,11 +1,18 @@
+// @ts-check
 import { state } from '../state.js';
 import { executeHostCommand } from '../ipc.js';
+import { Note, Player, Tune, getNote, getTrackSize, removeNote, setNote } from '../sid.js';
 
 export const $editor = {
+  /** @type {!HTMLElement} */
+  // @ts-expect-error
   $root: document.getElementById('editor'),
   init() {
     state.listen('tune', (tune) => this.update(tune));
   },
+  /**
+   * @param {Tune} tune
+   */
   update(tune) {
     const tracks = tune.getTracksCount()
     const maxTrackLength = tune.getBeatsCount() * tune.getTicksPerBeat();
@@ -15,7 +22,7 @@ export const $editor = {
     const $indexColumn = document.createElement('div');
     for (let j = 0; j < maxTrackLength; j++) {
       const $index = document.createElement('div');
-      $index.appendChild(document.createTextNode(j));
+      $index.appendChild(document.createTextNode(j.toString()));
       $index.classList.add('index');
       if (j % tune.getTicksPerBeat() === 0) {
         $index.classList.add('beat');
@@ -26,21 +33,26 @@ export const $editor = {
 
     for (let i = 0; i < tracks; i++) {
       const $track = document.createElement('div');
-      for (let j = 0; j < Module.getTrackSize(tune, i); j++) {
+      for (let j = 0; j < getTrackSize(tune, i); j++) {
         const $cell = makeCell(tune, i, j);
         $track.appendChild($cell);
       }
 
-      if (Module.getTrackSize(tune, i) < maxTrackLength) {
+      const trackSize = getTrackSize(tune, i);
+      if (trackSize < maxTrackLength) {
         const $btn = document.createElement('button');
         $btn.classList.add('add', 'codicon', 'codicon-plus');
-        if (Module.getTrackSize(tune, i) % tune.getTicksPerBeat() === 0) {
+
+        if (trackSize % tune.getTicksPerBeat() === 0) {
           $btn.classList.add('beat');
         }
+
         $btn.addEventListener('click', () => {
-          const note = Module.Note.makeRest();
           const tune = state.getTune();
-          Module.setNote(tune, i, Module.getTrackSize(tune, i), note);
+          if (!tune) return;
+
+          const note = Note.makeRest();
+          setNote(tune, i, getTrackSize(tune, i), note);
           state.setTune(tune);
         });
         $track.appendChild($btn);
@@ -49,41 +61,47 @@ export const $editor = {
       $root.appendChild($track);
     }
     this.$root.replaceWith($root);
+    // @ts-expect-error This is a valid assignment: $root is a Node, but also an Element
     this.$root = $root;
   }
 }
 
 const makeCell = (tune, track, tick) => {
   const $input = document.createElement('input');
-  $input.value = Module.getNote(tune, track, tick).getSymbol();
+  $input.value = getNote(tune, track, tick).getSymbol();
   $input.classList.add('input');
 
   let previousValue = $input.value;
   $input.addEventListener('keyup', (e) => {
-    if (e.target.value === previousValue) return;
+    // @ts-expect-error
+    const value = e.target?.value;
+    if (value === previousValue) return;
 
-    const note = Module.Player.parse(e.target.value);
+    const note = Player.parse(value);
     if (note.isInvalid()) return;
 
     try {
-      Module.Player.preview(e.target.value);
-      previousValue = e.target.value;
+      Player.preview(value);
+      previousValue = value;
     } catch (error) {
       executeHostCommand('error', error.message);
     }
   })
 
   $input.addEventListener('change', (e) => {
-    const note = Module.Player.parse(e.target.value);
+    // @ts-expect-error
+    const symbol = e.target?.value;
+    const note = Player.parse(symbol);
     if (note.isInvalid()) {
-      executeHostCommand('error', `Invalid symbol: ${e.target.value}`);
+      executeHostCommand('error', `Invalid symbol: ${symbol}`);
       $input.value = previousValue;
       return
     }
 
     try {
       const tune = state.getTune();
-      Module.setNote(tune, track, tick, note);
+      if (!tune) return;
+      setNote(tune, track, tick, note);
       state.setTune(tune);
     } catch (error) {
       executeHostCommand('error', error);
@@ -91,14 +109,16 @@ const makeCell = (tune, track, tick) => {
   });
 
   $input.addEventListener('focus', (e) => {
-    Module.Player.preview(e.target.value);
+    // @ts-expect-error
+    Player.preview(e.target.value);
   })
 
   const $delete = document.createElement('button');
   $delete.classList.add('delete', 'codicon', 'codicon-close');
   $delete.addEventListener('click', () => {
     const tune = state.getTune();
-    Module.removeNote(tune, track, tick);
+    if (!tune) return;
+    removeNote(tune, track, tick);
     state.setTune(tune);
   });
 
