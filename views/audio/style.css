@@ -21,7 +21,7 @@ header {
 
   display: grid;
   gap: var(--container-paddding);
-  grid-template-columns: var(--index-size) repeat(auto-fill, minmax(var(--column-size), 1fr));
+  grid-template-columns: var(--index-size) repeat(auto-fill, var(--column-size));
 
   .beat {
     margin-top: var(--beat-gap);
