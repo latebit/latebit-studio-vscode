@@ -14,8 +14,9 @@ export const $playback = {
   // @ts-expect-error
   $stop: document.getElementById('stop'),
   init() {
-    this.$play.disabled = true;
-    this.$stop.disabled = true;
+    this.$play.disabled = false;
+    this.$loop.disabled = false;
+    this.$stop.disabled = false;
     this.$play.addEventListener('click', handleClickPlay);
     this.$stop.addEventListener('click', handleClickStop);
     this.$loop.addEventListener('click', handleToggleLoop);

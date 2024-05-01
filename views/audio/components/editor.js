@@ -1,14 +1,20 @@
 // @ts-check
 import { state } from '../state.js';
 import { executeHostCommand } from '../ipc.js';
-import { Note, Player, Tune, getNote, getTrackSize, removeNote, setNote } from '../sid.js';
+import { Note, Player, Tune, TuneParser, getNote, getTrackSize, removeNote, setNote } from '../sid.js';
 
 export const $editor = {
   /** @type {!HTMLElement} */
   // @ts-expect-error
   $root: document.getElementById('editor'),
   init() {
-    state.listen('tune', (tune) => this.update(tune));
+    state.listen('tune', (tune) => {
+      this.update(tune);
+      executeHostCommand('updateDocumentText', TuneParser.toString(tune));
+    });
+
+    const tune = state.getTune();
+    if (tune) this.update(tune);
   },
   /**
    * @param {Tune} tune

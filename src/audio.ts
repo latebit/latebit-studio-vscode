@@ -30,17 +30,16 @@ export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvide
     webviewPanel.webview.options = { enableScripts: true };
     webviewPanel.webview.html = this.getHTML(webviewPanel.webview);
 
-    webviewPanel.webview.onDidReceiveMessage(e => {
+    webviewPanel.webview.onDidReceiveMessage((e) => {
       switch (e.type) {
         case 'log': return console.log(...e.args);
         case 'error': return console.error(...e.args);
         case 'command:getDocumentText':
           return webviewPanel.webview.postMessage({ type: 'command:getDocumentText:response', payload: document.getText() });
-        case 'command:saveDocumentText':
-          return vscode.workspace.fs.writeFile(document.uri, Buffer.from(e.payload))
-            .then(
-              () => webviewPanel.webview.postMessage({ type: 'command:saveDocumentText:response', payload: null }),
-              (error) => webviewPanel.webview.postMessage({ type: 'command:saveDocumentText:response', error }))
+        case 'command:updateDocumentText':
+          const edit = new vscode.WorkspaceEdit();
+          edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), e.payload);
+          return vscode.workspace.applyEdit(edit);
         case 'command:info':
           return vscode.window.showInformationMessage(e.payload);
         case 'command:error':

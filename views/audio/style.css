@@ -52,14 +52,16 @@ header {
     }
 
     .input {
-      font-family: monospace;
+      font-size: var(--vscode-editor-font-size);
+      font-family: var(--vscode-editor-font-family);
       height: var(--input-height);
       width: var(--input-width);
     }
   }
 
   .index {
-    font-family: monospace;
+    font-size: var(--vscode-editor-font-size);
+    font-family: var(--vscode-editor-font-family);
     height: var(--input-height);
     text-align: right;
     padding: var(--input-padding-vertical) var(--input-padding-horizontal);
@@ -84,9 +86,11 @@ aside {
 
       &#loop {
         background-color: transparent;
+        color: var(--vscode-foreground);
 
         &[data-checked] {
           background-color: var(--vscode-editorMarkerNavigationError-background);
+          color: var(--vscode-button-foreground);
         }
       }
 
