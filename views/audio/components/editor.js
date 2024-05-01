@@ -1,6 +1,6 @@
 // @ts-check
 import { state } from '../state.js';
-import { executeHostCommand } from '../ipc.js';
+import { executeHostCommand, Command } from '../../ipc.js';
 import { Note, Player, Tune, TuneParser, getNote, getTrackSize, removeNote, setNote } from '../sid.js';
 
 export const $editor = {
@@ -10,7 +10,7 @@ export const $editor = {
   init() {
     state.listen('tune', (tune) => {
       this.update(tune);
-      executeHostCommand('updateDocumentText', TuneParser.toString(tune));
+      executeHostCommand(Command.UpdateDocumentText, TuneParser.toString(tune));
     });
 
     const tune = state.getTune();
@@ -90,7 +90,7 @@ const makeCell = (tune, track, tick) => {
       Player.preview(value);
       previousValue = value;
     } catch (error) {
-      executeHostCommand('error', error.message);
+      executeHostCommand(Command.Error, error.message);
     }
   })
 
@@ -99,7 +99,7 @@ const makeCell = (tune, track, tick) => {
     const symbol = e.target?.value;
     const note = Player.parse(symbol);
     if (note.isInvalid()) {
-      executeHostCommand('error', `Invalid symbol: ${symbol}`);
+      executeHostCommand(Command.Error, `Invalid symbol: ${symbol}`);
       $input.value = previousValue;
       return
     }
@@ -110,7 +110,7 @@ const makeCell = (tune, track, tick) => {
       setNote(tune, track, tick, note);
       state.setTune(tune);
     } catch (error) {
-      executeHostCommand('error', error);
+      executeHostCommand(Command.Error, error);
     }
   });
 

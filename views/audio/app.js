@@ -1,11 +1,11 @@
 // @ts-check
 
-import { executeHostCommand } from './ipc.js'
 import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
 import { Tune, TuneParser } from './sid.js'
+import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 
 const $app = {
   onLoad() {
@@ -23,27 +23,35 @@ const $app = {
             tune.setTicksPerBeat(4);
           } else {
             tune = TuneParser.fromString(payload);
-            state.setTune(tune);
           }
 
           state.setTune(tune);
           $app.init();
         } catch (error) {
-          executeHostCommand('error', error.message);
+          executeHostCommand(Command.Error, error.message);
         }
       }
 
-      executeHostCommand('getDocumentText', null, loadTune);
+      executeHostCommand(Command.GetDocumentText, null, loadTune);
     } catch (error) {
       $editor.$root.innerHTML = '';
-      executeHostCommand('error', error.message);
+      executeHostCommand(Command.Error, error.message);
     }
   },
   init() {
-    console.log('init');
     $metadata.init();
     $playback.init();
     $editor.init();
+
+    // Whenever the text changes for external reasons, we need to update the tune
+    listen(Event.DocumentTextUpdated, (text) => {
+      try {
+        const tune = TuneParser.fromString(text);
+        state.setTune(tune);
+      } catch (error) {
+        executeHostCommand(Command.Error, error.message);
+      }
+    })
   }
 };
 

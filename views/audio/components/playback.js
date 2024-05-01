@@ -1,5 +1,5 @@
 //@ts-check
-import { executeHostCommand } from '../ipc.js';
+import { executeHostCommand, Command } from '../../ipc.js';
 import { state } from '../state.js';
 import { Player } from '../sid.js';
 
@@ -48,12 +48,12 @@ const handleClickPlay = (e) => {
     }
     const tune = state.getTune();
     if (!tune) {
-      executeHostCommand('error', 'No tune to play');
+      executeHostCommand(Command.Error, 'No tune to play');
       return;
     }
     Player.play(tune);
   } catch (e) {
-    executeHostCommand('error', e.message);
+    executeHostCommand(Command.Error, e.message);
   }
 }
 
@@ -62,7 +62,7 @@ const handleClickStop = (e) => {
   try {
     Player.stop();
   } catch (error) {
-    executeHostCommand('error', error.message);
+    executeHostCommand(Command.Error, error.message);
   }
 }
 

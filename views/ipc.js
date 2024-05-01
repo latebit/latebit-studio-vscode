@@ -1,5 +1,19 @@
 const vscode = acquireVsCodeApi();
 
+/// THIS IS COPIED FROM THE TYPESCRIPT FILE `src/ipc.ts` AND NEEDS TO BE MANUALLY SYNCED
+export const Command = {
+  GetDocumentText: 'command:getDocumentText',
+  UpdateDocumentText: 'command:updateDocumentText',
+  Info: 'command:info',
+  Error: 'command:error',
+};
+
+export const Event = {
+  DocumentTextUpdated: 'event:documentTextUpdated',
+};
+
+export const response = (command) => `${command}:response`;
+
 /**
  * @template T
  * @typedef {MessageEvent & { data: CommandResponse<T> }} CustomMessageEvent
@@ -22,10 +36,11 @@ const vscode = acquireVsCodeApi();
  * @param {(error: Error) => void} [onError] 
  */
 export function executeHostCommand(command, payload = null, onResponse = null, onError = null) {
-  vscode.postMessage({ type: `command:${command}`, payload });
+  vscode.postMessage({ type: command, payload });
   /** @type {(event: CustomMessageEvent<R>) => void} */
   const callback = (event) => {
-    if (event.data.type === `command:${command}:response`) {
+    debugger
+    if (event.data.type === response(command)) {
       window.removeEventListener('message', callback);
       if (event.data.error) {
         onError?.(event.data.error);
@@ -36,4 +51,17 @@ export function executeHostCommand(command, payload = null, onResponse = null, o
   }
 
   window.addEventListener('message', callback);
+}
+
+/**
+ * @template P
+ * @param {string} event 
+ * @param {(payload: P) => void} callback
+ */
+export function listen(event, callback) {
+  window.addEventListener('message', (e) => {
+    if (e.data.type === event) {
+      callback(e.data.payload);
+    }
+  });
 }
