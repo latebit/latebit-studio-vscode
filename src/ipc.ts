@@ -14,4 +14,4 @@ export const Event = {
 
 export type Event = typeof Event[keyof typeof Event];
 
-export const response = (command: Command) => `${command}:response`
+export const response = (command: Command) => `${command}:response`;
