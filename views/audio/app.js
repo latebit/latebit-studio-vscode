@@ -55,4 +55,4 @@ const $app = {
   }
 };
 
-window.addEventListener('load', $app.onLoad);
+$app.onLoad();

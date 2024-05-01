@@ -7,3 +7,4 @@ player/lib
 node_modules
 .vscode-test/
 *.vsix
+local.sh

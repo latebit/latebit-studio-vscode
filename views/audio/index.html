@@ -61,17 +61,23 @@
     Module = {
       locateFile: function (path) {
         return '{{ player }}/' + path;
+      },
+      onRuntimeInitialized: function () {
+        // Load app only when the emscripten runtime is ready
+        const script = document.createElement('script');
+        script.src = '{{ views }}/audio/app.js';
+        script.type = 'module';
+        document.body.appendChild(script);
       }
     };
   </script>
-  <script src="{{ player }}/player.js"></script>
-  <script src="{{ views }}/audio/app.js" type="module"></script>
   <style>
     /* for FOUC */
     html {
       display: unset;
     }
   </style>
+  <script src="{{ player }}/player.js"></script>
 </body>
 
 </html>

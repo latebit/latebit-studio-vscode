@@ -39,7 +39,6 @@ export function executeHostCommand(command, payload = null, onResponse = null, o
   vscode.postMessage({ type: command, payload });
   /** @type {(event: CustomMessageEvent<R>) => void} */
   const callback = (event) => {
-    debugger
     if (event.data.type === response(command)) {
       window.removeEventListener('message', callback);
       if (event.data.error) {
