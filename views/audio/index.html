@@ -34,8 +34,8 @@
     <section id="editor">
       <p>Loading...</p>
     </section>
-    <aside id="metadata">
-      <form>
+    <aside>
+      <form id="metadata">
         <h2>Metadata</h2>
         <label for="bpm">BPM</label>
         <input id="bpm" type="number" min="10" max="400" value="10">
@@ -46,17 +46,13 @@
         <label for="beats">Number of beats</label>
         <input id="beats" type="number" min="1" max="64" value="1">
       </form>
-      <form>
+      <form id="playback">
         <h2>Playback</h2>
-        <label for="loop">
-          <input type="checkbox" id="loop" disabled>Loop
-        </label>
-        <button id="play" disabled>
-          Play/Pause
-        </button>
-        <button id="stop" disabled>
-          Stop
-        </button>
+        <fieldset>
+          <button id="play" title="Play/Pause" class="codicon codicon-play" disabled></button>
+          <button id="stop" title="Stop" class="codicon codicon-debug-stop" disabled></button>
+          <button id="loop" title="Toggle Loop" class="codicon codicon-sync-ignored" disabled></button>
+        </fieldset>
       </form>
       <form>
         <h2>Edit</h2>

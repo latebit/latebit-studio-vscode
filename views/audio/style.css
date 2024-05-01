@@ -66,11 +66,31 @@ header {
   }
 }
 
-#metadata {
+aside {
   flex: 1;
 
   form {
     padding-bottom: var(--container-paddding);
+  }
+
+  #playback fieldset {
+    display: grid;
+    grid-auto-flow: column;
+    border: none;
+
+    button {
+      height: 48px;
+      min-width: 48px;
+
+      &#loop {
+        background-color: transparent;
+
+        &[data-checked] {
+          background-color: var(--vscode-editorMarkerNavigationError-background);
+        }
+      }
+
+    }
   }
 }
 

@@ -18,11 +18,27 @@ export const $playback = {
     this.$stop.disabled = true;
     this.$play.addEventListener('click', handleClickPlay);
     this.$stop.addEventListener('click', handleClickStop);
-    this.$loop.addEventListener('change', handleToggleLoop);
+    this.$loop.addEventListener('click', handleToggleLoop);
+    handlePlayingIcon();
   }
 }
 
-const handleToggleLoop = (e) => Player.setLoop(e.target.checked);
+const handleToggleLoop = (e) => {
+  e.preventDefault();
+  const checked = e.target.hasAttribute('data-checked')
+  if (checked) {
+    e.target.removeAttribute('data-checked');
+    e.target.classList.add('codicon-sync-ignored');
+    e.target.classList.remove('codicon-sync');
+  } else {
+    e.target.setAttribute('data-checked', '');
+    e.target.classList.add('codicon-sync');
+    e.target.classList.remove('codicon-sync-ignored');
+  }
+
+  Player.setLoop(!checked);
+};
+
 const handleClickPlay = (e) => {
   e.preventDefault();
   try {
@@ -47,4 +63,18 @@ const handleClickStop = (e) => {
   } catch (error) {
     executeHostCommand('error', error.message);
   }
+}
+
+const handlePlayingIcon = () => {
+  const loop = () => {
+    if (Player.isPlaying()) {
+      $playback.$play.classList.remove('codicon-play');
+      $playback.$play.classList.add('codicon-debug-pause');
+    } else {
+      $playback.$play.classList.remove('codicon-debug-pause');
+      $playback.$play.classList.add('codicon-play');
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
 }
