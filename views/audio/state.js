@@ -6,21 +6,17 @@
 /**
  * @type {Object} Listeners
  * @param {((tune: Tune) => void)[]} tune
- * @param {(tick: number) => void[]} currentTick
  */
 const listeners = {
   tune: [],
-  currentTick: []
 }
 
 /**
  * @type {Object} State 
  * @param {Tune} tune
- * @param {number} currentTick
-*/
+ */
 const store = {
   tune: null,
-  currentTick: -1,
 }
 
 export const state = {
@@ -29,6 +25,8 @@ export const state = {
    * @param {Tune} tune
    */
   setTune(tune) {
+    if (tune === store.tune) return;
+
     store.tune = tune;
     listeners.tune?.forEach(callback => callback(tune));
   },
@@ -38,20 +36,6 @@ export const state = {
    */
   getTune() {
     return store.tune;
-  },
-
-  /**
-   * @param {number} tick
-   */
-  setCurrentTick(tick) {
-    store.currentTick = tick;
-    listeners.currentTick?.forEach(callback => callback(tick));
-  },
-  /**
-   * @returns {number}
-   */
-  getCurrentTick() {
-    return store.currentTick;
   },
 
   /**

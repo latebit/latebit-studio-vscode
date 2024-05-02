@@ -9,6 +9,10 @@ import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 
 const $app = {
   onLoad() {
+    $metadata.init();
+    $playback.init();
+    $editor.init();
+
     try {
       /**
        * @type {(payload: string) => void}
@@ -23,11 +27,15 @@ const $app = {
             tune.setTicksPerBeat(4);
           } else {
             tune = TuneParser.fromString(payload);
+            if (!tune) {
+              throw new Error('Failed to parse tune. Check specification or console for more information.');
+            }
           }
 
           state.setTune(tune);
           $app.init();
         } catch (error) {
+          $editor.$root.innerHTML = '';
           executeHostCommand(Command.Error, error.message);
         }
       }
@@ -39,10 +47,6 @@ const $app = {
     }
   },
   init() {
-    $metadata.init();
-    $playback.init();
-    $editor.init();
-
     // Whenever the text changes for external reasons, we need to update the tune
     listen(Event.DocumentTextUpdated, (text) => {
       try {

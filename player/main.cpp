@@ -12,6 +12,7 @@
 #include "latebit/sid/parser/parser.h"
 #include "latebit/sid/synth/track.h"
 #include "latebit/sid/synth/tune.h"
+#include "latebit/utils/Logger.h"
 
 using namespace std;
 using namespace sid;
@@ -19,6 +20,7 @@ using namespace player;
 using namespace emscripten;
 
 int main() {
+  Log.setDestination(lb::STDOUT);
   if (0 != SDL_Init(SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
     printf("Cannot initialize audio.");
     return 1;

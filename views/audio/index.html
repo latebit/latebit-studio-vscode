@@ -68,6 +68,12 @@
         script.src = '{{ views }}/audio/app.js';
         script.type = 'module';
         document.body.appendChild(script);
+      },
+      print: function (...args) {
+        console.log(...args);
+      },
+      printErr: function (...args) {
+        console.error(...args);
       }
     };
   </script>
