@@ -6,7 +6,7 @@ import * as vscode from 'vscode';
 import { debounce } from './utils';
 import { VIEWS_PATH } from './constants';
 
-const view = fs.readFileSync(path.join(VIEWS_PATH, 'sprites.html'), { encoding: 'utf-8' });
+const view = fs.readFileSync(path.join(VIEWS_PATH, 'sprites', 'index.html'), { encoding: 'utf-8' });
 
 export interface SpriteContext {
   frames: number;
@@ -47,7 +47,7 @@ function getSpritePanel() {
   );
 
   panel.webview.onDidReceiveMessage(e => {
-    if (e.type == 'log') {console.log(...e.payload);}
+    if (e.type == 'log') { console.log(...e.payload); }
   });
 
   panel.webview.html = view;
@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(vscode.commands.registerCommand('latebit-studio.sprite', () => {
     const editor = vscode.window.activeTextEditor;
-    if (!editor) {return;}
+    if (!editor) { return; }
 
     const doc = editor.document;
     const text = doc.getText();
