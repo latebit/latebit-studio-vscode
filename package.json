@@ -33,6 +33,25 @@
         ]
       }
     ],
+    "taskDefinitions": [
+      {
+        "type": "latebit",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The command used to build your game."
+          },
+          "flags": {
+            "type": "array",
+            "description": "Flags to pass to the command."
+          },
+          "environment": {
+            "type": "object",
+            "description": "Environment variables to set when running the task."
+          }
+        }
+      }
+    ],
     "languages": [
       {
         "id": "latebit",

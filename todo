@@ -9,7 +9,12 @@ that accommodates for that case better (for example, Tune is a single track
 which can be controlled with a few vertical range inputs to draw a curve for
 the sound).
 
-## latebit sprite editor 
+### Write parsing errors to the "Output" of vscode
+
+We could use the Output/Problems panel to surface errors instead of asking users
+to open the console.
+
+## latebit sprite editor
 
 - [] extract library from engine code
 - [] preview sprite animation
