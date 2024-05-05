@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { LatebitTaskDefinition } from './types';
 import { DEFAULT_CONFIGURATION } from './utils';
+import { access, constants } from 'node:fs/promises'
 
-function getCMakeExtensionParameters() {
-  const extension = vscode.extensions.getExtension('twxs.cmake');
+export function getCMakeExtensionParameters() {
+  const extension = vscode.extensions.getExtension('ms-vscode.cmake-tools');
   const version = extension?.packageJSON.version;
   const config = vscode.workspace.getConfiguration('cmake');
 
@@ -27,13 +28,16 @@ export function makeExecution(definition: LatebitTaskDefinition): vscode.CustomE
   } = getCMakeExtensionParameters();
 
   const command = definition.command || cmakePath;
-  const flags = (definition.flags ?? defaults.getFlags(buildDirectory)).join(' ');
+  const flagList = definition.flags && definition.flags.length > 0
+    ? definition.flags
+    : defaults.getFlags(buildDirectory);
+  const flags = flagList.join(' ');
   const env = definition.environment ?? defaults.environment;
 
   // Use CMake Extension only if it is active and no command is provided
   const useCMakeExtension = !definition.command && CMakeExtension;
   if (useCMakeExtension) {
-    console.log(`Using twxs.cmake@${CMakeExtensionVersion} Extension.`);
+    console.log(`Using ms-vscode.cmake-tools@${CMakeExtensionVersion} Extension.`);
   }
 
   const writeEmitter = new vscode.EventEmitter<string>();
@@ -50,4 +54,35 @@ export function makeExecution(definition: LatebitTaskDefinition): vscode.CustomE
       close: () => { }
     }))
     : new vscode.ShellExecution(`${command} ${flags}`, { env });
+}
+
+type CMakeTarget = { targetType: 'EXECUTABLE' | string, name: string, filepath: string };
+
+export async function getExecutableTargets(): Promise<[name: string, path: string][]> {
+  const cmakeTools = vscode.extensions.getExtension('ms-vscode.cmake-tools');
+  if (!cmakeTools) {
+    return [];
+  }
+
+  if (!cmakeTools.isActive) {
+    try {
+      await cmakeTools.activate();
+    } catch (error) {
+      vscode.window.showErrorMessage('Failed to activate CMake Tools extension. Please try again.');
+      return [];
+    }
+  }
+
+  const api = cmakeTools.exports.getApi();
+  const rootFolderUri = vscode.Uri.file(api.getActiveFolderPath());
+  const { project } = await api.getProject(rootFolderUri);
+  if (!project) {
+    vscode.window.showErrorMessage('No CMake project found. Please configure a project.');
+    return [];
+  }
+
+  const targets = await project.targets;
+  return targets
+    .filter((target: CMakeTarget) => target.targetType === 'EXECUTABLE')
+    .map((t: CMakeTarget) => [t.name, t.filepath]);
 }

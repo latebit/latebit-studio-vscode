@@ -20,6 +20,16 @@
         "command": "latebit-studio.sprite",
         "title": "Show sprite preview",
         "category": "latebit"
+      },
+      {
+        "command": "debug",
+        "title": "Debug current game",
+        "category": "latebit"
+      },
+      {
+        "command": "build",
+        "title": "Build current game",
+        "category": "latebit"
       }
     ],
     "customEditors": [
@@ -37,6 +47,15 @@
       {
         "type": "latebit",
         "properties": {
+          "typ": {
+            "type": "string",
+            "oneOf": [
+              {
+                "enum": [ "build", "configure" ]
+              }
+            ],
+            "description": "The type of task to run."
+          },
           "command": {
             "type": "string",
             "description": "The command used to build your game."
@@ -50,6 +69,62 @@
             "description": "Environment variables to set when running the task."
           }
         }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "cppdbg",
+        "label": "latebit debugger",
+        "languages": [ "cpp" ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [ "program" ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a the game executable.",
+                "default": "${workspaceFolder}/build/name-of-your-game"
+              }
+            }
+          }
+        },
+        "configurationSnippets": [
+          {
+            "label": "latebit: debug with gdb",
+            "description": "Debug your game using gdb",
+            "body": {
+              "name": "latebit debug (gdb)",
+              "type": "cppdbg",
+              "request": "launch",
+              "program": "^\"\\${workspaceFolder}/build/${1:name-of-your-game}\"",
+              "stopAtEntry": false,
+              "cwd": "^\"\\${workspaceFolder}\"",
+              "externalConsole": false,
+              "MIMode": "gdb",
+              "setupCommands": [
+                {
+                  "description": "Enable pretty-printing for gdb",
+                  "text": "-enable-pretty-printing",
+                  "ignoreFailures": true
+                }
+              ]
+            }
+          },
+          {
+            "label": "latebit: debug with lldb",
+            "description": "Debug your game using lldb",
+            "body": {
+              "name": "latebit debug (lldb)",
+              "type": "cppdbg",
+              "request": "launch",
+              "program": "\\${workspaceFolder}/path/to/your/program",
+              "stopAtEntry": false,
+              "cwd": "\\${workspaceFolder}",
+              "externalConsole": false,
+              "MIMode": "lldb"
+            }
+          }
+        ]
       }
     ],
     "languages": [
