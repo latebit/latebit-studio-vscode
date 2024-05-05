@@ -109,20 +109,6 @@
                 }
               ]
             }
-          },
-          {
-            "label": "latebit: debug with lldb",
-            "description": "Debug your game using lldb",
-            "body": {
-              "name": "latebit debug (lldb)",
-              "type": "cppdbg",
-              "request": "launch",
-              "program": "\\${workspaceFolder}/path/to/your/program",
-              "stopAtEntry": false,
-              "cwd": "\\${workspaceFolder}",
-              "externalConsole": false,
-              "MIMode": "lldb"
-            }
           }
         ]
       }
