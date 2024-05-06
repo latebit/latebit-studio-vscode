@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { LatebitTaskDefinition } from './types';
 import { DEFAULT_CONFIGURATION } from './utils';
-import { access, constants } from 'node:fs/promises'
 
 export function getCMakeExtensionParameters() {
   const extension = vscode.extensions.getExtension('ms-vscode.cmake-tools');
