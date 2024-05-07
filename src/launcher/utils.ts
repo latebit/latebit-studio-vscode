@@ -7,6 +7,7 @@ export enum LatebitTaskType {
 export enum LatebitCommandType {
   Debug = 'debug',
   Build = 'build',
+  Configure = 'configure',
 }
 
 export const DEFAULT_CONFIGURATION = {
