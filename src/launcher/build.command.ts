@@ -2,18 +2,18 @@ import * as vscode from 'vscode';
 import { DEFAULT_CONFIGURATION, LatebitCommandType, LatebitTaskType } from './utils';
 import { getCMakeExtensionParameters } from './cmake';
 
-export class LatebitBuildCommandProvider {
-  static type = LatebitCommandType.Build;
-
-  static register(context: vscode.ExtensionContext): vscode.Disposable {
-    const provider = new LatebitBuildCommandProvider(context);
-    const disposable = vscode.commands.registerCommand(LatebitBuildCommandProvider.type, () => provider.launch());
-    return disposable;
+export class LatebitBuildCommandsProvider {
+  static register(context: vscode.ExtensionContext): vscode.Disposable[] {
+    const provider = new LatebitBuildCommandsProvider(context);
+    return [
+      vscode.commands.registerCommand(LatebitCommandType.Build, () => provider.build()),
+      vscode.commands.registerCommand(LatebitCommandType.Configure, () => provider.configure())
+    ]
   }
 
   constructor(private readonly context: vscode.ExtensionContext) { }
 
-  async launch() {
+  async build() {
     const tasks = await vscode.tasks.fetchTasks({ type: 'latebit' });
     const buildTask = await this.getBuildTask(tasks);
     const isConfigured = await this.isConfigured();
@@ -34,6 +34,12 @@ export class LatebitBuildCommandProvider {
     }
 
     await vscode.tasks.executeTask(buildTask);
+  }
+
+  async configure() {
+    const tasks = await vscode.tasks.fetchTasks({ type: 'latebit' });
+    const configureTask = await this.getConfigureTask(tasks);
+    await vscode.tasks.executeTask(configureTask);
   }
 
   private async isConfigured() {
