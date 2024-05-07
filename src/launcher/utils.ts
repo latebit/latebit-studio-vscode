@@ -8,6 +8,8 @@ export enum CommandType {
   Debug = 'debug',
   Build = 'build',
   Configure = 'configure',
+  Clean = 'clean',
+  CleanBuild = 'clean-build'
 }
 
 export const DEFAULT_CONFIGURATION = {

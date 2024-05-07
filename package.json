@@ -35,6 +35,16 @@
         "command": "configure",
         "title": "Configure the workspace for the current game",
         "category": "latebit"
+      },
+      {
+        "command": "clean",
+        "title": "Clean build artifacts",
+        "category": "latebit"
+      },
+      {
+        "command": "clean-build",
+        "title": "Clean previous builds and build the current game",
+        "category": "latebit"
       }
     ],
     "customEditors": [

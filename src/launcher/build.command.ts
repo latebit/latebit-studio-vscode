@@ -7,7 +7,12 @@ export class BuildCommandsProvider {
     const provider = new BuildCommandsProvider(context);
     return [
       vscode.commands.registerCommand(CommandType.Build, () => provider.build()),
-      vscode.commands.registerCommand(CommandType.Configure, () => provider.configure())
+      vscode.commands.registerCommand(CommandType.Configure, () => provider.configure()),
+      vscode.commands.registerCommand(CommandType.Clean, () => provider.clean()),
+      vscode.commands.registerCommand(CommandType.CleanBuild, async () => {
+        await provider.clean();
+        await provider.build();
+      })
     ]
   }
 
@@ -42,9 +47,23 @@ export class BuildCommandsProvider {
     await vscode.tasks.executeTask(configureTask);
   }
 
+  async clean() {
+    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
+    const { buildDirectory = defaultBuildDirectory } = getCMakeExtensionParameters();
+
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) {
+      vscode.window.showErrorMessage('No workspace folder open.');
+      return;
+    }
+
+    const uri = vscode.Uri.joinPath(workspaceFolders[0].uri, buildDirectory)
+    vscode.workspace.fs.delete(uri, { recursive: true })
+  }
+
   private async isConfigured() {
-    const defaultBuildFolder = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
-    const { buildDirectory = defaultBuildFolder } = getCMakeExtensionParameters();
+    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
+    const { buildDirectory = defaultBuildDirectory } = getCMakeExtensionParameters();
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
