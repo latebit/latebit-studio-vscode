@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { LatebitTaskType } from './utils';
+import { TaskType } from './utils';
 
-export interface LatebitTaskDefinition extends vscode.TaskDefinition {
+export interface TaskDefinition extends vscode.TaskDefinition {
   type: 'latebit';
-  typ: LatebitTaskType;
+  typ: TaskType;
   command?: string;
   flags?: string[];
   environment?: { [key: string]: string };

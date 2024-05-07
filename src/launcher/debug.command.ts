@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import { LatebitCommandType } from './utils';
+import { CommandType } from './utils';
 import { getExecutableTargets } from './cmake';
 
-export class LatebitDebugCommandProvider {
-  static type = LatebitCommandType.Debug;
+export class DebugCommandProvider {
+  static type = CommandType.Debug;
 
   static register(context: vscode.ExtensionContext): vscode.Disposable {
-    const provider = new LatebitDebugCommandProvider(context);
-    const disposable = vscode.commands.registerCommand(LatebitDebugCommandProvider.type, () => provider.launch());
+    const provider = new DebugCommandProvider(context);
+    const disposable = vscode.commands.registerCommand(DebugCommandProvider.type, () => provider.launch());
     return disposable;
   }
 

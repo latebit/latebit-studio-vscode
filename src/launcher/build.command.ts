@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import { DEFAULT_CONFIGURATION, LatebitCommandType, LatebitTaskType } from './utils';
+import { DEFAULT_CONFIGURATION, CommandType, TaskType } from './utils';
 import { getCMakeExtensionParameters } from './cmake';
 
-export class LatebitBuildCommandsProvider {
+export class BuildCommandsProvider {
   static register(context: vscode.ExtensionContext): vscode.Disposable[] {
-    const provider = new LatebitBuildCommandsProvider(context);
+    const provider = new BuildCommandsProvider(context);
     return [
-      vscode.commands.registerCommand(LatebitCommandType.Build, () => provider.build()),
-      vscode.commands.registerCommand(LatebitCommandType.Configure, () => provider.configure())
+      vscode.commands.registerCommand(CommandType.Build, () => provider.build()),
+      vscode.commands.registerCommand(CommandType.Configure, () => provider.configure())
     ]
   }
 
@@ -43,7 +43,7 @@ export class LatebitBuildCommandsProvider {
   }
 
   private async isConfigured() {
-    const defaultBuildFolder = DEFAULT_CONFIGURATION[LatebitTaskType.Configure].buildDirectory;
+    const defaultBuildFolder = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
     const { buildDirectory = defaultBuildFolder } = getCMakeExtensionParameters();
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -56,7 +56,7 @@ export class LatebitBuildCommandsProvider {
   }
 
   private async getConfigureTask(tasks: vscode.Task[]) {
-    const configureTasks = tasks.filter(task => task.definition.typ === LatebitTaskType.Configure);
+    const configureTasks = tasks.filter(task => task.definition.typ === TaskType.Configure);
     let configureTask = configureTasks[0];
     if (configureTasks.length > 1) {
       const picks = configureTasks.map(task => task.name);
@@ -67,7 +67,7 @@ export class LatebitBuildCommandsProvider {
   }
 
   private async getBuildTask(tasks: vscode.Task[]) {
-    const buildTasks = tasks.filter(task => task.definition.typ === LatebitTaskType.Build);
+    const buildTasks = tasks.filter(task => task.definition.typ === TaskType.Build);
     let buildTask = buildTasks[0];
     if (buildTasks.length > 1) {
       const picks = buildTasks.map(task => task.name);

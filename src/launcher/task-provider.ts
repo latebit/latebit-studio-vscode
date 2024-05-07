@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
-import { LatebitTaskDefinition } from './types';
-import { LatebitTaskType } from './utils';
+import { TaskDefinition } from './types';
+import { TaskType } from './utils';
 import { makeExecution } from './cmake';
 
-export class LatebitTaskProvider implements vscode.TaskProvider {
+export class TaskProvider implements vscode.TaskProvider {
   private readonly source = 'latebit' as const;
   private readonly type = 'latebit' as const;
 
   provideTasks(token: vscode.CancellationToken): vscode.ProviderResult<vscode.Task[]> {
-    const configDefinition = { type: this.type, typ: LatebitTaskType.Configure };
+    const configDefinition = { type: this.type, typ: TaskType.Configure };
     const configureTask = new vscode.Task(
       configDefinition,
       vscode.TaskScope.Workspace,
@@ -19,7 +19,7 @@ export class LatebitTaskProvider implements vscode.TaskProvider {
     );
     configureTask.detail = "Configure local environment to build the project.";
 
-    const buildDefinition = { type: this.type, typ: LatebitTaskType.Build };
+    const buildDefinition = { type: this.type, typ: TaskType.Build };
     const buildTask = new vscode.Task(
       buildDefinition,
       vscode.TaskScope.Workspace,
@@ -37,7 +37,7 @@ export class LatebitTaskProvider implements vscode.TaskProvider {
   }
 
   resolveTask(task: vscode.Task, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Task> {
-    const definition = task.definition as LatebitTaskDefinition;
+    const definition = task.definition as TaskDefinition;
 
     return new vscode.Task(
       definition,

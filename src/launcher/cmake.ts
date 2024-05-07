@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { LatebitTaskDefinition } from './types';
+import { TaskDefinition } from './types';
 import { DEFAULT_CONFIGURATION } from './utils';
 
 export function getCMakeExtensionParameters() {
@@ -16,7 +16,7 @@ export function getCMakeExtensionParameters() {
 
 // Returns a CustomExecution or ShellExecution based on the existing configuration of the CMake Extension.
 // If no CMake Extension is found, a ShellExecution using a local cmake is returned.
-export function makeExecution(definition: LatebitTaskDefinition): vscode.CustomExecution | vscode.ShellExecution {
+export function makeExecution(definition: TaskDefinition): vscode.CustomExecution | vscode.ShellExecution {
   const type = definition.typ;
   const defaults = DEFAULT_CONFIGURATION[type];
   const {

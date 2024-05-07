@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
 import { activate as activateSprite } from './sprites';
-import { LatebitTuneEditorProvider } from './audio';
-import { LatebitBuildCommandsProvider, LatebitTaskProvider, LatebitDebugCommandProvider } from './launcher';
+import { TuneEditorProvider } from './audio';
+import { BuildCommandsProvider, TaskProvider, DebugCommandProvider } from './launcher';
 
 export function activate(context: vscode.ExtensionContext) {
 	activateSprite(context);
-	context.subscriptions.push(LatebitTuneEditorProvider.register(context));
+	context.subscriptions.push(TuneEditorProvider.register(context));
 
-	vscode.tasks.registerTaskProvider('latebit', new LatebitTaskProvider());
-	context.subscriptions.push(LatebitDebugCommandProvider.register(context));
-	context.subscriptions.push(...LatebitBuildCommandsProvider.register(context));
+	vscode.tasks.registerTaskProvider('latebit', new TaskProvider());
+	context.subscriptions.push(DebugCommandProvider.register(context));
+	context.subscriptions.push(...BuildCommandsProvider.register(context));
 }
 
 export function deactivate() { }

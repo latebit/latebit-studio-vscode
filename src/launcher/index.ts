@@ -1,3 +1,3 @@
-export { LatebitTaskProvider } from './task-provider';
-export { LatebitDebugCommandProvider } from './debug.command';
-export { LatebitBuildCommandsProvider } from './build.command';
+export { TaskProvider } from './task-provider';
+export { DebugCommandProvider } from './debug.command';
+export { BuildCommandsProvider } from './build.command';

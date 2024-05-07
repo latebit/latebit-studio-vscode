@@ -6,13 +6,13 @@ import { Command, Event, response } from './ipc';
 
 const view = fs.readFileSync(path.join(VIEWS_PATH, 'audio', 'index.html'), { encoding: 'utf-8' });
 
-export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvider {
+export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
   static VIEW_TYPE = 'latebit-studio.tune';
 
   static register(context: vscode.ExtensionContext): vscode.Disposable {
-    const provider = new LatebitTuneEditorProvider(context);
+    const provider = new TuneEditorProvider(context);
     return vscode.window.registerCustomEditorProvider(
-      LatebitTuneEditorProvider.VIEW_TYPE,
+      TuneEditorProvider.VIEW_TYPE,
       provider,
       {
         webviewOptions: {
@@ -38,7 +38,7 @@ export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvide
             type: response(Command.GetDocumentText), payload: document.getText()
           });
         case Command.UpdateDocumentText:
-          if (document.getText() === e.payload) {return;}
+          if (document.getText() === e.payload) { return; }
 
           const edit = new vscode.WorkspaceEdit();
           edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), e.payload);
@@ -51,7 +51,7 @@ export class LatebitTuneEditorProvider implements vscode.CustomTextEditorProvide
     });
 
     vscode.workspace.onDidChangeTextDocument((e) => {
-      if (e.reason == null) {return;}
+      if (e.reason == null) { return; }
 
       const isUndoRedo = [vscode.TextDocumentChangeReason.Redo, vscode.TextDocumentChangeReason.Undo].includes(e.reason);
       if (e.document === document && isUndoRedo) {

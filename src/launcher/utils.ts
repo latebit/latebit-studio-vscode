@@ -1,24 +1,24 @@
 
-export enum LatebitTaskType {
+export enum TaskType {
   Configure = 'configure',
   Build = 'build',
 }
 
-export enum LatebitCommandType {
+export enum CommandType {
   Debug = 'debug',
   Build = 'build',
   Configure = 'configure',
 }
 
 export const DEFAULT_CONFIGURATION = {
-  [LatebitTaskType.Configure]: {
+  [TaskType.Configure]: {
     buildDirectory: 'build',
     command: 'cmake',
     getFlags: (buildDirectory: string) => ['-B', buildDirectory, '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-DCMAKE_BUILD_TYPE=Debug'],
     environment: {},
     fallbackCMakeExtensionCommand: 'cmake.configure',
   },
-  [LatebitTaskType.Build]: {
+  [TaskType.Build]: {
     buildDirectory: 'build',
     command: 'cmake',
     getFlags: (buildDirectory: string) => ['--build', buildDirectory],
