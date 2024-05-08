@@ -2,6 +2,9 @@
   "name": "latebit-studio",
   "displayName": "latebit-studio",
   "description": "Official tools for the latebit game engine",
+  "icon": "media/logo.png",
+  "publisher": "Latebit",
+  "repository": "https://github.com/latebit/latebit-studio-vscode",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.86.0"
