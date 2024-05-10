@@ -15,6 +15,15 @@
     "Other"
   ],
   "main": "./out/src/index.js",
+  "activationEvents": [
+    "onCustomEditor:viewType:latebit-studio.tune",
+    "onCommand:commandId:latebit-studio.sprite",
+    "onCommand:commandId:debug",
+    "onCommand:commandId:build",
+    "onCommand:commandId:configure",
+    "onCommand:commandId:clean",
+    "onCommand:commandId:clean-build"
+  ],
   "contributes": {
     "commands": [
       {
