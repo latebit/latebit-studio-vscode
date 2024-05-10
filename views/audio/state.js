@@ -19,13 +19,26 @@ const store = {
   tune: null,
 }
 
+/**
+ * TODO: If we see this changing a lot it migth be a good idea to move it into the library itself
+ * @param {Tune | null} a 
+ * @param {Tune | null} b 
+ * @returns 
+ */
+const isSameTune = (a, b) => {
+  return a?.getBpm() === b?.getBpm() &&
+    a?.getBeatsCount() === b?.getBeatsCount() &&
+    a?.getTicksPerBeat() === b?.getTicksPerBeat() &&
+    a?.getTracksCount() === b?.getTracksCount();
+}
+
 export const state = {
   /**
    * @method setTune
    * @param {Tune} tune
    */
   setTune(tune) {
-    if (tune === store.tune) return;
+    if (isSameTune(tune, state.tune)) return;
 
     store.tune = tune;
     listeners.tune?.forEach(callback => callback(tune));

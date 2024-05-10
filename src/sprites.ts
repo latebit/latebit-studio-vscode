@@ -91,18 +91,4 @@ export function activate(context: vscode.ExtensionContext) {
       });
     }
   }));
-
-  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(editor => {
-    console.log('did change active text editor');
-    if (editor?.document.languageId === 'latebit') {
-      if (!panel) {
-        panel = getSpritePanel();
-      }
-
-      panel.webview.postMessage({
-        type: 'refresh',
-        payload: makeSpriteContext(editor.document.getText())
-      });
-    }
-  }));
 }

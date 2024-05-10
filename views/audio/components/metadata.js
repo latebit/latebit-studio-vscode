@@ -39,6 +39,7 @@ const setBpm = (/** @type {number} */ value) => {
   tune.setBpm(value);
   state.setTune(tune);
   maybeRestart();
+  console.log('bpm set');
 }
 
 const setBeats = (/** @type {number} */ value) => {

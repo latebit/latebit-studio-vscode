@@ -1,8 +1,8 @@
 {
   "name": "latebit-studio",
-  "displayName": "latebit-studio",
+  "displayName": "Latebit Studio",
   "description": "Official tools for the latebit game engine",
-  "icon": "https://raw.githubusercontent.com/latebit/latebit-studio-vscode/master/media/logo.png",
+  "icon": "media/logo.png",
   "publisher": "Latebit",
   "repository": "https://github.com/latebit/latebit-studio-vscode",
   "version": "0.0.1",
@@ -10,11 +10,9 @@
     "vscode": "^1.86.0"
   },
   "categories": [
+    "Extension Packs",
+    "Debuggers",
     "Other"
-  ],
-  "activationEvents": [
-    "onFileSystem:latebit",
-    "onLanguage:latebit"
   ],
   "main": "./out/src/index.js",
   "contributes": {
@@ -128,18 +126,6 @@
               ]
             }
           }
-        ]
-      }
-    ],
-    "languages": [
-      {
-        "id": "latebit",
-        "aliases": [
-          "latebit",
-          "latebit"
-        ],
-        "extensions": [
-          ".latebit"
         ]
       }
     ]
