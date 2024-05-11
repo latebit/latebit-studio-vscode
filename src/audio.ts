@@ -50,6 +50,17 @@ export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
       }
     });
 
+    webviewPanel.onDidChangeViewState((e) => {
+      // Reload the document when the view becomes active, to allow external
+      // changes to be reflected in the view
+      if (e.webviewPanel.active && e.webviewPanel.visible) {
+        webviewPanel.webview.postMessage({
+          type: Event.DocumentTextUpdated,
+          payload: document.getText()
+        });
+      }
+    })
+
     vscode.workspace.onDidChangeTextDocument((e) => {
       if (e.reason == null) { return; }
 
