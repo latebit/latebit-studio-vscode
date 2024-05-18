@@ -1,6 +1,7 @@
 #pragma once
 
 #include "latebit/sid/synth/sequencer.h"
+#include "piano.h"
 #include <memory>
 
 using namespace sid;
@@ -10,8 +11,7 @@ class Player {
 private:
   static unsigned long int device;
   static unique_ptr<Sequencer> tuneSequencer;
-  static unique_ptr<Sequencer> sfxSequencer;
-  static shared_ptr<Tune> sfxTune;
+  static unique_ptr<Piano> piano;
 
 public:
   static void init(unsigned long int device);
@@ -19,11 +19,11 @@ public:
   static void play(Tune *tune);
   static void pause();
   static void stop();
-  static void preview(Symbol symbol);
   static Note parse(Symbol symbol);
 
   static bool isPlaying();
   static bool isLooping();
   static void setLoop(bool loop);
+  static void playNote(Note note);
 };
 } // namespace player

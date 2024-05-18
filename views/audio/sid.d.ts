@@ -17,7 +17,7 @@ declare namespace Module {
   }
 
   class Player {
-    static preview(note: Note): void;
+    static preview(symbol: string): void;
     static parse(symbol: string): Note;
     static isPlaying(): boolean;
     static isLooping(): boolean;
@@ -25,6 +25,7 @@ declare namespace Module {
     static pause(): void;
     static stop(): void;
     static play(tune: Tune): void;
+    static playNote(note: Note): void;
   }
 
   class TuneParser {

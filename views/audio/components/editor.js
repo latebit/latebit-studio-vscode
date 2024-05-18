@@ -116,7 +116,8 @@ const makeCell = (tune, track, tick) => {
 
   $input.addEventListener('focus', (e) => {
     // @ts-expect-error
-    Player.preview(e.target.value);
+    const note = Note.fromSymbol(e.target.value);
+    Player.playNote(note);
   })
 
   const $delete = document.createElement('button');

@@ -1,5 +1,6 @@
 #include "player.h"
 #include <SDL2/SDL_audio.h>
+#include <latebit/sid/synth/oscillator.h>
 #include <latebit/sid/synth/track.h>
 #include <memory>
 
@@ -9,7 +10,7 @@ using namespace std;
 namespace player {
 long unsigned int Player::device = 0;
 unique_ptr<Sequencer> Player::tuneSequencer = make_unique<Sequencer>();
-unique_ptr<Sequencer> Player::sfxSequencer = make_unique<Sequencer>();
+unique_ptr<Piano> Player::piano = make_unique<Piano>();
 
 void Player::init(unsigned long int device) { Player::device = device; }
 
@@ -22,8 +23,8 @@ void Player::callback(void *data, unsigned char *stream, int len) {
   int samples = len / sizeof(float);
 
   for (int i = 0; i < samples; i++) {
-    auto sfxSample = sfxSequencer->getNextSample();
-    ((float *)stream)[i] = mix(tuneSequencer->getNextSample(), sfxSample);
+    ((float *)stream)[i] =
+        mix(tuneSequencer->getNextSample(), piano->process());
   }
 }
 
@@ -55,28 +56,7 @@ bool Player::isPlaying() { return tuneSequencer->isPlaying(); };
 bool Player::isLooping() { return tuneSequencer->isLooping(); };
 void Player::setLoop(bool loop) { tuneSequencer->setLoop(loop); };
 
-void Player::preview(string symbol) {
-  if (symbol.empty() || symbol == END_OF_TRACK_SYMBOL ||
-      symbol == REST_SYMBOL || symbol == CONTINUE_SYMBOL)
-    return;
-
-  auto n = Note::fromSymbol(symbol);
-  if (n.isInvalid())
-    return;
-
-  auto tune = make_shared<Tune>(1);
-  tune->setBeatsCount(1);
-  tune->setBpm(120);
-  tune->setTicksPerBeat(1);
-  tune->getTrack(0)->push_back(n);
-  sfxSequencer->unloadTune();
-  sfxSequencer->loadTune(tune);
-
-  SDL_PauseAudioDevice(device, 0);
-  sfxSequencer->play();
-}
-
-Note Player::parse(string symbol) {
+Note Player::parse(Symbol symbol) {
   if (symbol.empty() || symbol == END_OF_TRACK_SYMBOL)
     return Note::makeInvalid();
   if (symbol == REST_SYMBOL)
@@ -85,6 +65,11 @@ Note Player::parse(string symbol) {
     return Note::makeContinue();
 
   return Note::fromSymbol(symbol);
+}
+
+void Player::playNote(Note note) {
+  SDL_PauseAudioDevice(device, 0);
+  piano->setNote(note);
 }
 
 } // namespace player
