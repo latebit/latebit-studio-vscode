@@ -4,14 +4,41 @@ import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
-import { Tune, TuneParser } from './sid.js'
+import { Note, Player, Tune, TuneParser } from './sid.js'
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
+
+const keyToNote = {
+  'KeyZ': Note.fromSymbol('C-4---'),
+  'KeyX': Note.fromSymbol('D-4---'),
+  'KeyC': Note.fromSymbol('E-4---'),
+  'KeyV': Note.fromSymbol('F-4---'),
+  'KeyB': Note.fromSymbol('G-4---'),
+  'KeyN': Note.fromSymbol('A-4---'),
+  'KeyM': Note.fromSymbol('B-4---'),
+  'KeyS': Note.fromSymbol('C#4---'),
+  'KeyD': Note.fromSymbol('D#4---'),
+  'KeyG': Note.fromSymbol('F#4---'),
+  'KeyH': Note.fromSymbol('G#4---'),
+  'KeyJ': Note.fromSymbol('A#4---'),
+  'Comma': Note.fromSymbol('C-5---'),
+};
+
+const $piano = {
+  init() {
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement === document.body && keyToNote[e.code]) {
+        Player.playNote(keyToNote[e.code]);
+      }
+    })
+  }
+}
 
 const $app = {
   onLoad() {
     $metadata.init();
     $playback.init();
     $editor.init();
+    $piano.init();
 
     try {
       /**
