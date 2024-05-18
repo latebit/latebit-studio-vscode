@@ -53,6 +53,10 @@ export class DebugCommandProvider {
     const executableTargets = await getExecutableTargets();
 
     if (executableTargets.length > 0) {
+      if (executableTargets.length === 1) {
+        return this.startDefaultDebugger(executableTargets[0][1]);
+      }
+
       const picks = executableTargets
         .map(([name, path]) => ({ label: name, description: name, detail: path }));
 
