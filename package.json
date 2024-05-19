@@ -72,18 +72,18 @@
       {
         "type": "latebit",
         "properties": {
-          "typ": {
+          "kind": {
             "type": "string",
             "oneOf": [
               {
                 "enum": [ "build", "configure" ]
               }
             ],
-            "description": "The type of task to run."
+            "description": "The kind of task to run. Configure prepares the workspace for the build, and build compiles the artifacts."
           },
           "command": {
             "type": "string",
-            "description": "The command used to build your game."
+            "description": "The command to use to perform the task."
           },
           "flags": {
             "type": "array",

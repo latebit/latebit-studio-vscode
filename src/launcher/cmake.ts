@@ -17,7 +17,7 @@ export function getCMakeExtensionParameters() {
 // Returns a CustomExecution or ShellExecution based on the existing configuration of the CMake Extension.
 // If no CMake Extension is found, a ShellExecution using a local cmake is returned.
 export function makeExecution(definition: TaskDefinition): vscode.CustomExecution | vscode.ShellExecution {
-  const type = definition.typ;
+  const type = definition.kind;
   const defaults = DEFAULT_CONFIGURATION[type];
   const {
     buildDirectory = defaults.buildDirectory,

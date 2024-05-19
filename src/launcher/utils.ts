@@ -1,5 +1,4 @@
-
-export enum TaskType {
+export enum TaskKind {
   Configure = 'configure',
   Build = 'build',
 }
@@ -13,14 +12,14 @@ export enum CommandType {
 }
 
 export const DEFAULT_CONFIGURATION = {
-  [TaskType.Configure]: {
+  [TaskKind.Configure]: {
     buildDirectory: 'build',
     command: 'cmake',
     getFlags: (buildDirectory: string) => ['-B', buildDirectory, '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-DCMAKE_BUILD_TYPE=Debug'],
     environment: {},
     fallbackCMakeExtensionCommand: 'cmake.configure',
   },
-  [TaskType.Build]: {
+  [TaskKind.Build]: {
     buildDirectory: 'build',
     command: 'cmake',
     getFlags: (buildDirectory: string) => ['--build', buildDirectory],

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DEFAULT_CONFIGURATION, CommandType, TaskType } from './utils';
+import { DEFAULT_CONFIGURATION, CommandType, TaskKind } from './utils';
 import { getCMakeExtensionParameters } from './cmake';
 
 export class BuildCommandsProvider {
@@ -48,7 +48,7 @@ export class BuildCommandsProvider {
   }
 
   async clean() {
-    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
+    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskKind.Configure].buildDirectory;
     const { buildDirectory = defaultBuildDirectory } = getCMakeExtensionParameters();
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -62,7 +62,7 @@ export class BuildCommandsProvider {
   }
 
   private async isConfigured() {
-    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskType.Configure].buildDirectory;
+    const defaultBuildDirectory = DEFAULT_CONFIGURATION[TaskKind.Configure].buildDirectory;
     const { buildDirectory = defaultBuildDirectory } = getCMakeExtensionParameters();
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -75,7 +75,7 @@ export class BuildCommandsProvider {
   }
 
   private async getConfigureTask(tasks: vscode.Task[]) {
-    const configureTasks = tasks.filter(task => task.definition.typ === TaskType.Configure);
+    const configureTasks = tasks.filter(task => task.definition.typ === TaskKind.Configure);
     let configureTask = configureTasks[0];
     if (configureTasks.length > 1) {
       const picks = configureTasks.map(task => task.name);
@@ -86,7 +86,7 @@ export class BuildCommandsProvider {
   }
 
   private async getBuildTask(tasks: vscode.Task[]) {
-    const buildTasks = tasks.filter(task => task.definition.typ === TaskType.Build);
+    const buildTasks = tasks.filter(task => task.definition.typ === TaskKind.Build);
     let buildTask = buildTasks[0];
     if (buildTasks.length > 1) {
       const picks = buildTasks.map(task => task.name);

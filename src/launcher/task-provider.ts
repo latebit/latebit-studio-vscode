@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TaskDefinition } from './types';
-import { TaskType } from './utils';
+import { TaskKind } from './utils';
 import { makeExecution } from './cmake';
 
 export class TaskProvider implements vscode.TaskProvider {
@@ -8,7 +8,7 @@ export class TaskProvider implements vscode.TaskProvider {
   private readonly type = 'latebit' as const;
 
   provideTasks(token: vscode.CancellationToken): vscode.ProviderResult<vscode.Task[]> {
-    const configDefinition = { type: this.type, typ: TaskType.Configure };
+    const configDefinition = { type: this.type, kind: TaskKind.Configure };
     const configureTask = new vscode.Task(
       configDefinition,
       vscode.TaskScope.Workspace,
@@ -19,7 +19,7 @@ export class TaskProvider implements vscode.TaskProvider {
     );
     configureTask.detail = "Configure local environment to build the project.";
 
-    const buildDefinition = { type: this.type, typ: TaskType.Build };
+    const buildDefinition = { type: this.type, kind: TaskKind.Build };
     const buildTask = new vscode.Task(
       buildDefinition,
       vscode.TaskScope.Workspace,
@@ -29,6 +29,7 @@ export class TaskProvider implements vscode.TaskProvider {
       []
     );
     buildTask.detail = "Build the project.";
+    buildTask.group = vscode.TaskGroup.Build;
 
     return [
       buildTask,
