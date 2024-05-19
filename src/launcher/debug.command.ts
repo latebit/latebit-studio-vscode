@@ -13,12 +13,16 @@ export class DebugCommandProvider {
 
   constructor(private readonly context: vscode.ExtensionContext) { }
 
-  private startDefaultDebugger(program: string) {
+  private async startDefaultDebugger(program: string) {
+    const tasks = await vscode.tasks.fetchTasks({ type: 'latebit' });
+    const buildTask = tasks.find(t => t.group === vscode.TaskGroup.Build);
+
     return vscode.debug.startDebugging(undefined, {
       name: "latebit debug (gdb)",
       type: "cppdbg",
       request: "launch",
       program,
+      prelaunchTask: buildTask?.definition,
       stopAtEntry: false,
       cwd: "${workspaceFolder}",
       externalConsole: false,

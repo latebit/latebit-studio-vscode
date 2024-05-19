@@ -5,7 +5,7 @@ import { DEFAULT_CONFIGURATION } from './utils';
 export function getCMakeExtensionParameters() {
   const extension = vscode.extensions.getExtension('ms-vscode.cmake-tools');
   const version = extension?.packageJSON.version;
-  const config = vscode.workspace.getConfiguration('cmake');
+  const config = vscode.workspace.getConfiguration('cmake', null);
 
   const buildDirectory = config.get<string>('buildDirectory');
   const cmakePath = config.get<string>('cmakePath');
@@ -40,7 +40,7 @@ export function makeExecution(definition: TaskDefinition): vscode.CustomExecutio
   }
 
   const writeEmitter = new vscode.EventEmitter<string>();
-  const closeEmitter = new vscode.EventEmitter<void>();
+  const closeEmitter = new vscode.EventEmitter<number>();
 
   return useCMakeExtension
     ? new vscode.CustomExecution(async () => ({
@@ -48,7 +48,7 @@ export function makeExecution(definition: TaskDefinition): vscode.CustomExecutio
       onDidClose: closeEmitter.event,
       open: async () => {
         await vscode.commands.executeCommand(defaults.fallbackCMakeExtensionCommand);
-        return closeEmitter.fire();
+        return closeEmitter.fire(0);
       },
       close: () => { }
     }))
