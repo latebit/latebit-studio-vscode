@@ -17,7 +17,6 @@ declare namespace Module {
   }
 
   class Player {
-    static preview(symbol: string): void;
     static parse(symbol: string): Note;
     static isPlaying(): boolean;
     static isLooping(): boolean;

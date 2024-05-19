@@ -87,7 +87,7 @@ const makeCell = (tune, track, tick) => {
     if (note.isInvalid()) return;
 
     try {
-      Player.preview(value);
+      Player.playNote(note);
       previousValue = value;
     } catch (error) {
       executeHostCommand(Command.Error, error.message);
