@@ -35,7 +35,6 @@ auto setNote(Tune &tune, int trackIndex, int noteIndex,
 
 auto removeNote(Tune &tune, int trackIndex, int noteIndex) -> unique_ptr<Tune> {
   vector<unique_ptr<Track>> tracks = {};
-  // TODO: use move semantics
   for (int i = 0; i < tune.getTracksCount(); i++) {
     tracks.push_back(std::make_unique<Track>(*tune.getTrack(i)));
   }
@@ -47,7 +46,6 @@ auto removeNote(Tune &tune, int trackIndex, int noteIndex) -> unique_ptr<Tune> {
 }
 
 auto setBpm(Tune &tune, int bpm) -> unique_ptr<Tune> {
-  // TODO: use move semantics
   vector<unique_ptr<Track>> tracks = {};
   for (int i = 0; i < tune.getTracksCount(); i++) {
     tracks.push_back(std::make_unique<Track>(*tune.getTrack(i)));

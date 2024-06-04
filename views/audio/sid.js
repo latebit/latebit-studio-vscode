@@ -5,6 +5,21 @@
  */
 
 const sid = window.Module;
-const { Player, TuneParser, Tune, Note, setNote, getTrackSize, getNote, removeNote, createEmptyTune, setBeatsCount, setBpm, setTicksPerBeat, ParserOptions } = sid;
+const { Player, TuneParser, Tune, Note, setNote, getTrackSize, getNote, removeNote, createEmptyTune, setBeatsCount, setBpm, setTicksPerBeat, MUSIC_PARSER_OPTIONS, SOUND_PARSER_OPTIONS } = sid;
 
-export { Player, TuneParser, Tune, Note, getTrackSize, getNote, removeNote, setNote, createEmptyTune, setBeatsCount, setBpm, setTicksPerBeat, ParserOptions }
+export {
+  Player,
+  TuneParser,
+  Tune,
+  Note,
+  getTrackSize,
+  getNote,
+  removeNote,
+  setNote,
+  createEmptyTune,
+  setBeatsCount,
+  setBpm,
+  setTicksPerBeat,
+  MUSIC_PARSER_OPTIONS,
+  SOUND_PARSER_OPTIONS,
+}

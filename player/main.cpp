@@ -14,6 +14,8 @@
 #include "latebit/sid/synth/Note.h"
 #include "latebit/sid/synth/Tune.h"
 #include "latebit/utils/Logger.h"
+#include "latebit/core/audio/Music.h"
+#include "latebit/core/audio/Sound.h"
 
 using namespace std;
 using namespace sid;
@@ -118,4 +120,7 @@ EMSCRIPTEN_BINDINGS(sid) {
       .value("DROP", EffectType::DROP)
       .value("FADEIN", EffectType::FADEIN)
       .value("FADEOUT", EffectType::FADEOUT);
+  
+  constant("MUSIC_PARSER_OPTIONS", lb::MUSIC_PARSER_OPTIONS);
+  constant("SOUND_PARSER_OPTIONS", lb::SOUND_PARSER_OPTIONS);
 }

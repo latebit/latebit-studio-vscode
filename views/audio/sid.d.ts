@@ -74,6 +74,9 @@ declare namespace Module {
   }
 
   type Track = Note[];
+
+  const SOUND_PARSER_OPTIONS: ParserOptions;
+  const MUSIC_PARSER_OPTIONS: ParserOptions;
 }
 
 export = Module;
