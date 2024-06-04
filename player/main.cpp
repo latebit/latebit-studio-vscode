@@ -10,9 +10,9 @@
 #include "src/player.h"
 #include "src/wrappers.h"
 
-#include "latebit/sid/parser/parser.h"
-#include "latebit/sid/synth/track.h"
-#include "latebit/sid/synth/tune.h"
+#include "latebit/sid/parser/TuneParser.h"
+#include "latebit/sid/synth/Note.h"
+#include "latebit/sid/synth/Tune.h"
 #include "latebit/utils/Logger.h"
 
 using namespace std;
@@ -67,24 +67,30 @@ EMSCRIPTEN_BINDINGS(sid) {
       .class_function("stop", &Player::stop)
       .class_function("playNote", &Player::playNote);
 
+  class_<ParserOptions>("ParserOptions")
+    .constructor<>()
+    .property("maxTracksCount", &ParserOptions::maxTracksCount)
+    .property("maxBeatsCount", &ParserOptions::maxBeatsCount)
+    .property("maxTicksPerBeat", &ParserOptions::maxTicksPerBeat);
+
   class_<TuneParser>("TuneParser")
-      .class_function("fromString", &TuneParser::fromString)
+      .class_function("fromString", &TuneParser::fromString, allow_raw_pointers())
       .class_function("toString", &TuneParser::toString, allow_raw_pointers());
 
   class_<Tune>("Tune")
-      .constructor<int>()
       .function("getBpm", &Tune::getBpm)
-      .function("setBpm", &Tune::setBpm)
       .function("getTicksPerBeat", &Tune::getTicksPerBeat)
-      .function("setTicksPerBeat", &Tune::setTicksPerBeat)
       .function("getBeatsCount", &Tune::getBeatsCount)
-      .function("setBeatsCount", &Tune::setBeatsCount)
       .function("getTracksCount", &Tune::getTracksCount);
 
-  emscripten::function("getNote", &getNote);
-  emscripten::function("setNote", &setNote);
-  emscripten::function("removeNote", &removeNote);
-  emscripten::function("getTrackSize", &getTrackSize);
+  emscripten::function("setNote", &setNote, allow_raw_pointers());
+  emscripten::function("getNote", &getNote, allow_raw_pointers());
+  emscripten::function("getTrackSize", &getTrackSize, allow_raw_pointers());
+  emscripten::function("removeNote", &removeNote, allow_raw_pointers());
+  emscripten::function("setBpm", &setBpm, allow_raw_pointers());
+  emscripten::function("setTicksPerBeat", &setTicksPerBeat, allow_raw_pointers());
+  emscripten::function("setBeatsCount", &setBeatsCount, allow_raw_pointers());
+  emscripten::function("createEmptyTune", &createEmptyTune, allow_raw_pointers());
 
   class_<Note>("Note")
       .class_function("makeRest", &Note::makeRest)

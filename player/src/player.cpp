@@ -1,7 +1,7 @@
 #include "player.h"
 #include <SDL2/SDL_audio.h>
-#include <latebit/sid/synth/oscillator.h>
-#include <latebit/sid/synth/track.h>
+#include <latebit/sid/synth/Oscillator.h>
+#include <latebit/sid/synth/Note.h>
 #include <memory>
 
 using namespace sid;
@@ -31,11 +31,10 @@ void Player::callback(void *data, unsigned char *stream, int len) {
 // This uses a raw pointer + conversion because emscripten cannot cope with
 // smart pointers
 void Player::play(Tune *tune) {
-  if (tuneSequencer->getCurrentTune().get() != tune) {
-    auto shared = shared_ptr<Tune>(tune);
+  if (tuneSequencer->getCurrentTune() != tune) {
     tuneSequencer->stop();
     tuneSequencer->unloadTune();
-    tuneSequencer->loadTune(shared);
+    tuneSequencer->loadTune(tune);
   }
 
   SDL_PauseAudioDevice(device, 0);

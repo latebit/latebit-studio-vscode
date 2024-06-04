@@ -1,6 +1,6 @@
 #pragma once
 
-#include "latebit/sid/synth/sequencer.h"
+#include "latebit/sid/synth/Sequencer.h"
 #include "piano.h"
 #include <memory>
 

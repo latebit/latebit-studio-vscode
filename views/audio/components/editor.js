@@ -1,7 +1,7 @@
 // @ts-check
 import { state } from '../state.js';
 import { executeHostCommand, Command } from '../../ipc.js';
-import { Note, Player, Tune, TuneParser, getNote, getTrackSize, removeNote, setNote } from '../sid.js';
+import { Note, Player, Tune, TuneParser, removeNote, setNote, getNote, getTrackSize } from '../sid.js';
 
 export const $editor = {
   /** @type {!HTMLElement} */
@@ -58,8 +58,7 @@ export const $editor = {
           if (!tune) return;
 
           const note = Note.makeRest();
-          setNote(tune, i, getTrackSize(tune, i), note);
-          state.setTune(tune);
+          state.setTune(setNote(tune, i, getTrackSize(tune, i), note));
         });
         $track.appendChild($btn);
       }
@@ -107,8 +106,7 @@ const makeCell = (tune, track, tick) => {
     try {
       const tune = state.getTune();
       if (!tune) return;
-      setNote(tune, track, tick, note);
-      state.setTune(tune);
+      state.setTune(setNote(tune, track, tick, note));
     } catch (error) {
       executeHostCommand(Command.Error, error);
     }
@@ -125,8 +123,7 @@ const makeCell = (tune, track, tick) => {
   $delete.addEventListener('click', () => {
     const tune = state.getTune();
     if (!tune) return;
-    removeNote(tune, track, tick);
-    state.setTune(tune);
+    state.setTune(removeNote(tune, track, tick));
   });
 
   const $cell = document.createElement('div');

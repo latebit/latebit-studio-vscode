@@ -1,7 +1,7 @@
 #pragma once
 
-#include "latebit/sid/synth/oscillator.h"
-#include "latebit/sid/synth/sequencer.h"
+#include "latebit/sid/synth/Oscillator.h"
+#include "latebit/sid/synth/Sequencer.h"
 
 using namespace sid;
 

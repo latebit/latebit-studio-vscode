@@ -1,5 +1,5 @@
 // @ts-check
-import { Player, Tune } from '../sid.js';
+import { Player, Tune, setBeatsCount, setBpm, setTicksPerBeat } from '../sid.js';
 import { state } from '../state.js';
 
 export const $metadata = {
@@ -15,7 +15,7 @@ export const $metadata = {
   init() {
     state.listen('tune', (tune) => this.update(tune));
     // @ts-expect-error Cannot type these handlers
-    this.$bpm.addEventListener('change', (e) => setBpm(e.target?.value));
+    this.$bpm.addEventListener('change', (e) => setTempo(e.target?.value));
     // @ts-expect-error Cannot type these handlers
     this.$ticks.addEventListener('change', (e) => setTicks(e.target?.value));
     // @ts-expect-error Cannot type these handlers
@@ -31,15 +31,13 @@ export const $metadata = {
   }
 }
 
-const setBpm = (/** @type {number} */ value) => {
+const setTempo = (/** @type {number} */ value) => {
   $metadata.$bpm.value = value.toString();
   const tune = state.getTune();
   if (!tune) return;
 
-  tune.setBpm(value);
-  state.setTune(tune);
+  state.setTune(setBpm(tune, value));
   maybeRestart();
-  console.log('bpm set');
 }
 
 const setBeats = (/** @type {number} */ value) => {
@@ -47,8 +45,7 @@ const setBeats = (/** @type {number} */ value) => {
   const tune = state.getTune();
   if (!tune) return;
 
-  tune.setBeatsCount(value);
-  state.setTune(tune);
+  state.setTune(setBeatsCount(tune, value));
   maybeRestart();
 }
 
@@ -57,8 +54,7 @@ const setTicks = (/** @type {number} */ value) => {
   const tune = state.getTune();
   if (!tune) return;
 
-  tune.setTicksPerBeat(value);
-  state.setTune(tune);
+  state.setTune(setTicksPerBeat(tune, value));
   maybeRestart();
 }
 

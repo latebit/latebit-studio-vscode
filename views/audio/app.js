@@ -4,8 +4,15 @@ import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
-import { Tune, TuneParser } from './sid.js'
+import { ParserOptions, TuneParser, createEmptyTune } from './sid.js'
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
+
+// TODO: get from lib
+const parserOptions = new ParserOptions();
+parserOptions.maxTracksCount = 3;
+parserOptions.maxBeatsCount = 64;
+parserOptions.maxTicksPerBeat = 16;
+
 
 const $app = {
   onLoad() {
@@ -21,12 +28,9 @@ const $app = {
         let tune;
         try {
           if (!payload.trim()) {
-            tune = new Tune(3);
-            tune.setBeatsCount(4);
-            tune.setBpm(90);
-            tune.setTicksPerBeat(4);
+            tune = createEmptyTune(90, 4, 4);
           } else {
-            tune = TuneParser.fromString(payload);
+            tune = TuneParser.fromString(payload, parserOptions);
             if (!tune) {
               throw new Error('Failed to parse tune. Check specification or console for more information.');
             }
@@ -50,7 +54,8 @@ const $app = {
     // Whenever the text changes for external reasons, we need to update the tune
     listen(Event.DocumentTextUpdated, (text) => {
       try {
-        const tune = TuneParser.fromString(text);
+        // TODO: get from lib
+        const tune = TuneParser.fromString(text, parserOptions);
         state.setTune(tune);
       } catch (error) {
         executeHostCommand(Command.Error, error.message);

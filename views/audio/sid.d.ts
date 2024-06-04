@@ -5,14 +5,16 @@ declare global {
 }
 
 declare namespace Module {
+  class ParserOptions {
+    maxTracksCount: number;
+    maxBeatsCount: number;
+    maxTicksPerBeat: number;
+  }
+
   class Tune {
-    constructor(numberOfTracks: number);
     getBpm(): number;
-    setBpm(bpm: number): void;
     getTicksPerBeat(): number;
-    setTicksPerBeat(ticksPerBeat: number): void;
     getBeatsCount(): number;
-    setBeatsCount(beats: number): void;
     getTracksCount(): number;
   }
 
@@ -28,14 +30,18 @@ declare namespace Module {
   }
 
   class TuneParser {
-    static fromString(s: string): Tune;
+    static fromString(s: string, options: ParserOptions): Tune;
     static toString(t: Tune): string;
   }
 
   function getNote(tune: Tune, trackIndex: number, noteIndex: number): Note;
-  function setNote(tune: Tune, trackIndex: number, noteIndex: number, note: Note): void;
-  function removeNote(tune: Tune, trackIndex: number, noteIndex: number): void;
   function getTrackSize(tune: Tune, trackIndex: number): number;
+  function setNote(tune: Tune, trackIndex: number, noteIndex: number, note: Note): readonly Tune;
+  function removeNote(tune: Tune, trackIndex: number, noteIndex: number): readonly Tune;
+  function setBpm(tune: Tune, bpm: number): readonly Tune;
+  function setTicksPerBeat(tune: Tune, ticks: number): readonly Tune;
+  function setBeatsCount(tune: Tune, beats: number): readonly Tune;
+  function createEmptyTune(bpm: number, ticksPerBeat: number, beatsCount: number): readonly Tune;
 
   class Note {
     static makeRest(): Note;
@@ -66,6 +72,8 @@ declare namespace Module {
     FADEIN,
     FADEOUT
   }
+
+  type Track = Note[];
 }
 
 export = Module;
