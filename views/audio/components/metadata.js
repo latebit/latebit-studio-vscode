@@ -1,7 +1,16 @@
 // @ts-check
 import { Command, executeHostCommand } from '../../ipc.js';
-import { Player, Tune, setBeatsCount, setBpm, setTicksPerBeat } from '../sid.js';
+import { MUSIC_PARSER_OPTIONS, Player, SOUND_PARSER_OPTIONS, Tune, setBeatsCount, setBpm, setTicksPerBeat } from '../sid.js';
 import { state } from '../state.js';
+
+/**
+ * @typedef {import('../sid').ParserOptions} ParserOptions
+ */
+
+const PARSER_OPTIONS = {
+  sound: SOUND_PARSER_OPTIONS,
+  music: MUSIC_PARSER_OPTIONS,
+}
 
 export const $metadata = {
   /** @type {!HTMLInputElement} */
@@ -13,8 +22,32 @@ export const $metadata = {
   /** @type {!HTMLInputElement} */
   // @ts-expect-error
   $beats: document.getElementById('beats'),
+  /** @type {!HTMLSelectElement} */
+  // @ts-expect-error
+  $mode: document.getElementById('mode'),
   init() {
     state.listen('tune', (tune) => this.update(tune));
+    state.listen('parserOptions', (/** @type {ParserOptions} */ options) => {
+      const mode = Object.keys(PARSER_OPTIONS).find(mode => PARSER_OPTIONS[mode] === options);
+
+      if (!mode) {
+        executeHostCommand(Command.Error, `Invalid mode. Expected one of ${Object.keys(PARSER_OPTIONS).join(', ')}.`);
+        return;
+      }
+      this.$mode.value = mode;
+
+      this.$beats.max = options.maxBeatsCount.toString();
+      this.$beats.style.display = mode === 'sound' ? 'none' : 'unset';
+      this.$beats.labels?.forEach(label => label.style.display = mode === 'sound' ? 'none' : 'unset');
+
+      this.$bpm.labels?.forEach(label => label.innerText = mode === 'sound' ? 'Speed' : 'BPM');
+
+      this.$ticks.labels?.forEach(label => label.innerText = mode === 'sound' ? 'Ticks' : 'Ticks per beat');
+      this.$ticks.max = options.maxTicksPerBeat.toString();
+
+      // TODO: how to change the number of tracks?
+    })
+
     this.$bpm.addEventListener('change', (e) => {
       const field = /** @type {HTMLInputElement} */ (e.target);
 
@@ -37,6 +70,16 @@ export const $metadata = {
         setBeats(field.valueAsNumber)
       }
     });
+
+    this.$mode.addEventListener('change', (e) => {
+      const field = /** @type {HTMLSelectElement} */ (e.target);
+      const options = PARSER_OPTIONS[field.value];
+      if (!options) {
+        executeHostCommand(Command.Error, `Invalid mode ${field.value}. Expected one of ${Object.keys(PARSER_OPTIONS).join(', ')}.`);
+        return;
+      }
+      state.setParserOptions(options);
+    })
   },
   /**
    * @param {Tune} tune

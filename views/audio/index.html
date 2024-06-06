@@ -37,14 +37,21 @@
     <aside>
       <form id="metadata">
         <h2>Metadata</h2>
+
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="music" selected>Music</option>
+          <option value="sound">Sound</option>
+        </select>
+
         <label for="bpm">BPM</label>
-        <input id="bpm" type="number" min="10" max="400" value="10">
+        <input id="bpm" type="number" min="10" max="400" value="90">
 
         <label for="ticks">Ticks per beat</label>
-        <input id="ticks" type="number" min="1" max="16" value="1">
+        <input id="ticks" type="number" min="1" max="16" value="4">
 
         <label for="beats">Number of beats</label>
-        <input id="beats" type="number" min="1" max="64" value="1">
+        <input id="beats" type="number" min="1" max="64" value="4">
       </form>
       <form id="playback">
         <h2>Playback</h2>

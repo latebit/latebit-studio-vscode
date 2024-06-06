@@ -9,6 +9,7 @@ import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 
 const $app = {
   onLoad() {
+    state.setParserOptions(MUSIC_PARSER_OPTIONS);
     $metadata.init();
     $playback.init();
     $editor.init();
@@ -23,7 +24,7 @@ const $app = {
           if (!payload.trim()) {
             tune = createEmptyTune(90, 4, 4);
           } else {
-            tune = TuneParser.fromString(payload, MUSIC_PARSER_OPTIONS);
+            tune = TuneParser.fromString(payload, state.getParserOptions());
             if (!tune) {
               throw new Error('Failed to parse tune. Check specification or console for more information.');
             }
@@ -47,7 +48,7 @@ const $app = {
     // Whenever the text changes for external reasons, we need to update the tune
     listen(Event.DocumentTextUpdated, (text) => {
       try {
-        const tune = TuneParser.fromString(text, MUSIC_PARSER_OPTIONS);
+        const tune = TuneParser.fromString(text, state.getParserOptions());
         state.setTune(tune);
       } catch (error) {
         executeHostCommand(Command.Error, error.message);

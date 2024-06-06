@@ -73,6 +73,11 @@ aside {
 
   form {
     padding-bottom: var(--container-paddding);
+
+    label {
+      display: block;
+      padding-top: var(--input-padding-vertical);
+    }
   }
 
   #playback fieldset {
