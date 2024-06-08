@@ -72,12 +72,32 @@ auto setBeatsCount(Tune &tune, int beatsCount) -> unique_ptr<Tune> {
   return make_unique<Tune>(tune.getBpm(), tune.getTicksPerBeat(), beatsCount, std::move(tracks));
 }
 
-Tune* createEmptyTune(int bpm, int ticksPerBeat, int beatsCount) {
-    std::vector<std::unique_ptr<Track>> tracks;
-    for (int i = 0; i < 3; i++) {
-        tracks.push_back(std::make_unique<Track>());
-    }
-    return new Tune(bpm, ticksPerBeat, beatsCount, std::move(tracks));
+auto setTracksCount(Tune &tune, int count) -> unique_ptr<Tune> {
+  const int currentCount = tune.getTracksCount();
+  
+  vector<unique_ptr<Track>> tracks = {};
+  printf("min: %d\n", min(count, currentCount));
+  for (int i = 0; i < min(count, currentCount); i++) {
+    printf("pushing track %d\n", i);
+    tracks.push_back(make_unique<Track>(*tune.getTrack(i)));
+  }
+
+  printf("remainder: %d\n",  count - currentCount);
+  for (int i = 0; i < count - currentCount; i++) {
+    printf("pushing new track\n");
+    tracks.push_back(make_unique<Track>());
+  }
+
+  return make_unique<Tune>(tune.getBpm(), tune.getTicksPerBeat(), tune.getBeatsCount(), std::move(tracks));
+}
+
+auto createEmptyTune(int bpm, int ticksPerBeat, int beatsCount, int tracksCount) -> unique_ptr<Tune> {
+  std::vector<std::unique_ptr<Track>> tracks;
+  for (int i = 0; i < tracksCount; i++) {
+      tracks.push_back(std::make_unique<Track>());
+  }
+
+  return make_unique<Tune>(bpm, ticksPerBeat, beatsCount, std::move(tracks));
 }
 
 } // namespace player

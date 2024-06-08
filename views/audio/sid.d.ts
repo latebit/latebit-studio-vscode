@@ -41,6 +41,7 @@ declare namespace Module {
   function setBpm(tune: Tune, bpm: number): readonly Tune;
   function setTicksPerBeat(tune: Tune, ticks: number): readonly Tune;
   function setBeatsCount(tune: Tune, beats: number): readonly Tune;
+  function setTracksCount(tune: Tune, tracks: number): readonly Tune;
   function createEmptyTune(bpm: number, ticksPerBeat: number, beatsCount: number): readonly Tune;
 
   class Note {

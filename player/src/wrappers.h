@@ -17,6 +17,7 @@ auto setBpm(Tune &tune, int bpm) -> unique_ptr<Tune>;
 auto setTicksPerBeat(Tune &tune, int ticksPerBeat) -> unique_ptr<Tune>;
 auto setBeatsCount(Tune &tune, int beatsCount) -> unique_ptr<Tune>;
 auto getTrackSize(Tune &tune, int trackIndex) -> int;
+auto setTracksCount(Tune &tune, int count) -> unique_ptr<Tune>;
 
-Tune* createEmptyTune(int bpm, int ticksPerBeat, int beatsCount);
+auto createEmptyTune(int bpm, int ticksPerBeat, int beatsCount, int tracksCount) -> unique_ptr<Tune>;
 } // namespace player

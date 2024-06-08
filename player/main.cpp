@@ -92,6 +92,7 @@ EMSCRIPTEN_BINDINGS(sid) {
   emscripten::function("setBpm", &setBpm, allow_raw_pointers());
   emscripten::function("setTicksPerBeat", &setTicksPerBeat, allow_raw_pointers());
   emscripten::function("setBeatsCount", &setBeatsCount, allow_raw_pointers());
+  emscripten::function("setTracksCount", &setTracksCount, allow_raw_pointers());
   emscripten::function("createEmptyTune", &createEmptyTune, allow_raw_pointers());
 
   class_<Note>("Note")
