@@ -6,13 +6,18 @@ import { Command, Event, response } from './ipc';
 
 const view = fs.readFileSync(path.join(VIEWS_PATH, 'audio', 'index.html'), { encoding: 'utf-8' });
 
-export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
-  static VIEW_TYPE = 'latebit-studio.tune';
+export type ViewType = typeof TuneEditorProvider.ViewType[keyof typeof TuneEditorProvider.ViewType];
 
-  static register(context: vscode.ExtensionContext): vscode.Disposable {
-    const provider = new TuneEditorProvider(context);
+export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
+  static ViewType = {
+    Music: 'latebit-studio.music' as const,
+    Sound: 'latebit-studio.sound' as const,
+  }
+
+  static register(context: vscode.ExtensionContext, viewType: ViewType): vscode.Disposable {
+    const provider = new TuneEditorProvider(context, viewType);
     return vscode.window.registerCustomEditorProvider(
-      TuneEditorProvider.VIEW_TYPE,
+      viewType,
       provider,
       {
         webviewOptions: {
@@ -22,7 +27,7 @@ export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
     );
   }
 
-  constructor(private readonly context: vscode.ExtensionContext) { }
+  constructor(private readonly context: vscode.ExtensionContext, private readonly viewType: ViewType) { }
 
   async resolveCustomTextEditor(
     document: vscode.TextDocument,
@@ -82,6 +87,7 @@ export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
     const nodeModules = getUri(webview, this.context, 'node_modules');
 
     return view
+      .replaceAll("{{ viewType }}", this.viewType)
       .replaceAll("{{ views }}", views)
       .replaceAll("{{ nodeModules }}", nodeModules)
       .replaceAll("{{ player }}", player);

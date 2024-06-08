@@ -38,12 +38,6 @@
       <form id="metadata">
         <h2>Metadata</h2>
 
-        <label for="mode">Mode</label>
-        <select id="mode">
-          <option value="music" selected>Music</option>
-          <option value="sound">Sound</option>
-        </select>
-
         <label for="bpm">BPM</label>
         <input id="bpm" type="number" min="10" max="400" value="90">
 
@@ -65,6 +59,7 @@
   </main>
 
   <script>
+    globalThis.viewType = "{{ viewType }}";
     Module = {
       locateFile: function (path) {
         return '{{ player }}/' + path;

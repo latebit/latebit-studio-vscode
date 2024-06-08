@@ -5,7 +5,8 @@ import { BuildCommandsProvider, TaskProvider, DebugCommandProvider } from './lau
 
 export function activate(context: vscode.ExtensionContext) {
 	activateSprite(context);
-	context.subscriptions.push(TuneEditorProvider.register(context));
+	context.subscriptions.push(TuneEditorProvider.register(context, TuneEditorProvider.ViewType.Music));
+	context.subscriptions.push(TuneEditorProvider.register(context, TuneEditorProvider.ViewType.Sound));
 
 	vscode.tasks.registerTaskProvider('latebit', new TaskProvider());
 	context.subscriptions.push(DebugCommandProvider.register(context));

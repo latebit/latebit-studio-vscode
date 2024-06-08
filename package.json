@@ -59,11 +59,20 @@
     ],
     "customEditors": [
       {
-        "viewType": "latebit-studio.tune",
+        "viewType": "latebit-studio.music",
         "displayName": "latebit",
         "selector": [
           {
-            "filenamePattern": "*.lbtune"
+            "filenamePattern": "*.lbmus"
+          }
+        ]
+      },
+      {
+        "viewType": "latebit-studio.sound",
+        "displayName": "latebit",
+        "selector": [
+          {
+            "filenamePattern": "*.lbsfx"
           }
         ]
       }
