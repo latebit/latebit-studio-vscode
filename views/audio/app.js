@@ -4,6 +4,7 @@ import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
+import { $sound } from './components/sound.js'
 import { TuneParser, createEmptyTune } from './sid.js'
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 import { ParserOptions } from './constants.js'
@@ -17,7 +18,7 @@ const $app = {
   onLoad() {
     $metadata.init();
     $playback.init();
-    $editor.init();
+    $sound.init();
 
     try {
       /**

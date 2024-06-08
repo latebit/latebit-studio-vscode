@@ -43,6 +43,8 @@ declare namespace Module {
   function setBeatsCount(tune: Tune, beats: number): readonly Tune;
   function setTracksCount(tune: Tune, tracks: number): readonly Tune;
   function createEmptyTune(bpm: number, ticksPerBeat: number, beatsCount: number): readonly Tune;
+  function symbolFromPitch(pitch: number, wave: number): string;
+  function pitchFromSymbol(symbol: string): number;
 
   class Note {
     static makeRest(): Note;

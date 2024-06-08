@@ -10,61 +10,78 @@ header {
 }
 
 #editor {
-  --input-height: calc(var(--vscode-editor-font-size) * 2);
-  --input-width: 7ch;
-  --delete-width: var(--input-height);
-  --column-size: calc(var(--input-width) + var(--delete-width));
-  --index-size: 4ch;
-  --beat-gap: calc(var(--container-paddding) / 2);
-
   flex: 3;
-
   display: grid;
-  gap: var(--container-paddding);
-  grid-template-columns: var(--index-size) repeat(auto-fill, var(--column-size));
 
-  .beat {
-    margin-top: var(--beat-gap);
-    font-weight: bolder;
-  }
+  &.with-cells {
+    --input-height: calc(var(--vscode-editor-font-size) * 2);
+    --input-width: 7ch;
+    --delete-width: var(--input-height);
+    --column-size: calc(var(--input-width) + var(--delete-width));
+    --index-size: 4ch;
+    --beat-gap: calc(var(--container-paddding) / 2);
 
-  .cell {
-    display: flex;
+    gap: var(--container-paddding);
+    grid-template-columns: var(--index-size) repeat(auto-fill, var(--column-size));
 
-    &.beat {
+    .beat {
       margin-top: var(--beat-gap);
-
-      .input {
-        font-weight: bolder;
-      }
+      font-weight: bolder;
     }
 
-    .delete {
-      width: var(--input-height);
-      background-color: var(--vscode-input-background);
-      color: var(--vscode-input-background);
-    }
-
-    &:hover {
-      .delete {
-        color: var(--vscode-input-foreground);
-      }
-    }
-
-    .input {
+    .index {
       font-size: var(--vscode-editor-font-size);
       font-family: var(--vscode-editor-font-family);
       height: var(--input-height);
-      width: var(--input-width);
+      text-align: right;
+      padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    }
+
+    .cell {
+      display: flex;
+
+      &.beat {
+        margin-top: var(--beat-gap);
+
+        .input {
+          font-weight: bolder;
+        }
+      }
+
+      .delete {
+        width: var(--input-height);
+        background-color: var(--vscode-input-background);
+        color: var(--vscode-input-background);
+      }
+
+      &:hover {
+        .delete {
+          color: var(--vscode-input-foreground);
+        }
+      }
+
+      .input {
+        font-size: var(--vscode-editor-font-size);
+        font-family: var(--vscode-editor-font-family);
+        height: var(--input-height);
+        width: var(--input-width);
+      }
     }
   }
 
-  .index {
-    font-size: var(--vscode-editor-font-size);
-    font-family: var(--vscode-editor-font-family);
-    height: var(--input-height);
-    text-align: right;
-    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  &.with-sliders {
+    gap: 8px;
+    grid-template-columns: repeat(auto-fill, 4ch);
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+
+      .slider {
+        flex: 1;
+        writing-mode: vertical-lr;
+      }
+    }
   }
 }
 

@@ -68,6 +68,7 @@ export const $editor = {
     this.$root.replaceWith($root);
     // @ts-expect-error This is a valid assignment: $root is a Node, but also an Element
     this.$root = $root;
+    this.$root.classList.add('with-cells');
   }
 }
 

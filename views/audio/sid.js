@@ -20,7 +20,9 @@ const {
   setBpm,
   setTicksPerBeat,
   MUSIC_PARSER_OPTIONS,
-  SOUND_PARSER_OPTIONS
+  SOUND_PARSER_OPTIONS,
+  symbolFromPitch,
+  pitchFromSymbol
 } = sid;
 
 export {
@@ -39,4 +41,6 @@ export {
   setTicksPerBeat,
   MUSIC_PARSER_OPTIONS,
   SOUND_PARSER_OPTIONS,
+  symbolFromPitch,
+  pitchFromSymbol
 }

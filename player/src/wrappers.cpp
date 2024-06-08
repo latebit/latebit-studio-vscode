@@ -1,5 +1,6 @@
 #include "wrappers.h"
 
+#include <sstream>
 #include "latebit/sid/synth/Tune.h"
 
 using namespace sid;
@@ -76,19 +77,47 @@ auto setTracksCount(Tune &tune, int count) -> unique_ptr<Tune> {
   const int currentCount = tune.getTracksCount();
   
   vector<unique_ptr<Track>> tracks = {};
-  printf("min: %d\n", min(count, currentCount));
   for (int i = 0; i < min(count, currentCount); i++) {
-    printf("pushing track %d\n", i);
     tracks.push_back(make_unique<Track>(*tune.getTrack(i)));
   }
 
-  printf("remainder: %d\n",  count - currentCount);
   for (int i = 0; i < count - currentCount; i++) {
-    printf("pushing new track\n");
     tracks.push_back(make_unique<Track>());
   }
 
   return make_unique<Tune>(tune.getBpm(), tune.getTicksPerBeat(), tune.getBeatsCount(), std::move(tracks));
+}
+
+auto symbolFromPitch(int pitch, WaveType wave) -> Symbol {
+  int note = pitch % 12;
+  int octave = int(pitch / 12);
+
+  stringstream ss;
+  switch (note) {
+    case 0: ss << "C-"; break;
+    case 1: ss << "C#"; break;
+    case 2: ss << "D-"; break;
+    case 3: ss << "D#"; break;
+    case 4: ss << "E-"; break;
+    case 5: ss << "F-"; break;
+    case 6: ss << "F#"; break;
+    case 7: ss << "G-"; break;
+    case 8: ss << "G#"; break;
+    case 9: ss << "A-"; break;
+    case 10: ss << "A#"; break;
+    case 11: ss << "B-"; break;
+    default: ss << "--";
+  }
+
+  ss << octave;
+  ss << wave;
+  ss << "--";
+
+  return ss.str();
+}
+
+auto pitchFromSymbol(Symbol sym) -> int {
+  return Note::fromSymbol(sym).getPitch();
 }
 
 auto createEmptyTune(int bpm, int ticksPerBeat, int beatsCount, int tracksCount) -> unique_ptr<Tune> {

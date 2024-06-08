@@ -20,4 +20,7 @@ auto getTrackSize(Tune &tune, int trackIndex) -> int;
 auto setTracksCount(Tune &tune, int count) -> unique_ptr<Tune>;
 
 auto createEmptyTune(int bpm, int ticksPerBeat, int beatsCount, int tracksCount) -> unique_ptr<Tune>;
+
+auto symbolFromPitch(int pitch, WaveType wave) -> string;
+auto pitchFromSymbol(Symbol string) -> int;
 } // namespace player
