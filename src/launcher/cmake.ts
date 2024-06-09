@@ -47,8 +47,20 @@ export function makeExecution(definition: TaskDefinition): vscode.CustomExecutio
       onDidWrite: writeEmitter.event,
       onDidClose: closeEmitter.event,
       open: async () => {
-        await vscode.commands.executeCommand(defaults.fallbackCMakeExtensionCommand);
-        return closeEmitter.fire(0);
+        const tasks = await vscode.tasks.fetchTasks({ type: 'cmake' });
+        const buildTask = tasks.find(task => task.definition.command === defaults.fallbackCMakeExtensionCommand);
+
+        if (!buildTask) {
+          throw new Error('No build task found.');
+        }
+
+        await vscode.tasks.executeTask(buildTask);
+        const { dispose } = vscode.tasks.onDidEndTaskProcess(e => {
+          if (e.execution.task.name === buildTask.name) {
+            closeEmitter.fire(e.exitCode ?? 1);
+            dispose();
+          }
+        })
       },
       close: () => { }
     }))
