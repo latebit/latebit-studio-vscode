@@ -41,7 +41,7 @@ export const $metadata = {
     state.listen('tune', (tune) => this.update(tune));
 
     this.$bpm.addEventListener('change', (e) => {
-      setField(/** @type {HTMLInputElement} */(e.target), setTicksPerBeat);
+      setField(/** @type {HTMLInputElement} */(e.target), setBpm);
     });
 
     this.$ticks.addEventListener('change', (e) => {
