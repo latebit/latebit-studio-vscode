@@ -39,12 +39,14 @@ export const $editor = {
 
     for (let i = 0; i < tracks; i++) {
       const $track = document.createElement('div');
-      for (let j = 0; j < getTrackSize(tune, i); j++) {
+      // Used to hide overflowing cells, if any
+      const trackSize = Math.min(getTrackSize(tune, i), maxTrackLength);
+
+      for (let j = 0; j < trackSize; j++) {
         const $cell = makeCell(tune, i, j);
         $track.appendChild($cell);
       }
 
-      const trackSize = getTrackSize(tune, i);
       if (trackSize < maxTrackLength) {
         const $btn = document.createElement('button');
         $btn.classList.add('add', 'codicon', 'codicon-plus');
