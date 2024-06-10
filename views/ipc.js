@@ -1,4 +1,4 @@
-const vscode = acquireVsCodeApi();
+const vscode = globalThis.vscode;
 
 /// THIS IS COPIED FROM THE TYPESCRIPT FILE `src/ipc.ts` AND NEEDS TO BE MANUALLY SYNCED
 export const Command = {

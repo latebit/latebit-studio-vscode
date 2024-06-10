@@ -8,7 +8,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(cmake/FetchSid.cmake)
-fetch_sid("v0.5.0")
+fetch_sid("v0.6.0")
 
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/main.cpp" "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB HDR_FILES "${CMAKE_SOURCE_DIR}/src/*.h")

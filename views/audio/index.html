@@ -19,7 +19,7 @@
 <body>
   <header>
     <h1>Latebit Tracker</h1>
-    <a href="#">Read the specification</a>
+    <a href="https://github.com/latebit/latebit-engine/blob/main/docs/specs/sid-v0.md">Read the specification</a>
     <section class="subtitle">
       <p>
         Change the metadata and the notes of the tracks to create a new audio track.
@@ -30,9 +30,13 @@
     </section>
   </header>
 
-  <main>
+  <div id="banner">
+    <i class="rotate codicon codicon-loading"></i>
+    <span class="message">Loading...</span>
+  </div>
+
+  <main hidden>
     <section id="editor">
-      <p>Loading...</p>
     </section>
     <aside>
       <form id="metadata">
@@ -63,6 +67,7 @@
 
   <script>
     globalThis.viewType = "{{ viewType }}";
+    globalThis.vscode = acquireVsCodeApi();
     Module = {
       locateFile: function (path) {
         return '{{ player }}/' + path;
@@ -75,10 +80,15 @@
         document.body.appendChild(script);
       },
       print: function (...args) {
-        console.log(...args);
+        const arg = args[0];
+        if (typeof arg !== 'string') return;
+
+        const message = arg.match('.*\] (.*)')?.[1]
+        const command = arg.includes('ERROR') ? 'command:error' : 'command:info'
+        vscode.postMessage({ type: command, payload: message })
       },
       printErr: function (...args) {
-        console.error(...args);
+        vscode.postMessage({ type: 'command:error', payload: args[0] })
       }
     };
   </script>

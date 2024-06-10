@@ -6,7 +6,7 @@ import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
 import { TuneParser, createEmptyTune } from './sid.js'
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
-import { ParserOptions } from './constants.js'
+import { ParserOptions, ViewType } from './constants.js'
 
 /** @global */
 globalThis.viewType = globalThis.viewType
@@ -14,12 +14,18 @@ globalThis.viewType = globalThis.viewType
 const parserOptions = ParserOptions[viewType];
 
 const $app = {
+  /** @type {!HTMLElement} */
+  // @ts-expect-error
+  $banner: document.getElementById('banner'),
+  /** @type {!HTMLElement} */
+  // @ts-expect-error
+  $main: document.querySelector('main'),
   onLoad() {
-    $metadata.init();
-    $playback.init();
-    $editor.init();
-
     try {
+      $metadata.init();
+      $playback.init();
+      $editor.init();
+
       /**
        * @type {(payload: string) => void}
        */
@@ -31,22 +37,21 @@ const $app = {
           } else {
             tune = TuneParser.fromString(payload, parserOptions);
             if (!tune) {
-              throw new Error('Failed to parse tune. Check specification or console for more information.');
+              throw new Error('Failed to parse tune');
             }
           }
 
           state.setTune(tune);
           $app.init();
+          this.handleSuccessLoading();
         } catch (error) {
-          $editor.$root.innerHTML = '';
-          executeHostCommand(Command.Error, error.message);
+          this.handleErrorLoading();
         }
       }
 
       executeHostCommand(Command.GetDocumentText, null, loadTune);
     } catch (error) {
-      $editor.$root.innerHTML = '';
-      executeHostCommand(Command.Error, error.message);
+      this.handleErrorLoading();
     }
   },
   init() {
@@ -59,7 +64,29 @@ const $app = {
         executeHostCommand(Command.Error, error.message);
       }
     })
-  }
+  },
+  handleSuccessLoading() {
+    this.$banner.parentNode?.removeChild(this.$banner);
+    this.$main.removeAttribute('hidden');
+  },
+  handleErrorLoading() {
+    this.$main.setAttribute('hidden', '');
+    this.$banner.classList.add('error');
+    this.$banner.innerHTML = `
+    <i class="codicon codicon-error"></i> 
+    <span class="message">
+      <h2>Unable to load tune</h3>
+      <p>Check the notification for more details.</p>
+      <br>
+      <p>Please refer to <a href="https://github.com/latebit/latebit-engine/blob/main/docs/specs/sid-v0.md">the specification</a> and fix the issue by doing one of the follwing:</p>
+      <ul>
+        <li>edit the tune with the built-in Text Editor (right-click on the file and select "Open with...");</li>
+        <li>create a new *.${viewType == ViewType.Music ? 'lbmus' : 'lbsfx'} file and copy over the cells one by one.</li>
+      </ul>
+      <p>If you are stuck or believe this is a bug, you can <a href="https://github.com/latebit/latebit-studio-vscode/issues/new">open an issue</a> and look for help.</p>
+    </span>
+    `;
+  },
 };
 
 $app.onLoad();
