@@ -76,13 +76,10 @@ auto setTracksCount(Tune &tune, int count) -> unique_ptr<Tune> {
   const int currentCount = tune.getTracksCount();
   
   vector<unique_ptr<Track>> tracks = {};
-  printf("min: %d\n", min(count, currentCount));
   for (int i = 0; i < min(count, currentCount); i++) {
-    printf("pushing track %d\n", i);
     tracks.push_back(make_unique<Track>(*tune.getTrack(i)));
   }
 
-  printf("remainder: %d\n",  count - currentCount);
   for (int i = 0; i < count - currentCount; i++) {
     printf("pushing new track\n");
     tracks.push_back(make_unique<Track>());
