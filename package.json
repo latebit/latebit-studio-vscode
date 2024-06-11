@@ -37,6 +37,11 @@
         "category": "latebit"
       },
       {
+        "command": "debug",
+        "title": "Run current game",
+        "category": "latebit"
+      },
+      {
         "command": "build",
         "title": "Configure and build the current game",
         "category": "latebit"
