@@ -79,11 +79,9 @@ export class TuneEditorProvider implements vscode.CustomTextEditorProvider {
     });
   }
 
-  /// Private
-
   private getHTML(webview: vscode.Webview) {
     const views = getUri(webview, this.context, 'views');
-    const player = getUri(webview, this.context, 'player', 'build');
+    const player = getUri(webview, this.context, 'lib', 'player', 'build');
     const nodeModules = getUri(webview, this.context, 'node_modules');
 
     return view

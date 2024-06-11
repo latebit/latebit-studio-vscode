@@ -16,8 +16,9 @@
   ],
   "main": "./out/src/index.js",
   "activationEvents": [
+    "onCustomEditor:viewType:latebit-studio.music",
     "onCustomEditor:viewType:latebit-studio.tune",
-    "onCommand:commandId:latebit-studio.sprite",
+    "onCustomEditor:viewType:latebit-studio.sprite",
     "onCommand:commandId:debug",
     "onCommand:commandId:build",
     "onCommand:commandId:configure",
@@ -26,11 +27,6 @@
   ],
   "contributes": {
     "commands": [
-      {
-        "command": "latebit-studio.sprite",
-        "title": "Show sprite preview",
-        "category": "latebit"
-      },
       {
         "command": "debug",
         "title": "Debug current game",
@@ -78,6 +74,15 @@
         "selector": [
           {
             "filenamePattern": "*.lbsfx"
+          }
+        ]
+      },
+      {
+        "viewType": "latebit-studio.sprite",
+        "displayName": "latebit",
+        "selector": [
+          {
+            "filenamePattern": "*.lbspr"
           }
         ]
       }
@@ -156,7 +161,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "npm run compile:player && tsc -p ./",
-    "compile:player": "cd player && emcmake cmake -B build && emmake cmake --build build",
+    "compile:player": "cd lib/player && emcmake cmake -B build && emmake cmake --build build",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
