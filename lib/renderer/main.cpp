@@ -6,7 +6,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-#include "src/wrappers.cpp"
+#include "src/wrappers.h"
 
 using namespace lb;
 using namespace emscripten;
