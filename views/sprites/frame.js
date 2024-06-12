@@ -1,6 +1,6 @@
 // @ts-check
-import { Color, Frame, Sprite } from "../renderer.js";
-import { state } from "../state.js";
+import { Color, Frame, Sprite } from "./renderer.js";
+import { state } from "./state.js";
 
 const COLOR_TO_HEX = {
   [Color.UNDEFINED_COLOR.value]: 'rgba(0, 0, 0, 0)',

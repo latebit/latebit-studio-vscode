@@ -1,7 +1,7 @@
 // @ts-check
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 import { $editor } from './components/editor.js';
-import { frameManager } from './components/frame.js';
+import { frameManager } from './frame.js';
 import { $metadata } from './components/metadata.js';
 import { $playback } from './components/playback.js';
 import { Sprite, SpriteParser } from './renderer.js';
@@ -37,6 +37,7 @@ const $app = {
           }
 
           state.setSprite(sprite);
+          state.setCurrentFrame(0);
           $app.init();
           this.handleSuccessLoading();
         } catch (error) {

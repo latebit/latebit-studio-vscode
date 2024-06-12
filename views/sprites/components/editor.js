@@ -3,7 +3,7 @@
  * @typedef {import('../renderer.js').Sprite} Sprite
  */
 import { state } from "../state.js";
-import { frameManager } from "./frame.js";
+import { frameManager } from "../frame.js";
 
 const PIXEL_SIZE = 10;
 

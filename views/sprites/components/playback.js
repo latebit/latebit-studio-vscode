@@ -4,24 +4,59 @@ import { state } from '../state.js';
 
 export const $playback = {
   $play: /** @type {HTMLButtonElement} */ (document.getElementById('play')),
+  $previous: /** @type {HTMLButtonElement} */ (document.getElementById('previous')),
+  $next: /** @type {HTMLButtonElement} */ (document.getElementById('next')),
+  $frameCounter: /** @type {HTMLButtonElement} */ (document.getElementById('frame-counter')),
 
   init() {
     this.$play.disabled = false;
-    this.$play.addEventListener('click', this.handleClick.bind(this));
+    this.$previous.disabled = false;
+    this.$next.disabled = false;
+
+    this.$play.addEventListener('click', this.handlePlay.bind(this));
+    this.$previous.addEventListener('click', this.handlePrevious.bind(this));
+    this.$next.addEventListener('click', this.handleNext.bind(this));
+    state.listen('currentFrame', this.handleNewFrame.bind(this));
   },
-  handleClick(/** @type {Event} */ e) {
+  handleNewFrame(/** @type {number} */ frame) {
+    const sprite = state.getSprite();
+    if (!sprite) return;
+
+    const total = sprite.getFrameCount().toString();
+    const current = (frame + 1).toString().padStart(total.length, '0');
+    this.$frameCounter.innerText = `${current} : ${total}`
+  },
+  handlePlay(/** @type {Event} */ e) {
     e.preventDefault();
 
     if (loop.isPlaying) {
       this.$play.classList.remove('codicon-debug-pause')
       this.$play.classList.add('codicon-play')
+      this.$previous.disabled = false;
+      this.$next.disabled = false;
       loop.stop();
     } else {
       this.$play.classList.add('codicon-debug-pause')
       this.$play.classList.remove('codicon-play')
+      this.$previous.disabled = true;
+      this.$next.disabled = true;
       loop.play();
     }
-  }
+  },
+  handlePrevious(/** @type {Event} */ e) {
+    e.preventDefault();
+    const sprite = state.getSprite();
+    if (!sprite) return;
+    const newFrame = (sprite.getFrameCount() + state.getCurrentFrame() - 1) % sprite.getFrameCount();
+    state.setCurrentFrame(newFrame);
+  },
+  handleNext(/** @type {Event} */ e) {
+    e.preventDefault();
+    const sprite = state.getSprite();
+    if (!sprite) return;
+    const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
+    state.setCurrentFrame(newFrame);
+  },
 }
 
 const loop = {

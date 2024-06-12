@@ -14,25 +14,26 @@ aside {
     }
   }
 
-  #playback fieldset {
-    display: grid;
-    grid-auto-flow: column;
-    border: none;
+  #playback {
+    fieldset {
+      display: grid;
+      grid-auto-flow: column;
+      border: none;
 
-    button {
-      height: 48px;
-      min-width: 48px;
-
-      &#loop {
-        background-color: transparent;
-        color: var(--vscode-foreground);
-
-        &[data-checked] {
-          background-color: var(--vscode-editorMarkerNavigationError-background);
-          color: var(--vscode-button-foreground);
-        }
+      button {
+        height: 48px;
+        min-width: 48px;
       }
+    }
 
+    #frame-counter {
+      display: block;
+      font-family: var(--vscode-editor-font-family);
+      margin: 0 0.85rem;
+      padding: 0.25rem;
+      font-size: 1.5rem;
+      text-align: center;
+      background: var(--vscode-notifications-background);
     }
   }
 }
