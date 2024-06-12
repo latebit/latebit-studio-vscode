@@ -27,6 +27,7 @@ export const $editor = {
     $frame.style.width = `calc(${$frame.style.width} * ${pixelSize})`;
     $frame.style.height = `calc(${$frame.style.height} * ${pixelSize})`;
 
+
     this.$root.innerHTML = '';
     this.$root.appendChild($frame);
   }

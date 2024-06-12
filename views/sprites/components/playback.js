@@ -71,14 +71,15 @@ const loop = {
     loop.isPlaying = true;
     const animate = (/** @type {number} */ time) => {
       if (!loop.isPlaying) return;
+      if (time - lastTime > 1000 / 60) {
+        lastTime = time;
+        currentTick++;
 
-      lastTime = time;
-      currentTick++;
-
-      if (currentTick % sprite.getSlowdown() === 0) {
-        currentTick = 0;
-        const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
-        state.setCurrentFrame(newFrame);
+        if (currentTick % sprite.getSlowdown() === 0) {
+          currentTick = 0;
+          const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
+          state.setCurrentFrame(newFrame);
+        }
       }
 
       requestAnimationFrame(animate);

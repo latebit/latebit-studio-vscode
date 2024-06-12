@@ -6,6 +6,7 @@ import { $metadata } from './components/metadata.js';
 import { $playback } from './components/playback.js';
 import { Sprite, SpriteParser } from './renderer.js';
 import { state } from './state.js';
+import { $timeline } from './components/timeline.js';
 
 // This is not really needed for rendering, but the library exports methods
 // that require it to be defined.
@@ -14,11 +15,13 @@ const MOCK_SPRITE_LABEL = 'Sprite';
 const $app = {
   $banner: /** @type {HTMLElement} */ (document.getElementById('banner')),
   $main:   /** @type {HTMLElement} */ (document.querySelector('main')),
+  $footer:   /** @type {HTMLElement} */ (document.querySelector('footer')),
   onLoad() {
     frameManager.init();
     $editor.init();
     $metadata.init();
     $playback.init();
+    $timeline.init();
 
     try {
       /**
@@ -64,6 +67,7 @@ const $app = {
   handleSuccessLoading() {
     this.$banner.parentNode?.removeChild(this.$banner);
     this.$main.removeAttribute('hidden');
+    this.$footer.removeAttribute('hidden');
   },
   handleErrorLoading() {
     this.$main.setAttribute('hidden', '');
