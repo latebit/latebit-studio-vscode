@@ -1,7 +1,9 @@
 // @ts-check
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 import { $editor } from './components/editor.js';
+import { frameManager } from './components/frame.js';
 import { $metadata } from './components/metadata.js';
+import { $playback } from './components/playback.js';
 import { Sprite, SpriteParser } from './renderer.js';
 import { state } from './state.js';
 
@@ -13,8 +15,10 @@ const $app = {
   $banner: /** @type {HTMLElement} */ (document.getElementById('banner')),
   $main:   /** @type {HTMLElement} */ (document.querySelector('main')),
   onLoad() {
+    frameManager.init();
     $editor.init();
     $metadata.init();
+    $playback.init();
 
     try {
       /**

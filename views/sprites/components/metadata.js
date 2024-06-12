@@ -3,10 +3,10 @@ import { Sprite } from '../renderer.js';
 import { state } from '../state.js';
 
 export const $metadata = {
-  $frames: /** @type {!HTMLInputElement} */ (document.getElementById('frames')),
-  $width: /** @type {!HTMLInputElement} */ (document.getElementById('width')),
-  $height: /** @type {!HTMLInputElement} */ (document.getElementById('height')),
-  $slowdown: /** @type {!HTMLInputElement} */ (document.getElementById('slowdown')),
+  $frames:    /** @type {!HTMLInputElement} */ (document.getElementById('frames')),
+  $width:     /** @type {!HTMLInputElement} */ (document.getElementById('width')),
+  $height:    /** @type {!HTMLInputElement} */ (document.getElementById('height')),
+  $slowdown:  /** @type {!HTMLInputElement} */ (document.getElementById('slowdown')),
   init() {
     state.listen('sprite', this.update.bind(this));
   },
