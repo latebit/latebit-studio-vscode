@@ -69,25 +69,13 @@ aside {
     }
   }
 
-  #playback fieldset {
-    display: grid;
-    grid-auto-flow: column;
-    border: none;
+  #playback #loop {
+    background-color: transparent;
+    color: var(--vscode-foreground);
 
-    button {
-      height: 48px;
-      min-width: 48px;
-
-      &#loop {
-        background-color: transparent;
-        color: var(--vscode-foreground);
-
-        &[data-checked] {
-          background-color: var(--vscode-editorMarkerNavigationError-background);
-          color: var(--vscode-button-foreground);
-        }
-      }
-
+    &[data-checked] {
+      background-color: var(--vscode-editorMarkerNavigationError-background);
+      color: var(--vscode-button-foreground);
     }
   }
 }

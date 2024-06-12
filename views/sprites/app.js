@@ -4,9 +4,10 @@ import { $editor } from './components/editor.js';
 import { frameManager } from './frame.js';
 import { $metadata } from './components/metadata.js';
 import { $playback } from './components/playback.js';
-import { Sprite, SpriteParser } from './renderer.js';
+import { Color, Sprite, SpriteParser } from './renderer.js';
 import { state } from './state.js';
 import { $timeline } from './components/timeline.js';
+import { $tools } from './components/tools.js';
 
 // This is not really needed for rendering, but the library exports methods
 // that require it to be defined.
@@ -22,6 +23,7 @@ const $app = {
     $metadata.init();
     $playback.init();
     $timeline.init();
+    $tools.init();
 
     try {
       /**
@@ -41,6 +43,7 @@ const $app = {
 
           state.setSprite(sprite);
           state.setCurrentFrame(0);
+          state.setCurrentColor(Color.BLACK);
           $app.init();
           this.handleSuccessLoading();
         } catch (error) {

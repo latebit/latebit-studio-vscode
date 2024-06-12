@@ -2,7 +2,7 @@
 /**
  * @typedef {import('./renderer').Sprite} Sprite
  */
-import { isSameSprite } from './renderer.js';
+import { Color, isSameSprite } from './renderer.js';
 
 /**
  * @type {Object} Listeners
@@ -14,6 +14,7 @@ const listeners = {
   sprite: [],
   zoom: [],
   currentFrame: [],
+  currentColor: [],
 }
 
 /**
@@ -21,11 +22,13 @@ const listeners = {
  * @param {Sprite} sprite
  * @param {number} zoom
  * @param {number} currentFrame
+ * @param {Color[keyof Color]} currentColor
  */
 const store = {
   sprite: null,
   zoom: 1,
   currentFrame: 0,
+  currentColor: Color.BLACK,
 }
 
 const triggerAllCallbacks = (callbacks, arg) => {
@@ -83,8 +86,25 @@ export const state = {
   },
 
   /**
+   * @method setCurrentColor
+   * @param {Color[keyof Color]} color
+   */
+  setCurrentColor(color) {
+    store.currentColor = color;
+    triggerAllCallbacks(listeners.currentColor, color);
+  },
+
+  /**
+   * @method getCurrentColor
+   * @returns {readonly Color[keyof Color]}
+   */
+  getCurrentColor() {
+    return store.currentColor;
+  },
+
+  /**
    * @template T
-   * @param {"sprite"|"currentFrame"} property
+   * @param {"sprite"|"currentFrame"|"currentColor"} property
    * @param {(arg: T) => void} callback
    */
   listen(property, callback) {

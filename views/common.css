@@ -19,6 +19,19 @@ main {
   padding-top: var(--container-paddding);
 }
 
+aside {
+  fieldset {
+    display: grid;
+    grid-auto-flow: column;
+    border: none;
+
+    button {
+      height: 48px;
+      min-width: 48px;
+    }
+  }
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);

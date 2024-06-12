@@ -2,7 +2,7 @@
 import { Color, Frame, Sprite } from "./renderer.js";
 import { state } from "./state.js";
 
-const COLOR_TO_HEX = {
+export const COLOR_TO_HEX = {
   [Color.UNDEFINED_COLOR.value]: 'rgba(0, 0, 0, 0)',
   [Color.BLACK.value]: 'rgb(0, 0, 0)',
   [Color.DARK_BLUE.value]: 'rgb(29, 43, 83)',

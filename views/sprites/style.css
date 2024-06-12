@@ -26,18 +26,28 @@ aside {
     }
   }
 
-  #playback {
-    fieldset {
+  #tools {
+    #palette {
       display: grid;
-      grid-auto-flow: column;
-      border: none;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-flow: unset;
 
-      button {
-        height: 48px;
-        min-width: 48px;
+      .color {
+        height: 24px;
+        width: 24px;
+        min-width: unset;
+        border: 4px solid transparent;
+        cursor: pointer;
+        margin: 1px;
+
+        &.selected {
+          border-color: var(--vscode-editorWidget-border);
+        }
       }
     }
+  }
 
+  #playback {
     #frame-counter {
       display: block;
       font-family: var(--vscode-editor-font-family);
@@ -69,7 +79,7 @@ footer {
       cursor: pointer;
 
       &.selected {
-        border-color: var(--vscode-editorInfo-foreground);
+        border-color: var(--vscode-editorWidget-border);
       }
 
       span {

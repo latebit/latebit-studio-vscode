@@ -1,5 +1,4 @@
 //@ts-check
-import { Sprite } from '../renderer.js';
 import { state } from '../state.js';
 
 export const $playback = {
