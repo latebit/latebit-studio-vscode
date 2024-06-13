@@ -2,6 +2,9 @@
 import { Color, Frame, Sprite } from "./renderer.js";
 import { state } from "./state.js";
 
+/**
+ * @type {{ [key in Color['value']]: string }}
+ */
 export const COLOR_TO_HEX = {
   [Color.UNDEFINED_COLOR.value]: 'rgba(0, 0, 0, 0)',
   [Color.BLACK.value]: 'rgb(0, 0, 0)',
@@ -45,21 +48,25 @@ const makeFrame = (/** @type {Frame} */ frame) => {
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
       const index = i + j * width;
-      const { value: color } = frame.getContent().get(index);
-      context.fillStyle = COLOR_TO_HEX[color];
-      context.fillRect(i, j, 1, 1);
+      const color = frame.getContent().get(index);
+
+      if (color && color.value > -1) {
+        context.fillStyle = COLOR_TO_HEX[color.value];
+        context.fillRect(i, j, 1, 1);
+      }
     }
   }
 
   return $canvas
 }
 
-const cachedFrames = /** @type {HTMLCanvasElement[]} */ ([])
+let cachedFrames = /** @type {HTMLCanvasElement[]} */ ([])
 
 /**
 * @param {Sprite} sprite
 */
 const update = (sprite) => {
+  cachedFrames = [];
   for (let i = 0; i < sprite.getFrameCount(); i++) {
     const frame = sprite.getFrame(i);
     const $canvas = makeFrame(frame);

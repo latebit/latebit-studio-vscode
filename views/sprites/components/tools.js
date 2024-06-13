@@ -14,17 +14,17 @@ export const $tools = {
       const $color = document.createElement('button');
       $color.classList.add('color');
       $color.style.backgroundColor = COLOR_TO_HEX[color.value];
-      $color.addEventListener('click', this.handleSelectColor.bind(this, color));
+      $color.addEventListener('click', this.selectCurrentColor.bind(this, color));
       this.$palette.appendChild($color);
     })
 
-    state.listen('currentColor', this.handleCurrentColor.bind(this));
+    state.listen('currentColor', this.highlightCurrentColor.bind(this));
   },
-  handleSelectColor(/** @type {Color[keyof Color]} */ color, /** @type {Event} */ e) {
+  selectCurrentColor(/** @type {Color} */ color, /** @type {Event} */ e) {
     e.preventDefault();
     state.setCurrentColor(color);
   },
-  handleCurrentColor(/** @type {Color[keyof Color]} */ color) {
+  highlightCurrentColor(/** @type {Color} */ color) {
     const $selected = this.$palette.querySelector('.selected');
     if ($selected) {
       $selected.classList.remove('selected');

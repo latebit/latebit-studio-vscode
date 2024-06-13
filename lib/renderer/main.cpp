@@ -2,6 +2,7 @@
 #include <emscripten.h>
 
 #include <latebit/core/graphics/SpriteParser.h>
+#include <latebit/utils/Logger.h>
 
 #include <emscripten.h>
 #include <emscripten/bind.h>
@@ -12,8 +13,11 @@ using namespace lb;
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(renderer) {
+  Log.setDestination(lb::STDOUT);
+
   class_<SpriteParser>("SpriteParser")
-    .class_function("fromString", &SpriteParser::fromString);  
+    .class_function("fromString", &SpriteParser::fromString)
+    .class_function("toString", &SpriteParser::toString);
 
   class_<Sprite>("Sprite")
     .constructor<string, uint8_t, uint8_t, uint8_t, uint8_t>()
@@ -25,6 +29,7 @@ EMSCRIPTEN_BINDINGS(renderer) {
     .function("setSlowdown", &Sprite::setSlowdown)
     .function("addFrame", &Sprite::addFrame)
     .function("getFrame", &Sprite::getFrame)
+    .function("setFrame", &Sprite::setFrame)
     .function("getFrameCount", &Sprite::getFrameCount);
   
   emscripten::function("isSameSprite", &isSameSprite);

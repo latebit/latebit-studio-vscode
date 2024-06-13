@@ -15,4 +15,5 @@ file(GLOB HDR_FILES "${CMAKE_SOURCE_DIR}/src/*.h")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HDR_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 latebit embind)
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "--emit-tsd ${PROJECT_NAME}.d.ts")
+# TODO: remove -sALLOW_MEMORY_GROWTH
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-sALLOW_MEMORY_GROWTH --emit-tsd ${PROJECT_NAME}.d.ts")

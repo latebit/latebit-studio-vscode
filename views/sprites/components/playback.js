@@ -19,8 +19,6 @@ export const $playback = {
   },
   handleNewFrame(/** @type {number} */ frame) {
     const sprite = state.getSprite();
-    if (!sprite) return;
-
     const total = sprite.getFrameCount().toString();
     const current = (frame + 1).toString().padStart(total.length, '0');
     this.$frameCounter.innerText = `${current} : ${total}`
@@ -45,14 +43,12 @@ export const $playback = {
   handlePrevious(/** @type {Event} */ e) {
     e.preventDefault();
     const sprite = state.getSprite();
-    if (!sprite) return;
     const newFrame = (sprite.getFrameCount() + state.getCurrentFrame() - 1) % sprite.getFrameCount();
     state.setCurrentFrame(newFrame);
   },
   handleNext(/** @type {Event} */ e) {
     e.preventDefault();
     const sprite = state.getSprite();
-    if (!sprite) return;
     const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
     state.setCurrentFrame(newFrame);
   },
