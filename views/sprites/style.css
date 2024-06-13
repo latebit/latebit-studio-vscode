@@ -27,21 +27,45 @@ aside {
   }
 
   #tools {
+
+    input[type="radio"] {
+      outline: 4px solid transparent;
+      cursor: pointer;
+      appearance: none;
+      margin: 0;
+    }
+
+    #toolbox {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-flow: unset;
+
+      .tool {
+        font-size: 1.6rem;
+        padding: 1rem 0;
+
+        &:checked,
+        &:focus {
+          outline: none;
+          color: var(--vscode-input-background);
+          background-color: var(--vscode-input-foreground);
+        }
+      }
+    }
+
     #palette {
-      display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-auto-flow: unset;
 
       .color {
         height: 24px;
         width: 24px;
-        min-width: unset;
-        border: 4px solid transparent;
-        cursor: pointer;
-        margin: 1px;
 
-        &.selected {
-          border-color: var(--vscode-editorWidget-border);
+        &:checked,
+        &:focus {
+          z-index: 1;
+          /* copied from reset style for focus */
+          outline-color: var(--vscode-focusBorder);
+          outline-offset: -1px;
         }
       }
     }
@@ -79,7 +103,7 @@ footer {
       cursor: pointer;
 
       &.selected {
-        border-color: var(--vscode-editorWidget-border);
+        border-color: var(--vscode-focusBorder);
       }
 
       span {

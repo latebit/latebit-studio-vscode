@@ -21,9 +21,6 @@
   <header>
     <h1>Latebit Sprite Editor</h1>
     <a href="#">Read the specification</a>
-    <section class="subtitle">
-      <p>Description</p>
-    </section>
   </header>
 
   <div id="banner">
@@ -51,11 +48,15 @@
       </form>
       <form id="tools">
         <h2>Tools</h2>
-        <fieldset id="toolbox">
-          <button id="pencil" title="Pencil" class="codicon codicon-pencil"></button>
+        <fieldset id="toolbox" hidden>
+          <input name="tool" type="radio" id="pencil" title="Pencil" class="tool codicon codicon-edit">
+          <input name="tool" type="radio" id="eraser" title="Eraser" class="tool codicon codicon-layout-panel">
+          <input name="tool" type="radio" id="fill" title="Fill" class="tool codicon codicon-paintcan">
+          <input name="tool" type="radio" id="picker" title="Color Picker" class="tool codicon codicon-symbol-color">
+          <input name="tool" type="radio" id="zoom-in" title="Zoom In" class="tool codicon codicon-zoom-in">
+          <input name="tool" type="radio" id="zoom-out" title="Zoom Out" class="tool codicon codicon-zoom-out">
         </fieldset>
-        <fieldset id="palette">
-        </fieldset>
+        <fieldset id="palette"></fieldset>
       </form>
       <form id="playback">
         <h2>Animation</h2>
