@@ -1,15 +1,38 @@
 // @ts-check
-/**
- * @typedef {import('./renderer').Sprite} Sprite
- */
-import { Color, isSameSprite } from './renderer.js';
+import { Color, isSameSprite, Sprite } from './renderer.js';
 
 /**
- * @type {Object} Listeners
- * @param {((sprite: Sprite) => void)[]} sprite
- * @param {((zoom: number) => void)[]} zoom
- * @param {((currentFrame: number) => void)[]} currentFrame
+ * @template T
+ * @typedef {(value: T) => void} ListenerCallback<T>
+*/
+
+/**
+ * @typedef {Object} Store 
+ * @property {Sprite} sprite
+ * @property {number} zoom
+ * @property {number} currentFrame
+ * @property {Color} currentColor
  */
+
+/**
+ * @type {Store} store
+ */
+const store = {
+  sprite: new Sprite("", 0, 0, 0, 0),
+  zoom: 1,
+  currentFrame: 0,
+  currentColor: Color.BLACK,
+}
+
+/**
+ * @typedef {Object} Listeners
+ * @property {ListenerCallback<Store['sprite']>[]} sprite
+ * @property {ListenerCallback<Store['zoom']>[]} zoom
+ * @property {ListenerCallback<Store['currentFrame']>[]} currentFrame
+ * @property {ListenerCallback<Store['currentColor']>[]} currentColor
+ */
+
+/** @type {Listeners} */
 const listeners = {
   sprite: [],
   zoom: [],
@@ -17,19 +40,6 @@ const listeners = {
   currentColor: [],
 }
 
-/**
- * @type {Object} State 
- * @param {Sprite} sprite
- * @param {number} zoom
- * @param {number} currentFrame
- * @param {Color[keyof Color]} currentColor
- */
-const store = {
-  sprite: null,
-  zoom: 1,
-  currentFrame: 0,
-  currentColor: Color.BLACK,
-}
 
 const triggerAllCallbacks = (callbacks, arg) => {
   callbacks?.forEach(callback => {
@@ -55,7 +65,7 @@ export const state = {
 
   /**
    * @method getSprite
-   * @returns {readonly Sprite | null}
+   * @returns {readonly Store['sprite']}
    */
   getSprite() {
     return store.sprite;
@@ -63,7 +73,7 @@ export const state = {
 
   /**
    * @method getZoom
-   * @returns {readonly number}
+   * @returns {readonly Store['zoom']}
    */
   getZoom() {
     return store.zoom;
@@ -80,6 +90,7 @@ export const state = {
 
   /**
    * @method getCurrentFrame
+   * @returns {readonly Store['currentFrame']}
    */
   getCurrentFrame() {
     return store.currentFrame;
@@ -87,7 +98,7 @@ export const state = {
 
   /**
    * @method setCurrentColor
-   * @param {Color[keyof Color]} color
+   * @param {Color} color
    */
   setCurrentColor(color) {
     store.currentColor = color;
@@ -96,20 +107,20 @@ export const state = {
 
   /**
    * @method getCurrentColor
-   * @returns {readonly Color[keyof Color]}
+   * @returns {readonly Color}
    */
   getCurrentColor() {
     return store.currentColor;
   },
 
   /**
-   * @template T
-   * @param {"sprite"|"currentFrame"|"currentColor"} property
-   * @param {(arg: T) => void} callback
+   * @param {keyof Store} property
+   * @param {ListenerCallback<any>} callback
    */
   listen(property, callback) {
     listeners[property].push(callback);
     return () => {
+      // @ts-expect-error
       listeners[property] = listeners[property].filter(i => i != callback);
     }
   }
