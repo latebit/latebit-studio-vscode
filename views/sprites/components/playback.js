@@ -15,7 +15,7 @@ export const $playback = {
     this.$play.addEventListener('click', this.handlePlay.bind(this));
     this.$previous.addEventListener('click', this.handlePrevious.bind(this));
     this.$next.addEventListener('click', this.handleNext.bind(this));
-    state.listen('currentFrame', this.handleNewFrame.bind(this));
+    state.listen('frameIndex', this.handleNewFrame.bind(this));
   },
   handleNewFrame(/** @type {number} */ frame) {
     const sprite = state.getSprite();
@@ -43,14 +43,15 @@ export const $playback = {
   handlePrevious(/** @type {Event} */ e) {
     e.preventDefault();
     const sprite = state.getSprite();
-    const newFrame = (sprite.getFrameCount() + state.getCurrentFrame() - 1) % sprite.getFrameCount();
-    state.setCurrentFrame(newFrame);
+    const frameCount = sprite.getFrameCount();
+    const index = (frameCount + state.getFrameIndex() - 1) % frameCount;
+    state.setFrameIndex(index);
   },
   handleNext(/** @type {Event} */ e) {
     e.preventDefault();
     const sprite = state.getSprite();
-    const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
-    state.setCurrentFrame(newFrame);
+    const index = (state.getFrameIndex() + 1) % sprite.getFrameCount();
+    state.setFrameIndex(index);
   },
 }
 
@@ -72,8 +73,8 @@ const loop = {
 
         if (currentTick % sprite.getSlowdown() === 0) {
           currentTick = 0;
-          const newFrame = (state.getCurrentFrame() + 1) % sprite.getFrameCount();
-          state.setCurrentFrame(newFrame);
+          const index = (state.getFrameIndex() + 1) % sprite.getFrameCount();
+          state.setFrameIndex(index);
         }
       }
 

@@ -7,7 +7,7 @@ export const $timeline = {
   $root: /** @type {HTMLElement} */ (document.getElementById('timeline')),
   init() {
     state.listen('sprite', this.update.bind(this))
-    state.listen('currentFrame', this.highlight.bind(this))
+    state.listen('frameIndex', this.highlight.bind(this))
   },
   highlight(/** @type {number} */ frame) {
     Array.from(this.$root.children).forEach((child, index) => {
@@ -27,7 +27,7 @@ export const $timeline = {
       $frame.setAttribute("data-index", i.toString());
       $frame.addEventListener('click', (e) => {
         e.preventDefault();
-        state.setCurrentFrame(i);
+        state.setFrameIndex(i);
       })
 
       const $canvas = frameManager.getFrame(i);

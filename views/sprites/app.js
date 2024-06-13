@@ -8,6 +8,7 @@ import { Color, Sprite, SpriteParser } from './renderer.js';
 import { state } from './state.js';
 import { $timeline } from './components/timeline.js';
 import { $tools } from './components/tools.js';
+import { Tool } from './constants.js';
 
 // This is not really needed for rendering, but the library exports methods
 // that require it to be defined.
@@ -42,17 +43,20 @@ const $app = {
           }
 
           state.setSprite(sprite);
-          state.setCurrentFrame(0);
-          state.setCurrentColor(Color.BLACK);
+          state.setFrameIndex(0);
+          state.setActiveColor(Color.BLACK);
+          state.setTool(Tool.Pencil);
           $app.init();
           this.handleSuccessLoading();
         } catch (error) {
+          console.log(error)
           this.handleErrorLoading();
         }
       }
 
       executeHostCommand(Command.GetDocumentText, null, loadSprite);
     } catch (error) {
+      console.log(error)
       this.handleErrorLoading();
     }
   },

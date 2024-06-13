@@ -1,5 +1,6 @@
 // @ts-check
 import { Color, isSameSprite, Sprite } from './renderer.js';
+import { Tool } from './constants.js';
 
 /**
  * @template T
@@ -10,8 +11,9 @@ import { Color, isSameSprite, Sprite } from './renderer.js';
  * @typedef {Object} Store 
  * @property {Sprite} sprite
  * @property {number} zoom
- * @property {number} currentFrame
- * @property {Color} currentColor
+ * @property {number} frameIndex
+ * @property {Color} activeColor
+ * @property {import('./constants.js').ToolType} tool
  */
 
 /**
@@ -20,24 +22,27 @@ import { Color, isSameSprite, Sprite } from './renderer.js';
 const store = {
   sprite: new Sprite("", 0, 0, 0, 0),
   zoom: 1,
-  currentFrame: 0,
-  currentColor: Color.BLACK,
+  frameIndex: 0,
+  activeColor: Color.BLACK,
+  tool: Tool.Pencil,
 }
 
 /**
  * @typedef {Object} Listeners
  * @property {ListenerCallback<Store['sprite']>[]} sprite
  * @property {ListenerCallback<Store['zoom']>[]} zoom
- * @property {ListenerCallback<Store['currentFrame']>[]} currentFrame
- * @property {ListenerCallback<Store['currentColor']>[]} currentColor
+ * @property {ListenerCallback<Store['frameIndex']>[]} frameIndex
+ * @property {ListenerCallback<Store['activeColor']>[]} activeColor
+ * @property {ListenerCallback<Store['tool']>[]} tool
  */
 
 /** @type {Listeners} */
 const listeners = {
   sprite: [],
   zoom: [],
-  currentFrame: [],
-  currentColor: [],
+  frameIndex: [],
+  activeColor: [],
+  tool: [],
 }
 
 
@@ -80,37 +85,54 @@ export const state = {
   },
 
   /**
-   * @method setCurrentFrame
-   * @param {number} frame
+   * @method setFrameIndex
+   * @param {number} index
    */
-  setCurrentFrame(frame) {
-    store.currentFrame = frame;
-    triggerAllCallbacks(listeners.currentFrame, frame);
+  setFrameIndex(index) {
+    store.frameIndex = index;
+    triggerAllCallbacks(listeners.frameIndex, index);
   },
 
   /**
-   * @method getCurrentFrame
-   * @returns {readonly Store['currentFrame']}
+   * @method getFrameIndex
+   * @returns {readonly Store['frameIndex']}
    */
-  getCurrentFrame() {
-    return store.currentFrame;
+  getFrameIndex() {
+    return store.frameIndex;
   },
 
   /**
    * @method setCurrentColor
    * @param {Color} color
    */
-  setCurrentColor(color) {
-    store.currentColor = color;
-    triggerAllCallbacks(listeners.currentColor, color);
+  setActiveColor(color) {
+    store.activeColor = color;
+    triggerAllCallbacks(listeners.activeColor, color);
   },
 
   /**
-   * @method getCurrentColor
+   * @method getActiveColor
    * @returns {readonly Color}
    */
-  getCurrentColor() {
-    return store.currentColor;
+  getActiveColor() {
+    return store.activeColor;
+  },
+
+  /**
+   * @method setTool
+   * @param {import('./constants.js').ToolType} tool
+   */
+  setTool(tool) {
+    store.tool = tool;
+    triggerAllCallbacks(listeners.tool, tool);
+  },
+
+  /**
+   * @method getTool
+   * @returns {readonly Store['tool']}
+   */
+  getTool() {
+    return store.tool;
   },
 
   /**
