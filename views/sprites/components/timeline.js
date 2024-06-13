@@ -6,19 +6,26 @@ import { frameManager } from '../frame.js'
 export const $timeline = {
   $root: /** @type {HTMLElement} */ (document.getElementById('timeline')),
   init() {
-    state.listen('sprite', this.update.bind(this))
-    state.listen('frameIndex', this.highlight.bind(this))
+    state.listen('sprite', (sprite) => {
+      this.renderFrames(sprite)
+      this.highlightFrameAt(state.getFrameIndex())
+    })
+    state.listen('frameIndex', this.highlightFrameAt.bind(this))
   },
-  highlight(/** @type {number} */ frame) {
-    Array.from(this.$root.children).forEach((child, index) => {
-      if (index == frame) {
-        child.classList.add('selected');
+  highlightFrameAt(/** @type {number} */ frame) {
+    for (const $sprite of this.$root.childNodes) {
+      if (!($sprite instanceof HTMLElement)) continue;
+
+      if ($sprite.dataset.index == frame.toString()) {
+        $sprite.classList.add('selected');
+        // Allow always having the highlighted element in view
+        $sprite.scrollIntoView(false);
       } else {
-        child.classList.remove('selected');
+        $sprite.classList.remove('selected');
       }
-    });
+    }
   },
-  update(/** @type {Sprite} */ sprite) {
+  renderFrames(/** @type {Sprite} */ sprite) {
     this.$root.innerHTML = '';
     const count = sprite.getFrameCount();
     for (let i = 0; i < count; i++) {

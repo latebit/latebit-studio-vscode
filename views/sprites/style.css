@@ -93,6 +93,7 @@ footer {
     padding-top: var(--container-paddding);
     overflow-x: scroll;
     white-space: nowrap;
+    background-color: inherit;
 
     .frame {
       margin: 0 4px;
