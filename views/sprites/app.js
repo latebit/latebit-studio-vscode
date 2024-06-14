@@ -27,36 +27,33 @@ const $app = {
     $tools.init();
 
     try {
-      /**
-       * @type {(payload: string) => void}
-       */
-      const loadSprite = (payload) => {
-        let sprite;
-        try {
-          if (!payload.trim()) {
-            sprite = new Sprite(MOCK_SPRITE_LABEL, 16, 16, 10, 1);
-          } else {
-            sprite = SpriteParser.fromString(payload, MOCK_SPRITE_LABEL);
-            if (!sprite) {
-              throw new Error('Failed to parse sprite');
-            }
-          }
-
-          state.setSprite(sprite);
-          state.setFrameIndex(0);
-          state.setActiveColor(Color.BLACK);
-          state.setTool(Tool.Pencil);
-          $app.init();
-          this.handleSuccessLoading();
-        } catch (error) {
-          console.log(error)
-          this.handleErrorLoading();
+      executeHostCommand(Command.GetDocumentText, null, this.loadSprite.bind(this));
+    } catch (error) {
+      this.handleErrorLoading();
+    }
+  },
+  /**
+   * @param {string} payload
+   */
+  loadSprite(payload) {
+    let sprite;
+    try {
+      if (!payload.trim()) {
+        sprite = new Sprite(MOCK_SPRITE_LABEL, 16, 16, 10, 1);
+      } else {
+        sprite = SpriteParser.fromString(payload, MOCK_SPRITE_LABEL);
+        if (!sprite) {
+          throw new Error('Failed to parse sprite');
         }
       }
 
-      executeHostCommand(Command.GetDocumentText, null, loadSprite);
+      state.setSprite(sprite);
+      state.setFrameIndex(0);
+      state.setActiveColor(Color.BLACK);
+      state.setTool(Tool.Pencil);
+      $app.init();
+      this.handleSuccessLoading();
     } catch (error) {
-      console.log(error)
       this.handleErrorLoading();
     }
   },

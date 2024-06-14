@@ -2,11 +2,12 @@
 import { state } from "../state.js";
 import { COLOR_TO_HEX, frameManager } from "../frame.js";
 import { executeHostCommand, Command } from '../../ipc.js';
-import { Color, Frame, SpriteParser } from "../renderer.js";
+import { Color, Frame, Sprite, SpriteParser } from "../renderer.js";
 import { Tool } from "../constants.js";
 
 const PIXEL_SIZE = 10;
-let cachedSprite = state.getSprite();
+/** @type {Sprite | null} */
+let cachedSprite = null;
 
 export const $editor = {
   $root: /** @type {HTMLElement} */ (document.getElementById('editor')),
@@ -27,26 +28,36 @@ export const $editor = {
 
     $frame.style.width = `calc(${$frame.style.width} * ${pixelSize})`;
     $frame.style.height = `calc(${$frame.style.height} * ${pixelSize})`;
-    let shouldUpdate = false;
 
-    $frame.addEventListener('mousedown', (e) => {
+    let shouldUpdate = false;
+    const init = (/** @type {PointerEvent} */ e) => {
       shouldUpdate = true;
       cachedSprite = state.getSprite();
-      this.useTool(e);
-    })
-    $frame.addEventListener('mousemove', (e) => {
+      draw(e);
+    }
+
+    const draw = (/** @type {PointerEvent} */ e) => {
       if (!shouldUpdate) return;
-      this.useTool(e)
-    });
-    $frame.addEventListener('mouseup', () => {
+      this.useTool(e);
+    }
+
+    const commit = () => {
+      if (!shouldUpdate || !cachedSprite) return;
       shouldUpdate = false;
       state.setSprite(cachedSprite);
-    })
+    }
+
+    $frame.addEventListener('pointerdown', init);
+    $frame.addEventListener('pointermove', draw);
+    $frame.addEventListener('pointerup', commit);
+    $frame.addEventListener('pointerout', commit);
+    $frame.addEventListener('pointerleave', commit);
+
 
     this.$root.innerHTML = '';
     this.$root.appendChild($frame);
   },
-  useTool(/** @type {MouseEvent} */ e) {
+  useTool(/** @type {PointerEvent} */ e) {
     const canvas = /** @type {HTMLCanvasElement} */ (e.target);
 
     const zoom = state.getZoom();
@@ -69,9 +80,10 @@ export const $editor = {
  */
 const tools = {
   [Tool.Pencil]: (x, y, ctx) => {
-    // update sprite in memory, the updates will be commited to the document when the mouse is released
-    const color = state.getActiveColor();
     const sprite = cachedSprite;
+    if (!sprite) return;
+
+    const color = state.getActiveColor();
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
@@ -85,8 +97,9 @@ const tools = {
     ctx.fillRect(x, y, 1, 1);
   },
   [Tool.Eraser]: (x, y, ctx) => {
-    // update sprite in memory, the updates will be commited to the document when the mouse is released
     const sprite = cachedSprite;
+    if (!sprite) return;
+
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
@@ -100,6 +113,8 @@ const tools = {
   },
   [Tool.Picker]: (x, y) => {
     const sprite = cachedSprite;
+    if (!sprite) return;
+
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
@@ -110,6 +125,8 @@ const tools = {
   },
   [Tool.Fill]: (x, y, ctx) => {
     const sprite = cachedSprite;
+    if (!sprite) return;
+
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
     const targetColor = frame.getContent().get(x + y * sprite.getWidth());

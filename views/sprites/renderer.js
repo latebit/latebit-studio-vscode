@@ -15,4 +15,9 @@ export const Frame = /** @type {Frame & Renderer['Frame']} */ (renderer.Frame);
 export const Sprite = /** @type {Sprite & Renderer['Sprite']} */ (renderer.Sprite);
 export const SpriteParser = /** @type {Renderer['SpriteParser']} */ (renderer.SpriteParser);
 export const Color = /** @type {Renderer['Color']} */ (renderer.Color);
+
+// Wrapper functions
 export const isSameSprite = /** @type {Renderer['isSameSprite']} */ (renderer.isSameSprite);
+export const setSize = /** @type {Renderer['setSize']} */ (renderer.setSize);
+export const setSlowdown = /** @type {Renderer['setSlowdown']} */ (renderer.setSlowdown);
+export const setFrameCount = /** @type {Renderer['setFrameCount']} */ (renderer.setFrameCount);

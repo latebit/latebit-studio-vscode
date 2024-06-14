@@ -62,7 +62,7 @@ export const state = {
    * @param {Sprite} sprite
    */
   setSprite(sprite) {
-    if (!sprite || (!!sprite && !!state.sprite && isSameSprite(sprite, state.sprite))) return;
+    if ((!!sprite && !!state.sprite && isSameSprite(sprite, state.sprite))) return;
 
     store.sprite = sprite;
     triggerAllCallbacks(listeners.sprite, sprite);
