@@ -9,7 +9,7 @@
   aspect-ratio: 1;
 
   .canvas-container {
-    overflow: scroll;
+    overflow: auto;
 
     canvas {
       background-color: white;
@@ -80,7 +80,6 @@ aside {
 
       .color {
         height: 24px;
-        width: 24px;
 
         &:checked,
         &:focus {
