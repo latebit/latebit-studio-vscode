@@ -24,7 +24,6 @@ main {
 aside {
   fieldset {
     display: grid;
-    grid-auto-flow: column;
     border: none;
 
     button {

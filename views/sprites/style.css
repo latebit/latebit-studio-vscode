@@ -48,6 +48,13 @@ aside {
     }
   }
 
+  #metadata {
+    fieldset {
+      grid-template-columns: 5fr 4fr 5fr 4fr;
+      gap: var(--input-padding-horizontal);
+    }
+  }
+
   #tools {
 
     input[type="radio"] {
@@ -76,7 +83,6 @@ aside {
 
     #palette {
       grid-template-columns: repeat(8, 1fr);
-      grid-auto-flow: unset;
 
       .color {
         height: 24px;
@@ -93,6 +99,10 @@ aside {
   }
 
   #playback {
+    fieldset {
+      grid-auto-flow: column;
+    }
+
     #frame-counter {
       display: block;
       font-family: var(--vscode-editor-font-family);

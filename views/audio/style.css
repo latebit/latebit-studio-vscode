@@ -63,6 +63,10 @@ aside {
   form {
     padding-bottom: var(--container-paddding);
 
+    fieldset {
+      grid-auto-flow: column;
+    }
+
     label {
       display: block;
       padding-top: var(--input-padding-vertical);

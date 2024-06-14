@@ -19,16 +19,20 @@ export const $editor = {
   init() {
     state.listen('frameIndex', this.update.bind(this));
     state.listen('sprite', this.update.bind(this));
-    state.listen('zoom', this.update.bind(this));
+    state.listen('zoom', (zoom) => {
+      this.update();
+      const index = ALLOWED_ZOOM_VALUES.indexOf(zoom);
+      this.$zoomIn.disabled = index === (ALLOWED_ZOOM_VALUES.length - 1);
+      this.$zoomOut.disabled = index == 0;
+      this.$zoomReset.disabled = index === 1;
+    });
 
+    this.$zoomReset.disabled = true;
     this.$zoomIn.addEventListener('click', (e) => {
       e.preventDefault();
       let index = ALLOWED_ZOOM_VALUES.indexOf(state.getZoom());
       index = index === -1 ? 1 : Math.min(index + 1, ALLOWED_ZOOM_VALUES.length);
       state.setZoom(ALLOWED_ZOOM_VALUES[index]);
-
-      this.$zoomIn.disabled = index === (ALLOWED_ZOOM_VALUES.length - 1);
-      this.$zoomOut.disabled = false;
     })
 
     this.$zoomOut.addEventListener('click', (e) => {
@@ -36,9 +40,6 @@ export const $editor = {
       let index = ALLOWED_ZOOM_VALUES.indexOf(state.getZoom());
       index = index === -1 ? 1 : Math.max(index - 1, 0);
       state.setZoom(ALLOWED_ZOOM_VALUES[index]);
-
-      this.$zoomOut.disabled = index === 0;
-      this.$zoomIn.disabled = false;
     })
 
     this.$zoomReset.addEventListener('click', (e) => {
