@@ -6,17 +6,45 @@ import { Color, Frame, Sprite, SpriteParser } from "../renderer.js";
 import { Tool } from "../constants.js";
 
 const PIXEL_SIZE = 10;
+const ALLOWED_ZOOM_VALUES = [0.5, 1, 2, 5]
 /** @type {Sprite | null} */
 let cachedSprite = null;
 
 export const $editor = {
-  $root: /** @type {HTMLElement} */ (document.getElementById('editor')),
+  $root:      /** @type {HTMLElement} */ (document.getElementById('editor')),
+  $canvas:    /** @type {HTMLCanvasElement} */ (document.querySelector('#editor > .canvas-container > canvas')),
+  $zoomIn:    /** @type {HTMLButtonElement} */ (document.querySelector('#editor > .zoom > #zoom-in')),
+  $zoomOut:   /** @type {HTMLButtonElement} */ (document.querySelector('#editor > .zoom > #zoom-out')),
+  $zoomReset: /** @type {HTMLButtonElement} */ (document.querySelector('#editor > .zoom > #zoom-reset')),
   init() {
     state.listen('frameIndex', this.update.bind(this));
-    state.listen('sprite', (sprite) => {
-      this.update();
-      executeHostCommand(Command.UpdateDocumentText, SpriteParser.toString(sprite));
-    });
+    state.listen('sprite', this.update.bind(this));
+    state.listen('zoom', this.update.bind(this));
+
+    this.$zoomIn.addEventListener('click', (e) => {
+      e.preventDefault();
+      let index = ALLOWED_ZOOM_VALUES.indexOf(state.getZoom());
+      index = index === -1 ? 1 : Math.min(index + 1, ALLOWED_ZOOM_VALUES.length);
+      state.setZoom(ALLOWED_ZOOM_VALUES[index]);
+
+      this.$zoomIn.disabled = index === (ALLOWED_ZOOM_VALUES.length - 1);
+      this.$zoomOut.disabled = false;
+    })
+
+    this.$zoomOut.addEventListener('click', (e) => {
+      e.preventDefault();
+      let index = ALLOWED_ZOOM_VALUES.indexOf(state.getZoom());
+      index = index === -1 ? 1 : Math.max(index - 1, 0);
+      state.setZoom(ALLOWED_ZOOM_VALUES[index]);
+
+      this.$zoomOut.disabled = index === 0;
+      this.$zoomIn.disabled = false;
+    })
+
+    this.$zoomReset.addEventListener('click', (e) => {
+      e.preventDefault();
+      state.setZoom(1);
+    })
   },
   update() {
     const frameIndex = state.getFrameIndex();
@@ -45,6 +73,7 @@ export const $editor = {
       if (!shouldUpdate || !cachedSprite) return;
       shouldUpdate = false;
       state.setSprite(cachedSprite);
+      executeHostCommand(Command.UpdateDocumentText, SpriteParser.toString(cachedSprite));
     }
 
     $frame.addEventListener('pointerdown', init);
@@ -53,9 +82,8 @@ export const $editor = {
     $frame.addEventListener('pointerout', commit);
     $frame.addEventListener('pointerleave', commit);
 
-
-    this.$root.innerHTML = '';
-    this.$root.appendChild($frame);
+    this.$canvas.replaceWith($frame);
+    this.$canvas = $frame;
   },
   useTool(/** @type {PointerEvent} */ e) {
     const canvas = /** @type {HTMLCanvasElement} */ (e.target);

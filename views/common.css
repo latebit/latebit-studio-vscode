@@ -18,6 +18,7 @@ header {
 main {
   display: flex;
   padding-top: var(--container-paddding);
+  width: 900px;
 }
 
 aside {

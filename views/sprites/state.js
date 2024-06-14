@@ -77,6 +77,15 @@ export const state = {
   },
 
   /**
+   * @method setZoom
+   * @param {number} zoom
+   */
+  setZoom(zoom) {
+    store.zoom = zoom;
+    triggerAllCallbacks(listeners.zoom, zoom);
+  },
+
+  /**
    * @method getZoom
    * @returns {readonly Store['zoom']}
    */
