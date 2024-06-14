@@ -43,6 +43,20 @@ export const $timeline = {
       $canvas.style.height = '80px';
       $canvas.style.width = 'unset';
 
+      if (count > 1) {
+        const $remove = document.createElement('button');
+        $remove.classList.add('codicon', 'codicon-close')
+        $remove.addEventListener('click', () => {
+          const newSprite = new Sprite("", sprite.getHeight(), sprite.getWidth(), sprite.getSlowdown(), count - 1);
+          for (let j = 0; j < count; j++) {
+            if (j != i) newSprite.addFrame(sprite.getFrame(j))
+          }
+          state.setSprite(newSprite);
+          sprite.delete();
+        })
+        $frame.appendChild($remove)
+      }
+
       const $label = document.createElement('span');
       $label.innerText = `${i + 1}`
 

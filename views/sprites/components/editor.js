@@ -74,7 +74,6 @@ export const $editor = {
       if (!shouldUpdate || !cachedSprite) return;
       shouldUpdate = false;
       state.setSprite(cachedSprite);
-      executeHostCommand(Command.UpdateDocumentText, SpriteParser.toString(cachedSprite));
     }
 
     $frame.addEventListener('pointerdown', init);

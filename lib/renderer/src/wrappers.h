@@ -1,5 +1,6 @@
 #pragma once
 #include <latebit/core/graphics/Sprite.h>
+#include <memory>
 
 using namespace lb;
 

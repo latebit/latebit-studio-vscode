@@ -67,6 +67,10 @@ const $app = {
         executeHostCommand(Command.Error, error.message);
       }
     })
+
+    state.listen('sprite', (sprite) => {
+      executeHostCommand(Command.UpdateDocumentText, SpriteParser.toString(sprite));
+    })
   },
   handleSuccessLoading() {
     this.$banner.parentNode?.removeChild(this.$banner);
