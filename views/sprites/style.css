@@ -118,13 +118,22 @@ aside {
 footer {
   position: fixed;
   bottom: 0;
-  max-width: 900px;
+  width: 900px;
+  background-color: inherit;
+  padding: var(--container-paddding) 0;
 
   #timeline {
+    display: flex;
     padding-top: var(--container-paddding);
     overflow-x: scroll;
     white-space: nowrap;
-    background-color: inherit;
+
+    .add {
+      margin: 0 4px;
+      display: inline-block;
+      padding: 8px;
+      width: 40px;
+    }
 
     .frame {
       margin: 0 4px;
@@ -162,6 +171,7 @@ footer {
         width: 100%;
         text-align: center;
         padding-top: 8px;
+        height: 24px;
       }
     }
   }

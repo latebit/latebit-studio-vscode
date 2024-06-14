@@ -1,5 +1,5 @@
 // @ts-check
-import { Sprite } from '../renderer.js'
+import { Sprite, setFrameCount } from '../renderer.js'
 import { state } from '../state.js'
 import { frameManager } from '../frame.js'
 
@@ -46,12 +46,20 @@ export const $timeline = {
       if (count > 1) {
         const $remove = document.createElement('button');
         $remove.classList.add('codicon', 'codicon-close')
-        $remove.addEventListener('click', () => {
+        $remove.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
           const newSprite = new Sprite("", sprite.getHeight(), sprite.getWidth(), sprite.getSlowdown(), count - 1);
           for (let j = 0; j < count; j++) {
             if (j != i) newSprite.addFrame(sprite.getFrame(j))
           }
           state.setSprite(newSprite);
+
+          if (state.getFrameIndex() == i) {
+            state.setFrameIndex(Math.max(0, i - 1));
+          }
+
           sprite.delete();
         })
         $frame.appendChild($remove)
@@ -64,5 +72,17 @@ export const $timeline = {
       $frame.appendChild($label)
       this.$root.appendChild($frame);
     }
+
+    const $add = document.createElement('button');
+    $add.classList.add('add', 'codicon', 'codicon-add');
+    $add.addEventListener('click', (e) => {
+      e.preventDefault();
+      let sprite = state.getSprite();
+      sprite = setFrameCount(sprite, sprite.getFrameCount() + 1);
+      state.setSprite(sprite);
+      state.setFrameIndex(sprite.getFrameCount() - 1);
+    })
+
+    this.$root.appendChild($add);
   }
 }
