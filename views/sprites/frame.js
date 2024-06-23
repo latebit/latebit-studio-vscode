@@ -1,5 +1,5 @@
 // @ts-check
-import { Color, Frame, Sprite } from "./renderer.js";
+import { Color, Keyframe, Sprite } from "./renderer.js";
 import { state } from "./state.js";
 
 /**
@@ -27,10 +27,10 @@ export const COLOR_TO_HEX = {
 
 /**
  * Prerenders a frame into a canvas element to be used for preview, playback, and editing.
- * @param {Frame} frame
+ * @param {Keyframe} frame
  * @returns {HTMLCanvasElement}
  */
-const makeFrame = (/** @type {Frame} */ frame) => {
+const makeFrame = (/** @type {Keyframe} */ frame) => {
   const width = frame.getWidth();
   const height = frame.getHeight();
 

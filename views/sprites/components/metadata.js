@@ -1,5 +1,5 @@
 // @ts-check
-import { Sprite, setFrameCount, setSize, setSlowdown } from '../renderer.js';
+import { Sprite, setFrameCount, setSize, setDuration } from '../renderer.js';
 import { state } from '../state.js';
 
 export const $metadata = {
@@ -35,7 +35,7 @@ export const $metadata = {
       if (!(e.target instanceof HTMLInputElement)) return;
 
       const sprite = state.getSprite();
-      state.setSprite(setSlowdown(sprite, e.target.valueAsNumber))
+      state.setSprite(setDuration(sprite, e.target.valueAsNumber))
     })
   },
   /**
@@ -48,7 +48,7 @@ export const $metadata = {
     this.$width.defaultValue = sprite.getWidth().toString();
     this.$height.value = sprite.getHeight().toString();
     this.$height.defaultValue = sprite.getHeight().toString();
-    this.$slowdown.value = sprite.getSlowdown().toString();
-    this.$slowdown.defaultValue = sprite.getSlowdown().toString();
+    this.$slowdown.value = sprite.getDuration().toString();
+    this.$slowdown.defaultValue = sprite.getDuration().toString();
   }
 }

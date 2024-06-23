@@ -13,37 +13,37 @@ using namespace lb;
 using namespace renderer;
 
 EMSCRIPTEN_BINDINGS(renderer) {
-  Log.setDestination(lb::STDOUT);
+  Log.setDestination(LogDestination::STDOUT);
 
   emscripten::class_<SpriteParser>("SpriteParser")
     .class_function("fromString", &SpriteParser::fromString)
     .class_function("toString", &SpriteParser::toString);
 
   emscripten::class_<Sprite>("Sprite")
-    .constructor<string, uint8_t, uint8_t, uint8_t, uint8_t>()
+    .constructor<string, uint8_t, uint8_t, uint8_t, vector<Keyframe>>()
     .function("getWidth", &Sprite::getWidth)
     .function("getHeight", &Sprite::getHeight)
-    .function("getSlowdown", &Sprite::getSlowdown)
-    .function("addFrame", &Sprite::addFrame)
+    .function("getDuration", &Sprite::getDuration)
     .function("getFrame", &Sprite::getFrame)
-    .function("setFrame", &Sprite::setFrame)
     .function("getFrameCount", &Sprite::getFrameCount);
   
   emscripten::function("isSameSprite", &renderer::isSameSprite);
   emscripten::function("setSize", &renderer::setSize);
   emscripten::function("setFrameCount", &renderer::setFrameCount);
-  emscripten::function("setSlowdown", &renderer::setSlowdown);
+  emscripten::function("setDuration", &renderer::setDuration);
+  emscripten::function("setFrame", &renderer::setFrame);
 
-  emscripten::register_vector<Color>("Content");
+  emscripten::register_vector<Color::Color>("Content");
+  emscripten::register_vector<Keyframe>("Keyframes");
 
-  emscripten::class_<Frame>("Frame")
+  emscripten::class_<Keyframe>("Keyframe")
     .constructor<>()
-    .constructor<uint8_t, uint8_t, vector<Color>>()
-    .function("getWidth", &Frame::getWidth)
-    .function("getHeight", &Frame::getHeight)
-    .function("getContent", &Frame::getContent, emscripten::allow_raw_pointers());
+    .constructor<uint8_t, uint8_t, vector<Color::Color>>()
+    .function("getWidth", &Keyframe::getWidth)
+    .function("getHeight", &Keyframe::getHeight)
+    .function("getContent", &Keyframe::getContent, emscripten::allow_raw_pointers());
   
-  emscripten::enum_<Color>("Color")
+  emscripten::enum_<Color::Color>("Color")
     .value("UNDEFINED_COLOR", Color::UNDEFINED_COLOR)
     .value("BLACK", Color::BLACK)
     .value("DARK_BLUE", Color::DARK_BLUE)

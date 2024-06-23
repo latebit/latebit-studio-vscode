@@ -9,48 +9,71 @@ namespace renderer {
   };
 
   auto setSize(const Sprite &sprite, uint8_t width, uint8_t height) -> unique_ptr<Sprite> {
-    auto newSprite = make_unique<Sprite>(sprite.getLabel(), width, height, sprite.getSlowdown(), sprite.getFrameCount());
+    auto frames = vector<Keyframe>();
+    frames.reserve(sprite.getFrameCount());
 
-    for (int i = 0; i < sprite.getFrameCount(); i++) {
+    for (uint8_t i = 0; i < sprite.getFrameCount(); i++) {
       auto frame = sprite.getFrame(i);
-      auto content = vector<Color>(width * height, Color::UNDEFINED_COLOR);
+      auto content = vector<Color::Color>(width * height, Color::UNDEFINED_COLOR);
 
-      for (int y = 0; y < frame.getHeight(); y++) {
-        for (int x = 0; x < frame.getWidth(); x++) {
+      for (uint8_t y = 0; y < frame.getHeight(); y++) {
+        for (uint8_t x = 0; x < frame.getWidth(); x++) {
           content[y * width + x] = frame.getContent()[y * frame.getWidth() + x];
         }
       }
 
-      newSprite->addFrame(Frame(width, height, content));
+      frames.push_back(Keyframe(width, height, content));
     }
 
+    auto newSprite = make_unique<Sprite>(sprite.getLabel(), width, height, sprite.getDuration(), frames);
     delete &sprite;
     return newSprite;
   };
 
-  auto setSlowdown(Sprite &sprite, uint8_t slowdown) -> unique_ptr<Sprite> {
-    auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), slowdown, sprite.getFrameCount());
+  auto setDuration(Sprite &sprite, uint8_t slowdown) -> unique_ptr<Sprite> {
+    auto frames = vector<Keyframe>();
+    frames.reserve(sprite.getFrameCount());
 
-    for (int i = 0; i < sprite.getFrameCount(); i++) {
-      newSprite->addFrame(sprite.getFrame(i));
+    for (uint8_t i = 0; i < sprite.getFrameCount(); i++) {
+      frames.push_back(sprite.getFrame(i));
     }
 
+    auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), slowdown, frames);
     delete &sprite;
     return newSprite;
   };
 
   auto setFrameCount(Sprite &sprite, uint8_t frameCount) -> unique_ptr<Sprite> {
-    auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), sprite.getSlowdown(), frameCount);
     auto maxFrameCount = frameCount < sprite.getFrameCount() ? frameCount : sprite.getFrameCount();
+    auto frames = vector<Keyframe>();
+    frames.reserve(frameCount);
 
-    for (int i = 0; i < maxFrameCount; i++) {
-      newSprite->addFrame(sprite.getFrame(i));
+    for (uint8_t i = 0; i < maxFrameCount; i++) {
+      frames.push_back(sprite.getFrame(i));
     }
 
-    for (int i = maxFrameCount; i < frameCount; i++) {
-      newSprite->addFrame(Frame(sprite.getWidth(), sprite.getHeight(), vector<Color>(sprite.getWidth() * sprite.getHeight(), Color::UNDEFINED_COLOR)));
+    for (uint8_t i = maxFrameCount; i < frameCount; i++) {
+      frames.push_back(Keyframe(sprite.getWidth(), sprite.getHeight(), vector<Color::Color>(sprite.getWidth() * sprite.getHeight(), Color::UNDEFINED_COLOR)));
     }
 
+    auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), sprite.getDuration(), frames);
+    delete &sprite;
+    return newSprite;
+  };
+
+  auto setFrame(Sprite &sprite, uint8_t index, const Keyframe &frame) -> unique_ptr<Sprite> {
+    auto frames = vector<Keyframe>();
+    frames.reserve(sprite.getFrameCount());
+
+    for (uint8_t i = 0; i < sprite.getFrameCount(); i++) {
+      if (i == index) {
+        frames.push_back(frame);
+      } else {
+        frames.push_back(sprite.getFrame(i));
+      }
+    }
+
+    auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), sprite.getDuration(), frames);
     delete &sprite;
     return newSprite;
   };

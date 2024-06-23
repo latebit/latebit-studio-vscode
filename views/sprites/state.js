@@ -1,5 +1,5 @@
 // @ts-check
-import { Color, isSameSprite, Sprite } from './renderer.js';
+import { Color, isSameSprite, Keyframes, Sprite } from './renderer.js';
 import { Tool } from './constants.js';
 
 /**
@@ -20,7 +20,7 @@ import { Tool } from './constants.js';
  * @type {Store} store
  */
 const store = {
-  sprite: new Sprite("", 0, 0, 0, 0),
+  sprite: new Sprite("", 1, 1, 1, new Keyframes()),
   zoom: 1,
   frameIndex: 0,
   activeColor: Color.BLACK,

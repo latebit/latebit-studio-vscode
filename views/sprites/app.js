@@ -4,7 +4,7 @@ import { $editor } from './components/editor.js';
 import { frameManager } from './frame.js';
 import { $metadata } from './components/metadata.js';
 import { $playback } from './components/playback.js';
-import { Color, Sprite, SpriteParser } from './renderer.js';
+import { Color, Keyframe, Keyframes, Sprite, SpriteParser } from './renderer.js';
 import { state } from './state.js';
 import { $timeline } from './components/timeline.js';
 import { $tools } from './components/tools.js';
@@ -39,7 +39,9 @@ const $app = {
     let sprite;
     try {
       if (!payload.trim()) {
-        sprite = new Sprite(MOCK_SPRITE_LABEL, 16, 16, 10, 1);
+        const frames = new Keyframes();
+        frames.push_back(new Keyframe());
+        sprite = new Sprite(MOCK_SPRITE_LABEL, 16, 16, 10, frames);
       } else {
         sprite = SpriteParser.fromString(payload, MOCK_SPRITE_LABEL);
         if (!sprite) {

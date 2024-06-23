@@ -1,7 +1,7 @@
 //@ts-check
 import { executeHostCommand, Command } from '../../ipc.js';
 import { state } from '../state.js';
-import { Player } from '../sid.js';
+import { Player } from '../player.js';
 
 export const $playback = {
   /** @type {!HTMLButtonElement} */

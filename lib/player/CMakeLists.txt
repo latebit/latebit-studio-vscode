@@ -15,4 +15,4 @@ file(GLOB HDR_FILES "${CMAKE_SOURCE_DIR}/src/*.h")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HDR_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 sid embind)
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-O3 -sUSE_SDL=2")
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-O3 --emit-tsd ${PROJECT_NAME}.d.ts -sUSE_SDL=2")

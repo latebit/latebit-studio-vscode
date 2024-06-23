@@ -71,7 +71,7 @@ const loop = {
         lastTime = time;
         currentTick++;
 
-        if (currentTick % sprite.getSlowdown() === 0) {
+        if (currentTick % sprite.getDuration() === 0) {
           currentTick = 0;
           const index = (state.getFrameIndex() + 1) % sprite.getFrameCount();
           state.setFrameIndex(index);

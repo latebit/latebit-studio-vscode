@@ -1,5 +1,5 @@
 // @ts-check
-import { Sprite, setFrameCount } from '../renderer.js'
+import { Keyframes, Sprite, setFrameCount } from '../renderer.js'
 import { state } from '../state.js'
 import { frameManager } from '../frame.js'
 
@@ -50,10 +50,11 @@ export const $timeline = {
           e.preventDefault();
           e.stopPropagation();
 
-          const newSprite = new Sprite("", sprite.getHeight(), sprite.getWidth(), sprite.getSlowdown(), count - 1);
+          const frames = new Keyframes();
           for (let j = 0; j < count; j++) {
-            if (j != i) newSprite.addFrame(sprite.getFrame(j))
+            if (j != i) frames.push_back(sprite.getFrame(j))
           }
+          const newSprite = new Sprite("", sprite.getHeight(), sprite.getWidth(), sprite.getDuration(), frames);
           state.setSprite(newSprite);
 
           if (state.getFrameIndex() == i) {

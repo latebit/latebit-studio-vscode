@@ -2,7 +2,7 @@
 import { state } from "../state.js";
 import { COLOR_TO_HEX, frameManager } from "../frame.js";
 import { executeHostCommand, Command } from '../../ipc.js';
-import { Color, Frame, Sprite, SpriteParser } from "../renderer.js";
+import { Color, Keyframe, Sprite, SpriteParser, setFrame } from "../renderer.js";
 import { Tool } from "../constants.js";
 
 const PIXEL_SIZE = 10;
@@ -117,7 +117,7 @@ const tools = {
     const frame = sprite.getFrame(frameIndex);
     const content = frame.getContent()
     content.set(index, color);
-    sprite.setFrame(frameIndex, new Frame(frame.getWidth(), frame.getHeight(), content));
+    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
     frame.delete();
 
     // give visual feedback to the user
@@ -133,7 +133,7 @@ const tools = {
     const frame = sprite.getFrame(frameIndex);
     const content = frame.getContent()
     content.set(index, Color.UNDEFINED_COLOR);
-    sprite.setFrame(frameIndex, new Frame(frame.getWidth(), frame.getHeight(), content));
+    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
     frame.delete();
 
     // give visual feedback to the user
@@ -176,6 +176,6 @@ const tools = {
     }
 
     fill(x, y);
-    sprite.setFrame(frameIndex, new Frame(frame.getWidth(), frame.getHeight(), content));
+    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
   }
 }

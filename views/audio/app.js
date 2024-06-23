@@ -4,7 +4,7 @@ import { state } from './state.js'
 import { $metadata } from './components/metadata.js'
 import { $playback } from './components/playback.js'
 import { $editor } from './components/editor.js'
-import { TuneParser, createEmptyTune } from './sid.js'
+import { TuneParser, createEmptyTune } from './player.js'
 import { executeHostCommand, listen, Command, Event } from '../ipc.js'
 import { ParserOptions, ViewType } from './constants.js'
 
@@ -33,7 +33,7 @@ const $app = {
         let tune;
         try {
           if (!payload.trim()) {
-            tune = createEmptyTune(90, 4, 4);
+            tune = createEmptyTune(90, 4, 4, parserOptions.maxTracksCount);
           } else {
             tune = TuneParser.fromString(payload, parserOptions);
             if (!tune) {
