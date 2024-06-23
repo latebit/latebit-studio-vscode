@@ -104,7 +104,7 @@
         const arg = args[0];
         if (typeof arg !== 'string') return;
 
-        const message = arg.match('.*\] (.*)')?.[1]
+        const message = arg.match('.*\(\)\: (.*)')?.[1]
         const command = arg.includes('ERROR') ? 'command:error' : 'command:info'
         vscode.postMessage({ type: command, payload: message })
       },
