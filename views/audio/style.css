@@ -2,7 +2,7 @@
   --input-height: calc(var(--vscode-editor-font-size) * 2);
   --input-width: 7ch;
   --delete-width: var(--input-height);
-  --column-size: calc(var(--input-width) + var(--delete-width));
+  --column-size: calc(var(--input-width) + var(--delete-width) + 8px);
   --index-size: 4ch;
   --beat-gap: calc(var(--container-paddding) / 2);
 
