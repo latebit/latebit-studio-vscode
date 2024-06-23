@@ -16,8 +16,9 @@
   ],
   "main": "./out/src/index.js",
   "activationEvents": [
+    "onCustomEditor:viewType:latebit-studio.music",
     "onCustomEditor:viewType:latebit-studio.tune",
-    "onCommand:commandId:latebit-studio.sprite",
+    "onCustomEditor:viewType:latebit-studio.sprite",
     "onCommand:commandId:debug",
     "onCommand:commandId:build",
     "onCommand:commandId:configure",
@@ -26,11 +27,6 @@
   ],
   "contributes": {
     "commands": [
-      {
-        "command": "latebit-studio.sprite",
-        "title": "Show sprite preview",
-        "category": "latebit"
-      },
       {
         "command": "debug",
         "title": "Debug current game",
@@ -80,6 +76,15 @@
             "filenamePattern": "*.lbsfx"
           }
         ]
+      },
+      {
+        "viewType": "latebit-studio.sprite",
+        "displayName": "latebit",
+        "selector": [
+          {
+            "filenamePattern": "*.lbspr"
+          }
+        ]
       }
     ],
     "taskDefinitions": [
@@ -90,7 +95,10 @@
             "type": "string",
             "oneOf": [
               {
-                "enum": [ "build", "configure" ]
+                "enum": [
+                  "build",
+                  "configure"
+                ]
               }
             ],
             "description": "The kind of task to run. Configure prepares the workspace for the build, and build compiles the artifacts."
@@ -114,10 +122,14 @@
       {
         "type": "cppdbg",
         "label": "latebit debugger",
-        "languages": [ "cpp" ],
+        "languages": [
+          "cpp"
+        ],
         "configurationAttributes": {
           "launch": {
-            "required": [ "program" ],
+            "required": [
+              "program"
+            ],
             "properties": {
               "program": {
                 "type": "string",
@@ -155,12 +167,11 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "npm run compile:player && tsc -p ./",
-    "compile:player": "cd player && emcmake cmake -B build && emmake cmake --build build",
+    "compile": "npm run compile:renderer && npm run compile:player && tsc -p ./",
+    "compile:player": "cd lib/player && emcmake cmake -B build && emmake cmake --build build",
+    "compile:renderer": "cd lib/renderer && emcmake cmake -B build && emmake cmake --build build",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test",
     "package": "vsce package"
   },
   "devDependencies": {
@@ -169,11 +180,9 @@
     "@types/vscode": "^1.86.0",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.27.0",
     "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "vsce": "^2.15.0"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35"

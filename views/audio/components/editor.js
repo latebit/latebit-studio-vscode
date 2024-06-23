@@ -1,7 +1,7 @@
 // @ts-check
 import { state } from '../state.js';
 import { executeHostCommand, Command } from '../../ipc.js';
-import { Note, Player, Tune, TuneParser, removeNote, setNote, getNote, getTrackSize } from '../sid.js';
+import { Note, Player, Tune, TuneParser, removeNote, setNote, getNote, getTrackSize, NoteType } from '../player.js';
 
 export const $editor = {
   /** @type {!HTMLElement} */
@@ -85,7 +85,7 @@ const makeCell = (tune, track, tick) => {
     if (value === previousValue) return;
 
     const note = Player.parse(value);
-    if (note.isInvalid()) return;
+    if (note.getType() === NoteType.INVALID) return;
 
     try {
       Player.playNote(note);
@@ -99,7 +99,7 @@ const makeCell = (tune, track, tick) => {
     // @ts-expect-error
     const symbol = e.target?.value;
     const note = Player.parse(symbol);
-    if (note.isInvalid()) {
+    if (note.getType() === NoteType.INVALID) {
       executeHostCommand(Command.Error, `Invalid symbol: ${symbol}`);
       $input.value = previousValue;
       return

@@ -76,5 +76,8 @@
         "variant": "cpp",
         "format": "cpp"
     },
-    "cmake.sourceDirectory": "/home/manuel/dev/manuel/latebit-studio-vscode/player"
+    "cmake.sourceDirectory": "/home/manuel/dev/manuel/latebit-studio-vscode/player",
+    "cmake.debugConfig": {
+
+    }
 }

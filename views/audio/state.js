@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @typedef {import('./sid').Tune} Tune
+ * @typedef {import('./player').Tune} Tune
  */
 
 /**

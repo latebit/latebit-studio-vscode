@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/lib/renderer/build/_deps/latebit-src/include",
+                "/home/manuel/dev/oss/emsdk/upstream/emscripten/system/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-15",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

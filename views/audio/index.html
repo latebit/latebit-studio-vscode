@@ -13,6 +13,7 @@
 
   <link rel="stylesheet" href="{{ views }}/reset.css">
   <link rel="stylesheet" href="{{ nodeModules }}/@vscode/codicons/dist/codicon.css">
+  <link rel="stylesheet" href="{{ views }}/common.css">
   <link rel="stylesheet" href="{{ views }}/audio/style.css">
 </head>
 
@@ -83,7 +84,7 @@
         const arg = args[0];
         if (typeof arg !== 'string') return;
 
-        const message = arg.match('.*\] (.*)')?.[1]
+        const message = arg.match('.*\(\)\: (.*)')?.[1]
         const command = arg.includes('ERROR') ? 'command:error' : 'command:info'
         vscode.postMessage({ type: command, payload: message })
       },

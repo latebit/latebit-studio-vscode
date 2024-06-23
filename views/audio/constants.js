@@ -1,4 +1,4 @@
-import { MUSIC_PARSER_OPTIONS, SOUND_PARSER_OPTIONS } from "./sid.js"
+import { MUSIC_PARSER_OPTIONS, SOUND_PARSER_OPTIONS } from "./player.js"
 
 export const ViewType = {
   Music: 'latebit-studio.music',

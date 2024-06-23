@@ -1,23 +1,8 @@
-[hidden] {
-  display: none;
-}
-
-body {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-header {
-  section.subtitle {
-    padding: var(--container-paddding) 0;
-  }
-}
-
 #editor {
   --input-height: calc(var(--vscode-editor-font-size) * 2);
   --input-width: 7ch;
   --delete-width: var(--input-height);
-  --column-size: calc(var(--input-width) + var(--delete-width));
+  --column-size: calc(var(--input-width) + var(--delete-width) + 8px);
   --index-size: 4ch;
   --beat-gap: calc(var(--container-paddding) / 2);
 
@@ -78,81 +63,23 @@ aside {
   form {
     padding-bottom: var(--container-paddding);
 
+    fieldset {
+      grid-auto-flow: column;
+    }
+
     label {
       display: block;
       padding-top: var(--input-padding-vertical);
     }
   }
 
-  #playback fieldset {
-    display: grid;
-    grid-auto-flow: column;
-    border: none;
+  #playback #loop {
+    background-color: transparent;
+    color: var(--vscode-foreground);
 
-    button {
-      height: 48px;
-      min-width: 48px;
-
-      &#loop {
-        background-color: transparent;
-        color: var(--vscode-foreground);
-
-        &[data-checked] {
-          background-color: var(--vscode-editorMarkerNavigationError-background);
-          color: var(--vscode-button-foreground);
-        }
-      }
-
+    &[data-checked] {
+      background-color: var(--vscode-editorMarkerNavigationError-background);
+      color: var(--vscode-button-foreground);
     }
-  }
-}
-
-main {
-  display: flex;
-  padding-top: var(--container-paddding);
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-#banner {
-  display: flex;
-  padding: var(--container-paddding);
-
-  &.error {
-    border-left: var(--vscode-inputValidation-errorBorder) 4px solid;
-    background: var(--vscode-inputValidation-errorBackground);
-    font-size: 1.1rem;
-
-    .codicon {
-      color: var(--vscode-inputValidation-errorBorder);
-      font-size: 1.5rem;
-      /* align with text */
-      padding-top: 3px;
-    }
-
-    ul {
-      padding-top: var(--input-padding-vertical);
-      padding-bottom: var(--input-padding-vertical);
-
-      li {
-        padding-top: var(--input-padding-vertical);
-      }
-    }
-  }
-
-  .rotate {
-    animation: rotate 2s linear infinite;
-  }
-
-  .message {
-    padding-left: calc(var(--container-paddding)/2);
   }
 }

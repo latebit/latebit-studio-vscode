@@ -1,0 +1,178 @@
+#editor {
+  flex: 3;
+  text-align: center;
+  position: relative;
+  background: var(--vscode-textBlockQuote-background);
+  margin-right: var(--container-paddding);
+  display: grid;
+  place-content: center;
+  aspect-ratio: 1;
+
+  .canvas-container {
+    overflow: auto;
+
+    canvas {
+      background-color: white;
+      background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+  }
+
+  .zoom {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    margin: 8px;
+
+    button {
+      height: 36px;
+    }
+  }
+}
+
+aside {
+  flex: 1;
+
+  form {
+    padding-bottom: var(--container-paddding);
+
+    label {
+      display: block;
+      padding-top: var(--input-padding-vertical);
+    }
+  }
+
+  #metadata {
+    fieldset {
+      grid-template-columns: 5fr 4fr 5fr 4fr;
+      gap: var(--input-padding-horizontal);
+    }
+  }
+
+  #tools {
+
+    input[type="radio"] {
+      outline: 4px solid transparent;
+      cursor: pointer;
+      appearance: none;
+      margin: 0;
+    }
+
+    #toolbox {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-flow: unset;
+
+      .tool {
+        font-size: 1.6rem;
+        padding: 1rem 0;
+
+        &:checked,
+        &:focus {
+          outline: none;
+          color: var(--vscode-input-background);
+          background-color: var(--vscode-input-foreground);
+        }
+      }
+    }
+
+    #palette {
+      grid-template-columns: repeat(8, 1fr);
+
+      .color {
+        height: 24px;
+
+        &:checked,
+        &:focus {
+          z-index: 1;
+          /* copied from reset style for focus */
+          outline-color: var(--vscode-focusBorder);
+          outline-offset: -1px;
+        }
+      }
+    }
+  }
+
+  #playback {
+    fieldset {
+      grid-auto-flow: column;
+    }
+
+    #frame-counter {
+      display: block;
+      font-family: var(--vscode-editor-font-family);
+      margin: 0 0.85rem;
+      padding: 0.25rem;
+      font-size: 1.5rem;
+      text-align: center;
+      background: var(--vscode-notifications-background);
+    }
+  }
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 900px;
+  background-color: inherit;
+  padding: var(--container-paddding) 0;
+
+  #timeline {
+    display: flex;
+    padding-top: var(--container-paddding);
+    overflow-x: scroll;
+    white-space: nowrap;
+
+    .add {
+      margin: 0 4px;
+      display: inline-block;
+      padding: 8px;
+      width: 40px;
+    }
+
+    .frame {
+      margin: 0 4px;
+      display: inline-block;
+      padding: 8px;
+      background: var(--vscode-input-background);
+      border: 4px solid transparent;
+      cursor: pointer;
+      position: relative;
+
+      &.selected {
+        border-color: var(--vscode-focusBorder);
+      }
+
+      &:hover button {
+        opacity: 1;
+      }
+
+      button {
+        opacity: 0;
+        transition: 100ms opacity;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 1.2rem;
+        height: 1.2rem;
+        padding: 0;
+        text-align: center;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      span {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding-top: 8px;
+        height: 24px;
+      }
+    }
+  }
+}

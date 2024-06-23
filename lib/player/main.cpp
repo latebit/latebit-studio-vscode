@@ -23,7 +23,7 @@ using namespace player;
 using namespace emscripten;
 
 int main() {
-  Log.setDestination(lb::STDOUT);
+  Log.setDestination(lb::LogDestination::STDOUT);
   if (0 != SDL_Init(SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
     printf("Cannot initialize audio.");
     return 1;
@@ -98,24 +98,20 @@ EMSCRIPTEN_BINDINGS(sid) {
   class_<Note>("Note")
       .class_function("makeRest", &Note::makeRest)
       .class_function("fromSymbol", &Note::fromSymbol)
-      .function("isRest", &Note::isRest)
-      .function("isEqual", &Note::isEqual)
-      .function("isInvalid", &Note::isInvalid)
-      .function("isContinue", &Note::isContinue)
       .function("getPitch", &Note::getPitch)
       .function("getVolume", &Note::getVolume)
       .function("getWave", &Note::getWave)
       .function("getEffect", &Note::getEffect)
-      .function("getId", &Note::getId)
+      .function("getType", &Note::getType)
       .function("getSymbol", &Note::getSymbol);
 
-  enum_<WaveType>("WaveType")
+  enum_<WaveType::WaveType>("WaveType")
       .value("TRIANGLE", WaveType::TRIANGLE)
       .value("SQUARE", WaveType::SQUARE)
       .value("SAWTOOTH", WaveType::SAWTOOTH)
       .value("NOISE", WaveType::NOISE);
 
-  enum_<EffectType>("EffectType")
+  enum_<EffectType::EffectType>("EffectType")
       .value("NONE", EffectType::NONE)
       .value("SLIDE", EffectType::SLIDE)
       .value("DROP", EffectType::DROP)
@@ -124,4 +120,11 @@ EMSCRIPTEN_BINDINGS(sid) {
   
   constant("MUSIC_PARSER_OPTIONS", lb::MUSIC_PARSER_OPTIONS);
   constant("SOUND_PARSER_OPTIONS", lb::SOUND_PARSER_OPTIONS);
+
+  enum_<NoteType::NoteType>("NoteType")
+      .value("STANDARD", NoteType::STANDARD)
+      .value("REST", NoteType::REST)
+      .value("CONTINUE", NoteType::CONTINUE)
+      .value("INVALID", NoteType::INVALID)
+      .value("END_OF_TRACK", NoteType::END_OF_TRACK);
 }

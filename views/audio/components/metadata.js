@@ -1,7 +1,7 @@
 // @ts-check
 import { Command, executeHostCommand } from '../../ipc.js';
 import { ParserOptions, ViewType } from '../constants.js';
-import { Player, Tune, setBeatsCount, setBpm, setTicksPerBeat, setTracksCount } from '../sid.js';
+import { Player, Tune, setBeatsCount, setBpm, setTicksPerBeat, setTracksCount } from '../player.js';
 import { state } from '../state.js';
 
 export const $metadata = {
