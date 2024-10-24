@@ -1,8 +1,7 @@
 // @ts-check
 import { state } from "../state.js";
 import { COLOR_TO_HEX, frameManager } from "../frame.js";
-import { executeHostCommand, Command } from '../../ipc.js';
-import { Color, Keyframe, Sprite, SpriteParser, setFrame } from "../renderer.js";
+import { Color, Sprite, setFrame } from "../renderer.js";
 import { Tool } from "../constants.js";
 
 const PIXEL_SIZE = 10;
@@ -115,9 +114,8 @@ const tools = {
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
-    const content = frame.getContent()
-    content.set(index, color);
-    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
+    frame.set(index, color);
+    cachedSprite = setFrame(sprite, frameIndex, frame);
     frame.delete();
 
     // give visual feedback to the user
@@ -131,9 +129,8 @@ const tools = {
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
-    const content = frame.getContent()
-    content.set(index, Color.UNDEFINED_COLOR);
-    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
+    frame.set(index, Color.UNDEFINED_COLOR);
+    cachedSprite = setFrame(sprite, frameIndex, frame);
     frame.delete();
 
     // give visual feedback to the user
@@ -146,7 +143,7 @@ const tools = {
     const index = x + y * sprite.getWidth();
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
-    const color = frame.getContent().get(index)
+    const color = frame.get(index)
     if (color) {
       state.setActiveColor(color)
     }
@@ -157,15 +154,14 @@ const tools = {
 
     const frameIndex = state.getFrameIndex();
     const frame = sprite.getFrame(frameIndex);
-    const targetColor = frame.getContent().get(x + y * sprite.getWidth());
+    const targetColor = frame.get(x + y * sprite.getWidth());
     const color = state.getActiveColor();
-    const content = frame.getContent();
-
+    
     const fill = (/** @type {number} */ x, /** @type {number} */ y) => {
       if (x < 0 || x >= sprite.getWidth() || y < 0 || y >= sprite.getHeight()) return;
       const index = x + y * sprite.getWidth();
-      if (content.get(index) !== targetColor) return;
-      content.set(index, color);
+      if (frame.get(index) !== targetColor) return;
+      frame.set(index, color);
       ctx.fillStyle = COLOR_TO_HEX[color.value];
       ctx.fillRect(x, y, 1, 1);
 
@@ -176,6 +172,6 @@ const tools = {
     }
 
     fill(x, y);
-    cachedSprite = setFrame(sprite, frameIndex, new Keyframe(frame.getWidth(), frame.getHeight(), content));
+    cachedSprite = setFrame(sprite, frameIndex, frame);
   }
 }

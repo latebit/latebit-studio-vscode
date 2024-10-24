@@ -1,5 +1,6 @@
 #pragma once
 #include <latebit/core/graphics/Sprite.h>
+#include <latebit/core/graphics/Keyframe.h>
 #include <memory>
 
 using namespace lb;

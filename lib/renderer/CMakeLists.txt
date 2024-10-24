@@ -8,12 +8,13 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(../../cmake/FetchEngine.cmake)
-fetch_latebit("v0.7.0")
+fetch_latebit("v0.9.1")
 
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/main.cpp" "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB HDR_FILES "${CMAKE_SOURCE_DIR}/src/*.h")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HDR_FILES})
+
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 latebit embind)
 # TODO: remove -sALLOW_MEMORY_GROWTH
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-sALLOW_MEMORY_GROWTH --emit-tsd ${PROJECT_NAME}.d.ts")

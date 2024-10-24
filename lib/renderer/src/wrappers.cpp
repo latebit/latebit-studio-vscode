@@ -1,3 +1,4 @@
+#include <latebit/core/graphics/Keyframe.h>
 #include <latebit/core/graphics/Sprite.h>
 #include <memory>
 
@@ -16,13 +17,13 @@ namespace renderer {
       auto frame = sprite.getFrame(i);
       auto content = vector<Color::Color>(width * height, Color::UNDEFINED_COLOR);
 
-      for (uint8_t y = 0; y < frame.getHeight(); y++) {
-        for (uint8_t x = 0; x < frame.getWidth(); x++) {
-          content[y * width + x] = frame.getContent()[y * frame.getWidth() + x];
+      for (uint8_t y = 0; y < sprite.getHeight(); y++) {
+        for (uint8_t x = 0; x < sprite.getWidth(); x++) {
+          content[y * width + x] = frame[y * sprite.getWidth() + x];
         }
       }
 
-      frames.push_back(Keyframe(width, height, content));
+      frames.push_back(content);
     }
 
     auto newSprite = make_unique<Sprite>(sprite.getLabel(), width, height, sprite.getDuration(), frames);
@@ -53,7 +54,7 @@ namespace renderer {
     }
 
     for (uint8_t i = maxFrameCount; i < frameCount; i++) {
-      frames.push_back(Keyframe(sprite.getWidth(), sprite.getHeight(), vector<Color::Color>(sprite.getWidth() * sprite.getHeight(), Color::UNDEFINED_COLOR)));
+      frames.push_back(vector<Color::Color>(sprite.getWidth() * sprite.getHeight(), Color::UNDEFINED_COLOR));
     }
 
     auto newSprite = make_unique<Sprite>(sprite.getLabel(), sprite.getWidth(), sprite.getHeight(), sprite.getDuration(), frames);

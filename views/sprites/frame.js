@@ -28,12 +28,11 @@ export const COLOR_TO_HEX = {
 /**
  * Prerenders a frame into a canvas element to be used for preview, playback, and editing.
  * @param {Keyframe} frame
+ * @param {number} width
+ * @param {number} height
  * @returns {HTMLCanvasElement}
  */
-const makeFrame = (/** @type {Keyframe} */ frame) => {
-  const width = frame.getWidth();
-  const height = frame.getHeight();
-
+const makeFrame = (frame, width, height) => {
   const $canvas = document.createElement('canvas');
   $canvas.width = width;
   $canvas.style.width = `${width}px`;
@@ -44,11 +43,11 @@ const makeFrame = (/** @type {Keyframe} */ frame) => {
   const context = /** @type {CanvasRenderingContext2D} */ ($canvas.getContext('2d'));
   context.imageSmoothingEnabled = false;
   context.fillStyle = COLOR_TO_HEX[Color.UNDEFINED_COLOR.value];
-
+  
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
       const index = i + j * width;
-      const color = frame.getContent().get(index);
+      const color = frame.get(index);
 
       if (color && color.value > -1) {
         context.fillStyle = COLOR_TO_HEX[color.value];
@@ -69,7 +68,7 @@ const update = (sprite) => {
   cachedFrames = [];
   for (let i = 0; i < sprite.getFrameCount(); i++) {
     const frame = sprite.getFrame(i);
-    const $canvas = makeFrame(frame);
+    const $canvas = makeFrame(frame, sprite.getWidth(), sprite.getHeight());
     cachedFrames.push($canvas);
   }
 }

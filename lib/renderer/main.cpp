@@ -1,6 +1,6 @@
 #include <cstdio>
-#include <emscripten.h>
 
+#include <latebit/core/graphics/Colors.h>
 #include <latebit/core/graphics/SpriteParser.h>
 #include <latebit/utils/Logger.h>
 
@@ -19,6 +19,9 @@ EMSCRIPTEN_BINDINGS(renderer) {
     .class_function("fromString", &SpriteParser::fromString)
     .class_function("toString", &SpriteParser::toString);
 
+  emscripten::register_vector<Color::Color>("Keyframe");
+  emscripten::register_vector<Keyframe>("Keyframes");
+
   emscripten::class_<Sprite>("Sprite")
     .constructor<string, uint8_t, uint8_t, uint8_t, vector<Keyframe>>()
     .function("getWidth", &Sprite::getWidth)
@@ -33,15 +36,6 @@ EMSCRIPTEN_BINDINGS(renderer) {
   emscripten::function("setDuration", &renderer::setDuration);
   emscripten::function("setFrame", &renderer::setFrame);
 
-  emscripten::register_vector<Color::Color>("Content");
-  emscripten::register_vector<Keyframe>("Keyframes");
-
-  emscripten::class_<Keyframe>("Keyframe")
-    .constructor<>()
-    .constructor<uint8_t, uint8_t, vector<Color::Color>>()
-    .function("getWidth", &Keyframe::getWidth)
-    .function("getHeight", &Keyframe::getHeight)
-    .function("getContent", &Keyframe::getContent, emscripten::allow_raw_pointers());
   
   emscripten::enum_<Color::Color>("Color")
     .value("UNDEFINED_COLOR", Color::UNDEFINED_COLOR)
